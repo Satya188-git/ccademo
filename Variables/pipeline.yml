@@ -1,0 +1,10 @@
+variables:
+  #General pipeline variables
+  - name: agentPool
+    value: 'SEU RHEL8 VX Shared'
+  - name: canaryPool
+    value: 'SEU RHEL8 VX Dev'
+  #Add variables here when they are the same per environment and referenced in Jobs and/or Steps added to the pipeline.
+  #More information: 
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3583/LocalReleaseYAML

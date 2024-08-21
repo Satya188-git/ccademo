@@ -1,0 +1,196 @@
+#Determines name of pipeline run. Default name is like 'master+99999' if the run id is 99999 and the source branch 
+#Can be overwritten in pipeline if needed
+name: $(Build.SourceBranchName)+$(BuildID)
+
+#Determines when pipeline runs automatically.
+#Can be branches, tags, folders
+#Full syntax required for anything except branches
+trigger:
+- master
+- main
+- dev
+- develop
+- feature/*
+- bundle/*
+- release/*
+
+#Reference to the repositories that contains all YAML files for this pattern
+resources:
+  repositories:
+  - repository: DevSecOpsYAML
+    type: git
+    name: shared-it-devsecops-yaml
+    ref: refs/heads/release/2024-04-09
+
+#References variables file located within repository that is native to the pipeline
+#Can be changed to any location with repositroy
+#Requires '@self' to ensure it targets triggering repository
+#Case sensitive
+variables:
+- template: ${{ parameters.VariableLocation }}/pipeline.yml
+
+#Agent pool is set in the pipeline level variables file.
+pool:
+  name: $(agentPool)
+
+parameters:
+#Timeout in minutes for all jobs in this run, default is 60 minutes.
+#DevSecOps gets alerts for jobs that run longer than 120 minutes.
+#No action is taken against long running jobs, but we may ask why its taking so long if it consistently occurrs
+  - name: TimeoutInMinutes
+    default: 60
+    displayName: "Job Timeout in Minutes"
+    type: string
+
+#List of environments for application
+#Uncomment environments as needed
+#Do not remove the PRValidation property
+  - name: 'Environments'
+    displayName: Environments
+    type: object
+    default:
+    - env: dev
+      PRValidation: false
+    # - env: int
+    #   PRValidation: false
+    # - env: tst
+    #   PRValidation: false
+    # - env: qa
+    #   PRValidation: false
+    # - env: prd
+    #   PRValidation: false
+
+#Location of pipeline variable files within triggering repository
+#Case sensitive
+#file names must be 'build.yml', 'dev.yml', 'tst.yml', 'qa.yml', 'prd.yml',
+#If located within Variables folder at root of repo, value is 'Variables'
+#Do not add a trailing slash
+  - name: VariableLocation
+    default: Variables
+    displayName: "Path to Pipeline Variables"
+    type: string
+
+# Allows all non produciton stages to deploy in parallel
+  - name: nonProdInParallel
+    default: false
+    displayName: "Deploy non-prod in parallel"
+    type: boolean
+
+#Enable canary mode
+#Pushes pipeline to Dev agent pool to allow for agent dependency upgrade testing and validation.
+#Limits pipeline to Build and Dev stages.
+  - name: CanaryMode
+    default: false
+    displayName: "Canary Mode"
+    type: boolean
+
+#Parameters to force deployment of Dev, TST, and QA stages
+#These override branch restrictions for deployment stages
+#CanaryMode overrides these and only Dev option will work in CanaryMode
+  - name: MakeDevGo
+    default: false
+    displayName: "Force Deploy DEV"
+    type: boolean
+  - name: MakeIntGo
+    default: false
+    displayName: "Force Deploy INT"
+    type: boolean
+  - name: MakeTstGo
+    default: false
+    displayName: "Force Deploy TST"
+    type: boolean
+  - name: MakeQAGo
+    default: false
+    displayName: "Force Deploy QA"
+    type: boolean
+
+
+#Use below flag to enable your post deployment validations 
+#By Enable below flag, jobs will load from local repo @ pipeline/jobs/run-post-deployment-validation.yml after application deployment
+  - name: RunPostDeploymentValidation
+    default: false
+    displayName: "Run Post Deployment Validation / Run Automation Tests"
+    type: boolean 
+#Service Now parameters
+
+#Enable Service Now Functionality
+  - name: EnableSNOW
+    default: false
+    displayName: "Enable Service Now Functionality"
+    type: boolean
+
+#Edit to ServiceNow assignment group assigned to application/team
+  - name: AssignmentGroup
+    default: "CHANGE ME IN THE YAML"
+    displayName: "Assignment Group Name"
+    type: string
+
+#Edit to ServiceNow CI-Name group assigned to application/team
+  - name: CIName
+    default: "CHANGE ME IN THE YAML"
+    displayName: "CI Name"
+    type: string
+
+#Select option at pipeline runtime
+#Set default option for CI based runs
+#Do not change list of values. ServiceNow will reject any values not in this list.
+  - name: ChangeReason
+    default: "Maintenance"
+    displayName: "Change Reason"
+    type: string
+    values:
+      - Small Enhancement
+      - Maintenance
+      - Warranty Fix
+      - Bug Fix
+      - Business Continuity
+
+#Select option at pipeline runtime
+#Set default option for CI based runs
+#Do not change list of values. ServiceNow will reject any values not in this list.
+  - name: ChangeWindow
+    default: "Business Hours"
+    displayName: "Change Window"
+    type: string
+    values:
+      - Weekend Maintenance Window
+      - Off Business Hours
+      - Business Hours
+
+#Enter reason at pipeline runtime
+#Set default option for CI based runs
+#Required when ChangeWindow is `Business Hours`
+  - name: BusinessHourJustification
+    default: "Support is available"
+    displayName: "Business Hour Justification"
+    type: string
+
+#Enter reason at pipeline runtime
+#Set default option for CI based runs
+#Required for all production runs
+  - name: ReleaseComments
+    default: "Change when queueing build"
+    displayName: "Release Comments"
+    type: string
+
+#Reference to remote pipeline template in shared-it-devsecops-yaml repo
+extends:
+  template: Pipeline-Templates/Bring-Your-Own-YAML/Pipeline/Pipeline.yml@DevSecOpsYAML
+  parameters:
+    Environments: ${{ parameters.Environments }}
+    TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}
+    VariableLocation: ${{ parameters.VariableLocation }}
+    nonProdInParallel: ${{ parameters.nonProdInParallel }}
+    MakeDevGo: ${{ parameters.MakeDevGo }}
+    MakeIntGo: ${{ parameters.MakeIntGo }}
+    MakeTSTGo: ${{ parameters.MakeTSTGo }}
+    MakeQAGo: ${{ parameters.MakeQAGo }}
+    CanaryMode: ${{ parameters.CanaryMode }}
+    RunPostDeploymentValidation: ${{ parameters.RunPostDeploymentValidation }}
+    EnableSNOW: ${{ parameters.EnableSNOW }}
+    AssignmentGroup: ${{ parameters.AssignmentGroup }}
+    ChangeWindow: ${{ parameters.ChangeWindow }}
+    BusinessHourJustification: ${{ parameters.BusinessHourJustification }}
+    ChangeReason: ${{ parameters.ChangeReason }}
+    ReleaseComments: ${{ parameters.ReleaseComments }}
+    CIName: ${{ parameters.CIName }}
