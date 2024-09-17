@@ -72,11 +72,6 @@ parameters:
     displayName: "Path to Pipeline Variables"
     type: string
 
-# Allows all non produciton stages to deploy in parallel
-  - name: nonProdInParallel
-    default: false
-    displayName: "Deploy non-prod in parallel"
-    type: boolean
 
 #Enable canary mode
 #Pushes pipeline to Dev agent pool to allow for agent dependency upgrade testing and validation.
@@ -92,10 +87,6 @@ parameters:
   - name: MakeDevGo
     default: false
     displayName: "Force Deploy DEV"
-    type: boolean
-  - name: MakeIntGo
-    default: false
-    displayName: "Force Deploy INT"
     type: boolean
   - name: MakeTstGo
     default: false
@@ -232,7 +223,6 @@ extends:
     VariableLocation: ${{ parameters.VariableLocation }}
     nonProdInParallel: ${{ parameters.nonProdInParallel }}
     MakeDevGo: ${{ parameters.MakeDevGo }}
-    MakeIntGo: ${{ parameters.MakeIntGo }}
     MakeTSTGo: ${{ parameters.MakeTSTGo }}
     MakeQAGo: ${{ parameters.MakeQAGo }}
     TerraformCloud: ${{ parameters.TerraformCloud }}
