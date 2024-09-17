@@ -221,7 +221,6 @@ extends:
     SCName: ${{ parameters.SCName }}
     TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}
     VariableLocation: ${{ parameters.VariableLocation }}
-    nonProdInParallel: ${{ parameters.nonProdInParallel }}
     MakeDevGo: ${{ parameters.MakeDevGo }}
     MakeTSTGo: ${{ parameters.MakeTSTGo }}
     MakeQAGo: ${{ parameters.MakeQAGo }}
