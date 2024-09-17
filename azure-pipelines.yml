@@ -21,6 +21,10 @@ resources:
     type: git
     name: shared-it-devsecops-yaml
     ref: refs/heads/release/2024-04-09
+  - repository: TemplateRepo
+    type: git
+    name: shared-it-iac-pipeline-templates
+    ref: refs/tags/0.0.39
 
 #References variables file located within repository that is native to the pipeline
 #Can be changed to any location with repositroy
@@ -50,15 +54,13 @@ parameters:
     type: object
     default:
     - env: dev
-      PRValidation: false
-    # - env: int
-    #   PRValidation: false
-    # - env: tst
-    #   PRValidation: false
-    # - env: qa
-    #   PRValidation: false
-    # - env: prd
-    #   PRValidation: false
+    - env: qa
+
+#Base portion of service connection name, generally pipeline name
+  - name: SCName
+    default: sdge-cs-cccanalytics
+    displayName: "AWS Service Connection Prefix"
+    type: string
 
 #Location of pipeline variable files within triggering repository
 #Case sensitive
@@ -104,6 +106,35 @@ parameters:
     displayName: "Force Deploy QA"
     type: boolean
 
+#Terraform Parameters
+#Enables extra steps that are required when running against terraform cloud
+  - name: TerraformCloud
+    default: true
+    displayName: "Enable Terraform Cloud"
+    type: boolean
+
+#Enables debug output from all terraform tasks except checkov
+  - name: TerraformDebug
+    default: false
+    displayName: "Terraform Debug"
+    type: boolean
+
+#This must remain as 'ChangeMeIfNeeded' in the YAML. CI/triggered runs for tf state remove are not supported.
+#Change this on the pipeline queue when needing to use tf state remove.
+  - name: terraformStateResourceToRemove
+    default: 'ChangeMeIfNeeded'
+    displayName: Terraform State Resource To Remove
+    type: string
+
+  - name: terraformDestroy
+    displayName: Terraform Destroy
+    default: false
+    type: boolean
+  
+  - name: UseOIDC
+    displayName: Use OIDC
+    default: false
+    type: boolean
 
 #Use below flag to enable your post deployment validations 
 #By Enable below flag, jobs will load from local repo @ pipeline/jobs/run-post-deployment-validation.yml after application deployment
@@ -111,6 +142,24 @@ parameters:
     default: false
     displayName: "Run Post Deployment Validation / Run Automation Tests"
     type: boolean 
+
+#Enable logic to source application build job(s) from triggering repository
+  - name: LocalBuildYAML
+    default: true
+    displayName: "Use Build Job YAML From Local Repo"
+    type: boolean
+
+#Enable logic to source pre S3 upload infra steps from triggering repository if needed
+  - name: LocalPreTFYAML
+    type: boolean
+    default: true
+  
+#Enable logic to source post tf-apply release steps from triggering repository if needed
+  - name: LocalReleaseYAML
+    default: true
+    displayName: "Use Release Step YAML From Local Repo"
+    type: boolean
+
 #Service Now parameters
 
 #Enable Service Now Functionality
@@ -175,9 +224,10 @@ parameters:
 
 #Reference to remote pipeline template in shared-it-devsecops-yaml repo
 extends:
-  template: Pipeline-Templates/Bring-Your-Own-YAML/Pipeline/Pipeline.yml@DevSecOpsYAML
+  template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
     Environments: ${{ parameters.Environments }}
+    SCName: ${{ parameters.SCName }}
     TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}
     VariableLocation: ${{ parameters.VariableLocation }}
     nonProdInParallel: ${{ parameters.nonProdInParallel }}
@@ -185,9 +235,17 @@ extends:
     MakeIntGo: ${{ parameters.MakeIntGo }}
     MakeTSTGo: ${{ parameters.MakeTSTGo }}
     MakeQAGo: ${{ parameters.MakeQAGo }}
+    TerraformCloud: ${{ parameters.TerraformCloud }}
+    TerraformDebug: ${{ parameters.TerraformDebug }}
+    TerraformDestroy: ${{ parameters.TerraformDestroy }}
+    terraformStateResourceToRemove: ${{ parameters.terraformStateResourceToRemove }}
+    UseOIDC: ${{ parameters.UseOIDC }}
     CanaryMode: ${{ parameters.CanaryMode }}
+    LocalBuildYAML: ${{ parameters.LocalBuildYAML }}
+    LocalPreTFYAML: ${{ parameters.LocalPreTFYAML }}
+    LocalReleaseYAML: ${{ parameters.LocalReleaseYAML }}
     RunPostDeploymentValidation: ${{ parameters.RunPostDeploymentValidation }}
-    EnableSNOW: ${{ parameters.EnableSNOW }}
+    #EnableSNOW: ${{ parameters.EnableSNOW }}
     AssignmentGroup: ${{ parameters.AssignmentGroup }}
     ChangeWindow: ${{ parameters.ChangeWindow }}
     BusinessHourJustification: ${{ parameters.BusinessHourJustification }}

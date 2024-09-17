@@ -4,6 +4,18 @@ variables:
     value: 'SEU RHEL8 VX Shared'
   - name: canaryPool
     value: 'SEU RHEL8 VX Dev'
+  - name: company_code
+    value: 'sdge'
+  - name: adoRepoName
+    value: 'sdge-cs-cccanalytics'
+  - name: terraformWorkingDirectory
+    value: ''
+  - name: terraformDeployDirectory
+    value: ''
+  - name: terraformVersion
+    value: '1.4.6'
+  - name: terraformUrl
+    value: 'app.terraform.io'
   #Add variables here when they are the same per environment and referenced in Jobs and/or Steps added to the pipeline.
   #More information: 
   #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML

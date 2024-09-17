@@ -2,5 +2,8 @@ variables:
   #Replace this with a different variable as needed. Kept here to avoid validation issues when no variables are needed for build stage.
   #Add variables here when they are unique per environment and referenced in Jobs added to the pipeline by the `LocalBuildYAML` pipeline parameter
   #More information, https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML
-  - name: placeholder
-    value: placeholder
+  - name: terraformOrg
+    value: $(company_code)-dev
+  - group: 'sdge-cs-cccanalytics-dev'
+  - name: workspace-name
+    value: '$(terraformOrg)_$(adoRepoName)'
