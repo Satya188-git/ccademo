@@ -1,6 +1,6 @@
 module "s3_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "11.1.0"
+  version = "11.1.3"
 
   company_code             = var.company_code
   application_code         = var.application_code
