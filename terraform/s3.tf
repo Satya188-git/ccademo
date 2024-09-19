@@ -6,7 +6,7 @@ module "s3_bucket" {
   application_code         = var.application_code
   environment_code         = var.environment_code
   region_code              = var.region_code
-  application_use          = var.application_use
+  application_use          = "${var.application_use}-sai-tf-testing"
   create_bucket            = true
   versioning               = true
   object_ownership         = "BucketOwnerPreferred"
