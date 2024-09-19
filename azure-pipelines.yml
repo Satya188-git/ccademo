@@ -227,7 +227,7 @@ extends:
     TerraformDebug: ${{ parameters.TerraformDebug }}
     TerraformDestroy: ${{ parameters.TerraformDestroy }}
     terraformStateResourceToRemove: ${{ parameters.terraformStateResourceToRemove }}
-    UseOIDC: ${{ parameters.UseOIDC }}
+    UseOIDC: true
     CanaryMode: ${{ parameters.CanaryMode }}
     LocalBuildYAML: ${{ parameters.LocalBuildYAML }}
     LocalPreTFYAML: ${{ parameters.LocalPreTFYAML }}
