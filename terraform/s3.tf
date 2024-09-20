@@ -8,7 +8,7 @@ module "s3_bucket_athena_results" {
   region_code              = var.region_code
   application_use          = "${var.application_use}-athena-results"
   create_bucket            = true
-  versioning               = False
+  versioning               = false
   object_ownership         = "BucketOwnerPreferred"
   control_object_ownership = true
   tags                     = var.tags
@@ -24,7 +24,7 @@ module "s3_bucket_nice" {
   region_code              = var.region_code
   application_use          = "${var.application_use}-nice-data"
   create_bucket            = true
-  versioning               = False
+  versioning               = false
   object_ownership         = "BucketOwnerPreferred"
   control_object_ownership = true
   tags                     = var.tags
