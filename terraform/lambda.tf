@@ -18,7 +18,7 @@ module "nice_lambda" {
   memory_size      = "1024"
   timeout          = "120"
   publish = true
-  Architecture = ["x86_64"] 
+  architectures = ["x86_64"] 
   create_package = false
 
   lambda_role = module.lambda_role.name
