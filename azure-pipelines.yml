@@ -75,7 +75,7 @@ parameters:
       awsRegionCode: us-west-2
       awsRegionAbbreviation: $(awsRegionAbbreviation)
 
-      
+
 #Base portion of service connection name, generally pipeline name
   - name: SCName
     default: sdge-cs-cccanalytics
@@ -237,6 +237,7 @@ parameters:
 extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
+    S3Info: ${{ parameters.S3Info }}
     Environments: ${{ parameters.Environments }}
     SCName: ${{ parameters.SCName }}
     TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}
