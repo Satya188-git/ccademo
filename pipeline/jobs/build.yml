@@ -1,7 +1,27 @@
+
+# Lambda CI Build Jobs
 jobs:
-  # Template referenced from shared-it-devsecops-yaml repository
-  # This template uses no tasks that rely on software dependencies and does not need to honor canary mode.
   - template: Pipeline-Templates/Standalone/Jobs/Linting/flake8.yml@DevSecOpsYAML
     parameters: 
       lintingConfig: "warn"
+  - job: lambdaArtifact
+    displayName: "Create an artifact of Serverless directory for testing"
+    steps:
+    - publish: ./serverless/
+      artifact: app_artifact
+
+  - job: PackagePublishArtifact
+    dependsOn: lambdaArtifact
+    displayName: "Lambda CI Build Jobs"
+    steps:
+      - task: ArchiveFiles@2
+        inputs:
+          rootFolderOrFile: './'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/helloworld_serverless.zip'
+          replaceExistingArchive: true
+
+      - publish: '$(Build.ArtifactStagingDirectory)/helloworld_serverless.zip'
+        artifact: 'helloworld_serverless_package'
 
