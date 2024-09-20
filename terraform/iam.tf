@@ -18,7 +18,8 @@ resource "aws_iam_role_policy" "lambda_custom_policy" {
   policy = templatefile(
     "${path.module}/iampolicies/policy-iam-lambda-assume-role.tmpl",
     {
-      region_code = var.region_code,
+      region = "us-west-2",
+      region_code = var.region_code
       account = var.awsAccount,
       company_code = var.company_code,
       application_code = var.application_code,
