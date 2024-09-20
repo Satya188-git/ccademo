@@ -19,7 +19,7 @@ variables:
   - name: bucketSuffix
     value: "artifacts"
   - name: sourceFolder
-    value: "$(Pipeline.Workspace)/training_file_tar"
+    value: "$(Pipeline.Workspace)/helloworld_serverless.zip"
   - name: targetFolderName
     value: ""
   - name: globExpressions
