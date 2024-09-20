@@ -25,7 +25,7 @@ module "nice_lambda" {
   tags        = var.tags
 
   s3_existing_package = {
-    bucket = var.module.s3_bucket_lambda_artifacts.name
+    bucket = module.s3_bucket_lambda_artifacts.name
     key    = var.serverless_application_zip
   }
 }
