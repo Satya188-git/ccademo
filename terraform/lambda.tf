@@ -2,8 +2,8 @@
 
 data "archive_file" "nice_lambda_zip"{
   type = "zip"
-  source_dir = "${path.module}./src/lambda/hello_world.py"
-  output_path = "${path.module}./src/lambda/helloworld_serverless.zip"
+  source_dir = "${path.module}/src/lambda/hello_world.py"
+  output_path = "${path.module}/src/lambda/helloworld_serverless.zip"
 }
 module "nice_lambda" {
 
