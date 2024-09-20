@@ -9,7 +9,7 @@ jobs:
     displayName: "Zip the Lambda Code and publish it"
 
     steps:
-      - task: ArchiveFiles
+      - task: ArchiveFiles@1
         inputs:
           rootFolderOrFile: './src/lambda/'
           includeRootFolder: false
