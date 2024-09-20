@@ -1,7 +1,20 @@
-
-# Lambda CI Build Jobs
 jobs:
-  - template: Pipeline-Templates/Standalone/Jobs/Linting/flake8.yml@DevSecOpsYAML
-    parameters: 
-      lintingConfig: "warn"
+  - job:
+    displayName: 'Create and Publish Lambda Artifact for Hello World Function'
+    steps:
+    
+    - script: |
+        set -e
+        set -x
 
+        # Zip hello_world.py file for Lambda
+        LAMBDA_DIR='src/lambda'
+        cd $LAMBDA_DIR
+        zip -r helloworld_serverless.zip hello_world.py
+        echo "Listing contents of the directory '$(pwd)'"
+        ls
+      displayName: 'Build Code Artifact For Hello World Lambda'
+
+    - publish: src/lambda/helloworld_serverless.zip
+      artifact: helloworld_serverless.zip
+      displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact'

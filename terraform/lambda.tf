@@ -1,10 +1,4 @@
 # Lambda function for NICE API
-
-data "archive_file" "nice_lambda_zip"{
-  type = "zip"
-  source_dir = "${path.module}/../src/lambda/hello_world.py"
-  output_path = "${path.module}/../src/lambda/helloworld_serverless.zip"
-}
 module "nice_lambda" {
 
   depends_on = [module.lambda_role,module.s3_bucket_lambda_artifacts] 
@@ -29,5 +23,8 @@ module "nice_lambda" {
   tags              = var.tags
   layers            = [var.pandas_layer_arn]
   
-  local_existing_package = "../src/lambda/helloworld_serverless.zip"
+  s3_existing_package = {
+    bucket = module.s3_bucket_lambda_artifacts.s3_bucket_id,
+    key    = "helloworld_serverless.zip"
+  }
 }
