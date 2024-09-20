@@ -41,3 +41,8 @@ variable "pandas_layer_arn" {
   type = string
   description = "AWSSDKPandas-Python311 Pandas Layer from AWS"
 }
+
+variable "code_artifact_bucket_name" {
+  description = "S3 bucket name for code artifacts"
+  type        = string
+}

@@ -29,7 +29,7 @@ variables:
   - name: organization
     value: "sdge"
   - name: applicationCode
-    value: "ccc"  
+    value: "dcctr"  
   #Add variables here when they are the same per environment and referenced in Jobs and/or Steps added to the pipeline.
   #More information: 
   #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML

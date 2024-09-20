@@ -24,7 +24,7 @@ module "nice_lambda" {
   layers            = [var.pandas_layer_arn]
   
   s3_existing_package = {
-    bucket = module.s3_bucket_lambda_artifacts.s3_bucket_id,
+    bucket = var.code_artifact_bucket_name,
     key    = "helloworld_serverless.zip"
   }
 }
