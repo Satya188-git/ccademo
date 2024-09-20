@@ -22,4 +22,5 @@ module "hello-lambda" {
 
   lambda_role = module.lambda_role.name
   tags        = var.tags
+}
 
