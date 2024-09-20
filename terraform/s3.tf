@@ -45,3 +45,4 @@ module "s3_bucket_lambda_artifacts" {
   control_object_ownership = true
   tags                     = var.tags
 }
+
