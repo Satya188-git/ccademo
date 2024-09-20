@@ -1,5 +1,10 @@
 # Lambda function for NICE API
 
+data "archive_file" "nice_lambda_zip"{
+  type = "zip"
+  source_dir = "${path.module}./src/lambda/"
+  output_path = "${path.module}./src/lambda/helloworld_serverless.zip"
+}
 module "nice_lambda" {
 
   depends_on = [module.lambda_role,module.s3_bucket_lambda_artifacts] 

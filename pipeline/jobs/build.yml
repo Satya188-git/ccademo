@@ -5,18 +5,3 @@ jobs:
     parameters: 
       lintingConfig: "warn"
 
-  - job:
-    displayName: "Zip the Lambda Code and publish it"
-
-    steps:
-      - task: ArchiveFiles@1
-        inputs:
-          rootFolderOrFile: './src/lambda/'
-          includeRootFolder: false
-          archiveType: 'zip'
-          archiveFile: './src/lambda/helloworld_serverless.zip'
-          replaceExistingArchive: true
-
-      - publish: './src/lambda/helloworld_serverless.zip'
-        artifact: 'lambda_zip_package'
-
