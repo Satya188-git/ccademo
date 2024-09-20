@@ -36,3 +36,8 @@ variable "tags" {
   type        = map(string)
   description = "Common tags for all resources in this module."
 }
+
+variable "serverless_application_zip" {
+  description = "Serverless application zip file stored in S3 bucket. This is used as the S3 key"
+  type        = string
+}
