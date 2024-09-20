@@ -8,6 +8,12 @@ module "lambda_role" {
   region_code       = var.region_code
   application_use   = "${var.application_use}-lambda-role"
   description       = "This is a lambda role to write data to S3 and update glue crawlers"
-  service_resources = ["lambda.amazonaws.com","s3.amazonaws.com"]
+  service_resources = ["lambda.amazonaws.com"]
   tags              = var.tags
+}
+
+resource "aws_iam_role_policy" "lambda_custom_policy" {
+  name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-lambda-policy"
+  role   = module.lambda_role.name
+  policy = templatefile("${path.module}/iampolicies/lambda_custom_policy.json.tpl", {})
 }
