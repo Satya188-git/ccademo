@@ -11,7 +11,8 @@
 				"glue:GetTable"
 			],
 			"Resource": [
-				"*"
+				"arn:aws:glue:${region_code}:${account}:database/*",
+				"arn:aws:glue:${region_code}:${account}:crawler/*"
 			]
 		},
 		{
@@ -27,6 +28,7 @@
 				"s3:ListMultipartUploadParts"
 			],
 			"Resource": [
+				"arn:aws:s3:::${company_code}-${application_code}-${environment_code}-${region_code}-s3-{application_use}",
 				"*"
 			]
 		},

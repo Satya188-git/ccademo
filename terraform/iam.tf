@@ -15,5 +15,15 @@ module "lambda_role" {
 resource "aws_iam_role_policy" "lambda_custom_policy" {
   name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-lambda-policy"
   role   = module.lambda_role.name
-  policy = templatefile("${path.module}/iampolicies/lambda_custom_policy.json.tpl", {})
+  policy = templatefile(
+    "${path.module}/iampolicies/policy-iam-lambda-assume-role.tpl",
+    {
+      region_code = var.region_code,
+      account = var.awsAccount,
+      company_code = var.company_code,
+      application_code = var.application_code,
+      environment_code = var.environment_code,
+      application_use = "${var.application_use}-nice-data"
+    }
+  )
 }
