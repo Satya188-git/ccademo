@@ -16,7 +16,7 @@ resource "aws_iam_role_policy" "lambda_custom_policy" {
   name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-lambda-policy"
   role   = module.lambda_role.name
   policy = templatefile(
-    "${path.module}/iampolicies/policy-iam-lambda-assume-role.tpl",
+    "${path.module}/iampolicies/policy-iam-lambda-assume-role.tmpl",
     {
       region_code = var.region_code,
       account = var.awsAccount,
