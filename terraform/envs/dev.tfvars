@@ -14,3 +14,4 @@ tags = {
     "sempra:gov:cmdb-ci-id"  = "APM1234567"
     "data-classification"    = "Data privacy classification ex: public sensitive confidential"
   }
+serverless_application_zip = "Artifacts/dev/helloworld_serverless_package/helloworld-serverless.zip"
