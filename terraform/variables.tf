@@ -37,7 +37,7 @@ variable "tags" {
   description = "Common tags for all resources in this module."
 }
 
-variable "serverless_application_zip" {
-  description = "Serverless application zip file stored in S3 bucket. This is used as the S3 key"
-  type        = string
+variable "pandas_layer_arn" {
+  type = string
+  description = "AWSSDKPandas-Python311 Pandas Layer from AWS"
 }

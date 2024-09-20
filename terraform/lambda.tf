@@ -16,14 +16,13 @@ module "nice_lambda" {
   runtime           = "python3.11"
   memory_size       = "1024"
   timeout           = "300"
-  publish           = true
-  architectures     = ["x86_64"] 
-  create_package    = false
-  lambda_role       = module.lambda_role.name
-  tags              = var.tags
+  architectures     = ["x86_64"]
 
-  s3_existing_package = {
-    bucket = module.s3_bucket_lambda_artifacts.s3_bucket_id
-    key    = var.serverless_application_zip
-  }
+  
+  lambda_role       = module.lambda_role.name
+
+  tags              = var.tags
+  layers            = [var.pandas_layer_arn]
+  
+  local_existing_package = "../src/lambda/helloworld_serverless.zip"
 }

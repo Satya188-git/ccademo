@@ -14,4 +14,5 @@ tags = {
     "sempra:gov:cmdb-ci-id"  = "APM1234567"
     "data-classification"    = "Data privacy classification ex: public sensitive confidential"
   }
-serverless_application_zip = "Artifacts/dev/helloworld_serverless_package/helloworld-serverless.zip"
+
+pandas_layer_arn = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"

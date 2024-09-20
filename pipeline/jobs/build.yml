@@ -4,24 +4,19 @@ jobs:
   - template: Pipeline-Templates/Standalone/Jobs/Linting/flake8.yml@DevSecOpsYAML
     parameters: 
       lintingConfig: "warn"
-  - job: lambdaArtifact
-    displayName: "Create an artifact of Serverless directory for testing"
-    steps:
-    - publish: ./serverless/
-      artifact: app_artifact
 
-  - job: PackagePublishArtifact
-    dependsOn: lambdaArtifact
-    displayName: "Lambda CI Build Jobs"
+  - job:
+    displayName: "Zip the Lambda Code and publish it"
+
     steps:
-      - task: ArchiveFiles@2
+      - task: ArchiveFiles
         inputs:
-          rootFolderOrFile: './'
+          rootFolderOrFile: './src/lambda/'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/helloworld_serverless.zip'
+          archiveFile: './src/lambda/helloworld_serverless.zip'
           replaceExistingArchive: true
 
-      - publish: '$(Build.ArtifactStagingDirectory)/helloworld_serverless.zip'
-        artifact: 'helloworld_serverless_package'
+      - publish: './src/lambda/helloworld_serverless.zip'
+        artifact: 'lambda_zip_package'
 
