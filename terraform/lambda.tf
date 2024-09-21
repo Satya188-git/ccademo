@@ -11,13 +11,11 @@ module "nice_lambda" {
   region_code       = var.region_code
   application_use   = "${var.application_use}-nice-lambda"
   description       = "NICE Lambda with IAC"
-  handler           = "nice_lambda.lambda_handler"
+  handler           = "hello_world.lambda_handler"
   runtime           = "python3.11"
   memory_size       = "1024"
   timeout           = "300"
   architectures     = ["x86_64"]
-
-  
   lambda_role       = module.lambda_role.name
 
   tags              = var.tags
@@ -25,6 +23,6 @@ module "nice_lambda" {
   
   s3_existing_package = {
     bucket = var.code_artifact_bucket_name,
-    key    = "helloworld_serverless.zip"
+    key    = "lambda/packages/hello_world.zip"
   }
 }
