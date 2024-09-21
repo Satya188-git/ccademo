@@ -19,7 +19,7 @@ variables:
   - name: bucketSuffix
     value: "artifacts"
   - name: sourceFolder
-    value: "$(Pipeline.Workspace)/hello_world.zip"
+    value: "$(Pipeline.Workspace)"
   - name: targetFolderName
     value: "lambda/packages/"
   - name: globExpressions
