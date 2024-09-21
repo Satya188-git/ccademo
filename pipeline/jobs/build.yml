@@ -14,3 +14,6 @@ jobs:
         echo "Listing contents of the directory '$(pwd)'"
         ls
       displayName: 'Build Code Artifact For Hello World Lambda'
+    - publish: src/lambda/hello_world.zip
+      artifact: lambda_function
+      displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact named lambda_function'
