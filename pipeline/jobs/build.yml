@@ -1,22 +1,3 @@
-# Timeout in minutes for all jobs in this run, default is 60 minutes.
-# DevSecOps gets alerts for jobs that run longer than 120 minutes.
-# No action is taken against long running jobs, but we may ask why it's taking so long if it consistently occurs.
-parameters:
-  - name: TimeoutInMinutes
-    default: 60
-    displayName: "Job Timeout in Minutes"
-    type: string
-
-  - name: TF_VAR_nice_api_key
-    type: string
-    default: "$(NICE_API_KEY)"
-    displayName: "NICE API Key"
-
-  - name: TF_VAR_nice_api_secret
-    type: string
-    default: "$(NICE_API_SECRET)"
-    displayName: "NICE API Secret"
-
 jobs:
   - job: BuildAndPublish
     displayName: 'Create and Publish Lambda Artifact for Hello World Function'
