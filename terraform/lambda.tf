@@ -6,13 +6,13 @@ module "lambda_role" {
   application_code  = var.application_code
   environment_code  = var.environment_code
   region_code       = var.region_code
-  application_use   = "${var.application_use}-lambda-role"
+  application_use   = "${var.application_use}-lambda"
   description       = "This is a lambda role to write data to S3 and update glue crawlers"
   service_resources = ["lambda.amazonaws.com"]
   tags              = var.tags
 }
 
-resource "aws_iam_role_policy" "lambda_custom_policy" {
+resource "aws_iam_role_policy" "lambda_policy" {
   name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-lambda-policy"
   role   = module.lambda_role.name
   policy = templatefile(
@@ -40,7 +40,7 @@ module "nice_lambda" {
   application_code  = var.application_code
   environment_code  = var.environment_code
   region_code       = var.region_code
-  application_use   = "${var.application_use}-nice-lambda"
+  application_use   = "${var.application_use}-nice-data"
   description       = "NICE Lambda with IAC"
   handler           = "hello_world.lambda_handler"
   runtime           = "python3.11"
@@ -48,7 +48,6 @@ module "nice_lambda" {
   timeout           = "300"
   architectures     = ["x86_64"]
   lambda_role       = module.lambda_role.name
-
   tags              = var.tags
   layers            = [var.pandas_layer_arn]
   
