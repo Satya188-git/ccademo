@@ -16,7 +16,7 @@ resource "aws_iam_role_policy" "eventbridge_policy" {
   name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-eventbridge"
   role   = module.eventbridge_role.name
   policy = templatefile(
-    "${path.module}/iampolicies/policy-iam-eventbrdige.tmpl",{})
+    "${path.module}/iampolicies/policy-iam-eventbrdige-assume-role.tmpl",{})
 }
 
 resource "aws_scheduler_schedule" "nice_eventbridge_scheduler" {
