@@ -58,6 +58,6 @@ module "nice_lambda" {
   
   s3_existing_package = {
     bucket = var.code_artifact_bucket_name,
-    key    = "lambda/packages/nice_lambda/hello_world.zip"
+    key    = "lambda/packages/nice_lambda/nice.zip"
   }
 }
