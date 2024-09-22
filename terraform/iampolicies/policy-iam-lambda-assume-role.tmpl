@@ -47,6 +47,19 @@
 			"Resource": [
 				"*"
 			]
+		},
+		{
+			"Sid": "BasicSecretPermissions",
+			"Effect": "Allow",
+			"Action": [
+				"secretsmanager:ListSecrets",
+				"secretsmanager:DescribeSecret",
+				"secretsmanager:GetSecretValue",
+				"secretsmanager:ListSecretVersionIds"
+			],
+			"Resource": [
+				"*"
+			]
 		}
 	]
 }
