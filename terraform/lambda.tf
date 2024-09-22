@@ -50,6 +50,7 @@ module "nice_lambda" {
   lambda_role       = module.lambda_role.name
   tags              = var.tags
   layers            = [var.pandas_layer_arn]
+  publish           = true
   
   s3_existing_package = {
     bucket = var.code_artifact_bucket_name,
