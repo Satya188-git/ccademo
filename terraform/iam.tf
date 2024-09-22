@@ -11,7 +11,7 @@ module "lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
   tags              = var.tags
   additional_policy_statements = [
-		{
+		{	"Sid": "Statement1",
 			"Effect": "Allow",
 			"Action": [
 				"glue:GetCrawler",
