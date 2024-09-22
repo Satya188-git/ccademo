@@ -5,7 +5,6 @@ company_code      = "sdge"
 application_code  = "dcctr"
 region_code       = "wus2"
 application_use   = "ccc-analytics"
-
 tags = {
     "billing-guid"           = "BC4AD0602D58DD1889ED839BF5929FCA"
     "portfolio"              = "DCCTR"
