@@ -17,3 +17,6 @@ tags = {
 pandas_layer_arn = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
 kms_key_id = "bc82727e-bf7f-491c-8061-1751f059456a"
+
+TF_VAR_nice_api_key = ${{ parameters.TF_VAR_nice_api_key }}
+TF_VAR_nice_api_secret = ${{ parameters.TF_VAR_nice_api_secret }}
