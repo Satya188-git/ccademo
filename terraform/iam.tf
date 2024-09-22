@@ -11,11 +11,11 @@ module "lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
   tags              = var.tags
   additional_policy_statements = [
-		{	Sid = "AthenaPermissions"
+		{	Sid = "AthenaPermissions",
 			"Principal": {
         		"AWS": "lambda.amazonaws.com"
       			},
-      		"Action": "sts:AssumeRole"
+      		"Action": "sts:AssumeRole",
 			"Effect": "Allow",
 			"Action": [
 				"athena:ListDatabases",
