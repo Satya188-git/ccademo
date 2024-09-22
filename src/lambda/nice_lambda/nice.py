@@ -74,7 +74,7 @@ def save_to_s3(data,name,folder):
         # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
         wr.s3.to_parquet(
             df=df,
-            path="s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/"+folder+"/nice_sample_"+name+".parquet",
+            path="s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-nice-data/"+folder+"/nice_sample_"+name+".parquet",
             index=False
         )
         

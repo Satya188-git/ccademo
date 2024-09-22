@@ -50,3 +50,13 @@ variable "kms_key_id" {
   description = "Default KMS encryption KEY ID for the Secrets Manager"
   type        = string
 }
+
+variable "nice_api_key" {
+  description = "Nice API Key from ADO"
+  type        = string
+}
+
+variable "nice_api_secret" {
+  description = "Nice API Key from ADO"
+  type        = string
+}
