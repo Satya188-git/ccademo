@@ -6,10 +6,7 @@ jobs:
     - script: |
         set -e
         set -x
-        echo "******************************************"
-        echo "Nice API Key : ${parameters.NICE_API_KEY}"
-        echo "Nice API Key : ${parameters.NICE_API_SECRET}"
-        echo "******************************************"
+
         # Zip nice.py file for Lambda
         LAMBDA_DIR='src/lambda/nice_lambda'
         cd $LAMBDA_DIR
