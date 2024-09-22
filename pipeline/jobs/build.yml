@@ -7,13 +7,13 @@ jobs:
         set -e
         set -x
 
-        # Zip hello_world.py file for Lambda
+        # Zip nice.py file for Lambda
         LAMBDA_DIR='src/lambda/nice_lambda'
         cd $LAMBDA_DIR
-        zip -r hello_world.zip hello_world.py
+        zip -r nice.zip nice.py
         echo "Listing contents of the directory '$(pwd)'"
         ls
       displayName: 'Build Code Artifact For Hello World Lambda'
-    - publish: src/lambda/nice_lambda/hello_world.zip
+    - publish: src/lambda/nice_lambda/nice.zip
       artifact: nice_lambda
       displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact named lambda_function'
