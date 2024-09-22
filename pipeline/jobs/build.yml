@@ -1,7 +1,7 @@
+# Timeout in minutes for all jobs in this run, default is 60 minutes.
+# DevSecOps gets alerts for jobs that run longer than 120 minutes.
+# No action is taken against long running jobs, but we may ask why it's taking so long if it consistently occurs.
 parameters:
-#Timeout in minutes for all jobs in this run, default is 60 minutes.
-#DevSecOps gets alerts for jobs that run longer than 120 minutes.
-#No action is taken against long running jobs, but we may ask why its taking so long if it consistently occurrs
   - name: TimeoutInMinutes
     default: 60
     displayName: "Job Timeout in Minutes"
@@ -17,26 +17,24 @@ parameters:
     default: "$(NICE_API_SECRET)"
     displayName: "NICE API Secret"
 
-
 jobs:
-  - job:
+  - job: BuildAndPublish
     displayName: 'Create and Publish Lambda Artifact for Hello World Function'
     steps:
-    
-    - script: |
-        set -e
-        set -x
-        echo "******************************************"
-        echo "Nice API Key : ${{parameters.NICE_API_KEY}}"
-        echo "Nice API Key : ${{parameters.NICE_API_SECRET}}"
-        echo "******************************************"
-        # Zip nice.py file for Lambda
-        LAMBDA_DIR='src/lambda/nice_lambda'
-        cd $LAMBDA_DIR
-        zip -r nice.zip nice.py
-        echo "Listing contents of the directory '$(pwd)'"
-        ls
-      displayName: 'Build Code Artifact For Hello World Lambda'
-    - publish: src/lambda/nice_lambda/nice.zip
-      artifact: nice_lambda
-      displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact named lambda_function'
+      - script: |
+          set -e
+          set -x
+          echo "******************************************"
+          echo "Nice API Key : ${{ parameters.TF_VAR_nice_api_key }}"
+          echo "Nice API Secret : ${{ parameters.TF_VAR_nice_api_secret }}"
+          echo "******************************************"
+          # Zip nice.py file for Lambda
+          LAMBDA_DIR='src/lambda/nice_lambda'
+          cd $LAMBDA_DIR
+          zip -r nice.zip nice.py
+          echo "Listing contents of the directory '$(pwd)'"
+          ls
+        displayName: 'Build Code Artifact For Hello World Lambda'
+      - publish: src/lambda/nice_lambda/nice.zip
+        artifact: nice_lambda
+        displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact named lambda_function'
