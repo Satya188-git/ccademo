@@ -12,6 +12,10 @@ module "lambda_role" {
   tags              = var.tags
   additional_policy_statements = [
 		{	Sid = "AthenaPermissions"
+			"Principal": {
+        		"AWS": "lambda.amazonaws.com"
+      			},
+      		"Action": "sts:AssumeRole"
 			"Effect": "Allow",
 			"Action": [
 				"athena:ListDatabases",
