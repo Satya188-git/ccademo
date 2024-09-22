@@ -43,7 +43,6 @@ module "nice_gluecrawler" {
 
   glue_crawler_map = {
     crawler_s3 = {
-      name          = ""
       database_name = aws_glue_catalog_database.nice_glue_database.name
       
       s3_targets = {
@@ -53,7 +52,7 @@ module "nice_gluecrawler" {
       }
       configuration = jsonencode(
         { 
-          CreatePartitionIndex = false
+          CreatePartitionIndex = "False"
           Version = 1
         })
       

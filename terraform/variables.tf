@@ -46,3 +46,7 @@ variable "code_artifact_bucket_name" {
   description = "S3 bucket name for code artifacts"
   type        = string
 }
+variable "kms_key_id" {
+  description = "Default KMS encryption KEY ID for the Secrets Manager"
+  type        = string
+}
