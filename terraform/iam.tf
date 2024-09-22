@@ -11,18 +11,18 @@ module "lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
   tags              = var.tags
   additional_policy_statements = [
-		{	"Sid": "Statement1",
+		{	Sid = "AthenaPermissions"
 			"Effect": "Allow",
 			"Action": [
-				"glue:GetCrawler",
-				"glue:GetTables",
-				"glue:StartCrawler",
-				"glue:UpdateTable",
-				"glue:GetTable"
+				"athena:ListDatabases",
+				"athena:ListDataCatalogs",
+				"athena:GetTable",
+				"athena:GetTableMetadata",
+				"athena:GetTables",
+				"athena:RunQuery"
 			],
 			"Resource": [
-				"arn:aws:glue:us-west-2:${var.awsAccount}:database/*",
-				"arn:aws:glue:us-west-2:${var.awsAccount}:crawler/*"
+				"*"
 			]
 		}
 	]
