@@ -5,7 +5,7 @@ module "gluecrawler_role" {
   application_code  = var.application_code
   environment_code  = var.environment_code
   region_code       = var.region_code
-  application_use   = "${var.application_use}-gluecrawler"
+  application_use   = "${var.application_use}-glue-crawler"
   description       = "This is a Glue role to run NICE and Connect crawlers and update respective tables in Athena"
   service_resources = ["glue.amazonaws.com"]
   tags              = var.tags
@@ -36,13 +36,14 @@ module "nice_gluecrawler" {
   application_code  = var.application_code
   environment_code  = var.environment_code
   region_code       = var.region_code
-  application_use   = "${var.application_use}-nice-crawler"
+  application_use   = "${var.application_use}"
   tags              = var.tags
   iam_role_arn  = module.gluecrawler_role.arn
   iam_role_name = module.gluecrawler_role.name
 
   glue_crawler_map = {
     crawler_s3 = {
+      name = "nice-crawler"
       database_name = aws_glue_catalog_database.nice_glue_database.name
       
       s3_targets = {
