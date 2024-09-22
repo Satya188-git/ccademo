@@ -51,12 +51,12 @@ variable "kms_key_id" {
   type        = string
 }
 
-variable "TF_VAR_nice_api_key" {
+variable "nice_api_key" {
   description = "Nice API Key from ADO"
   type        = string
 }
 
-variable "TF_VAR_nice_api_secret" {
+variable "nice_api_secret" {
   description = "Nice API Key from ADO"
   type        = string
 }
