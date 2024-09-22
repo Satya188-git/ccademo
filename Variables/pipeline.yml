@@ -19,7 +19,7 @@ variables:
   - name: bucketSuffix
     value: "artifacts"
   - name: sourceFolder
-    value: "$(Pipeline.Workspace)/src/lambda/nice_lambda"
+    value: "$(Pipeline.Workspace)/"
   - name: targetFolderName
     value: "lambda/packages/nice_lambda/"
   - name: globExpressions
