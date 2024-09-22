@@ -42,7 +42,7 @@ module "nice_lambda" {
   region_code       = var.region_code
   application_use   = "${var.application_use}-nice-data"
   description       = "NICE Lambda with IAC"
-  handler           = "hello_world.lambda_handler"
+  handler           = "nice.lambda_handler"
   runtime           = "python3.11"
   memory_size       = "1024"
   timeout           = "300"
@@ -50,7 +50,11 @@ module "nice_lambda" {
   lambda_role       = module.lambda_role.name
   tags              = var.tags
   layers            = [var.pandas_layer_arn]
-  publish           = true
+  publish           = false
+  attach_cloudwatch_logs_policy = false
+  create = true
+  create_function = true
+  create_package = true
   
   s3_existing_package = {
     bucket = var.code_artifact_bucket_name,
