@@ -22,10 +22,10 @@ resource "aws_glue_catalog_database" "nice_glue_database" {
   description  = "Database to store data from NICE API using Lambda"
 }
 
-resource "aws_glue_catalog_database" "connect_api_glue_database" {
-  name         = "connect_database_tf"
-  description  = "Database to store data from NICE API using Lambda"
-}
+# resource "aws_glue_catalog_database" "connect_api_glue_database" {
+#   name         = "connect_database_tf"
+#   description  = "Database to store data from Connect API using Lambda"
+# }
 
 
 module "nice_gluecrawler" {
@@ -43,7 +43,7 @@ module "nice_gluecrawler" {
 
   glue_crawler_map = {
     crawler_s3 = {
-      name          = "nice-crawler"
+      name          = ""
       database_name = aws_glue_catalog_database.nice_glue_database.name
       
       s3_targets = {
@@ -51,6 +51,11 @@ module "nice_gluecrawler" {
           path = "s3://${module.s3_bucket_nice.s3_bucket_id}/"
         }
       }
+      configuration = jsonencode(
+        { 
+          CreatePartitionIndex = false
+          Version = 1
+        })
       
       catalog_targets = {}
       dynamodb_targets = {}
