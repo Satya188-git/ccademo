@@ -1,7 +1,7 @@
 # Lambda function for NICE API
 module "nice_lambda" {
 
-  depends_on = [module.lambda_role,module.s3_bucket_lambda_artifacts] 
+  depends_on = [module.lambda_role] 
   source     = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version    = "10.0.0"
   
