@@ -74,7 +74,7 @@ def save_to_s3(data,name,folder):
         # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
         wr.s3.to_parquet(
             df=df,
-            path="s3://sdge-dcctr-dev-wus2-s3-nice-sample-data/"+folder+"/nice_sample_"+name+".parquet",
+            path="s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/"+folder+"/nice_sample_"+name+".parquet",
             index=False
         )
         
@@ -185,35 +185,35 @@ def lambda_handler(event, context):
     #     # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
     #     wr.s3.to_parquet(
     #         df=df1,
-    #         path='s3://sdge-dcctr-dev-wus2-s3-nice-sample-data/nice_sample_YTD_Queuestats.parquet',
+    #         path='s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/nice_sample_YTD_Queuestats.parquet',
     #         index=False
     #     )
         
     #     # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
     #     wr.s3.to_parquet(
     #         df=df2,
-    #         path='s3://sdge-dcctr-dev-wus2-s3-nice-sample-data/nice_sample_YTD_Entity.parquet',
+    #         path='s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/nice_sample_YTD_Entity.parquet',
     #         index=False
     #     )
         
     #     # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
     #     wr.s3.to_parquet(
     #         df=df3,
-    #         path='s3://sdge-dcctr-dev-wus2-s3-nice-sample-data/nice_sample_YTD_Schedule.parquet',
+    #         path='s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/nice_sample_YTD_Schedule.parquet',
     #         index=False
     #     )
         
     #     # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
     #     wr.s3.to_parquet(
     #         df=df4,
-    #         path='s3://sdge-dcctr-dev-wus2-s3-nice-sample-data/nice_sample_YTD_Plan.parquet',
+    #         path='s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/nice_sample_YTD_Plan.parquet',
     #         index=False
     #     )
         
         # Save the DataFrame to a Parquet file in S3 using AWS Wrangler
         # wr.s3.to_parquet(
         #     df=df,
-        #     path='s3://sdge-dcctr-dev-wus2-s3-nice-sample-data/nice_sample_op.parquet',
+        #     path='s3://sdge-dcctr-dev-wus2-s3-analytics-nice-data/nice_sample_op.parquet',
         #     index=False
         # )
 
