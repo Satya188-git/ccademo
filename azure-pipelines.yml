@@ -46,16 +46,6 @@ parameters:
     displayName: "Job Timeout in Minutes"
     type: string
 
-  - name: TF_VAR_nice_api_key
-    type: string
-    default: "$(NICE_API_KEY)"
-    displayName: "NICE API Key"
-
-  - name: TF_VAR_nice_api_secret
-    type: string
-    default: "$(NICE_API_SECRET)"
-    displayName: "NICE API Secret"
-
 #List of environments for application
 #Uncomment environments as needed
 #Do not remove the PRValidation property

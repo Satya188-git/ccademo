@@ -5,10 +5,10 @@ resource "aws_secretsmanager_secret" "nice_secrets_manager" {
 }
 
 
-resource "aws_secretsmanager_secret_version" "nice_secrets" {
-  secret_id     = aws_secretsmanager_secret.nice_secrets_manager.id
-  secret_string = jsonencode({
-    nice_common_api_key = var.nice_api_key
-    nice_hist_queuestats_key = var.nice_api_secret
-  })
-}
+# resource "aws_secretsmanager_secret_version" "nice_secrets" {
+#   secret_id     = aws_secretsmanager_secret.nice_secrets_manager.id
+#   secret_string = jsonencode({
+#     nice_common_api_key = var.nice_api_key
+#     nice_hist_queuestats_key = var.nice_api_secret
+#   })
+# }
