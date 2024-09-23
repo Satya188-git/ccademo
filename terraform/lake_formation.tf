@@ -11,8 +11,9 @@ module "lake-formation-nice" {
   set_glue_data_catalog_permissions = true
 
   s3_arns = []
-
+  
   assign_iam_admin    = true
+  
   sso_admin_role_arns = [var.admins_arn , var.devs_arn]
   sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
 
@@ -22,15 +23,15 @@ module "lake-formation-nice" {
 module "glue-database" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
   version = "10.1.0"
-
+  depends_on = [ module.lake-formation-nice ]
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
   region_code      = var.region_code
   application_use  = var.application_use
 
-  iam_role_arn  = module.gluecrawler_role.arn
-  iam_role_name = module.gluecrawler_role.name
+  iam_role_arn  = module.lake-formation-nice.arn
+  iam_role_name = module.lake-formation-nice.name
 
   glue_database_map = {
     database1 = {
