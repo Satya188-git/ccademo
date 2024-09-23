@@ -29,8 +29,8 @@ module "glue-database" {
   region_code      = var.region_code
   application_use  = var.application_use
 
-  iam_role_arn  = module.lake-formation-nice.arn
-  iam_role_name = module.lake-formation-nice.name
+  iam_role_arn  = module.gluecrawler_role.arn
+  iam_role_name = module.gluecrawler_role.name
 
   glue_database_map = {
     database1 = {
