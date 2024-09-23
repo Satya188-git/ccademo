@@ -14,8 +14,8 @@ module "lake-formation-nice" {
   
   assign_iam_admin    = true
   
-  sso_admin_role_arns = [var.admins_arn , var.devs_arn]
-  sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
+  # sso_admin_role_arns = [var.admins_arn , var.devs_arn]
+  # sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
 
 }
 
