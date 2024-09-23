@@ -49,5 +49,5 @@ module "lake-formation-nice" {
 
 #   # Depends on the database creation
 #   depends_on = [aws_glue_catalog_database.glue_database_links]
-}
+# }
 
