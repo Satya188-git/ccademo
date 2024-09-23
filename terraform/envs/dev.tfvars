@@ -23,3 +23,7 @@ target_database_name = "analytics_database"
 catalog_id = "632182196722"
 source_database_name = "connect_datalake"
 
+nice_common_api_key  = "#{nice-common-api-key}#" 
+nice_hist_queuestats_key  = "#{nice-hist-queuestats-key}#"
+
+

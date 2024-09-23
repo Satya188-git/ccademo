@@ -51,15 +51,16 @@ variable "code_artifact_bucket_name" {
 #   type        = string
 # }
 
-# variable "nice_api_key" {
-#   description = "Nice API Key from ADO"
-#   type        = string
-# }
 
-# variable "nice_api_secret" {
-#   description = "Nice API Key from ADO"
-#   type        = string
-# }
+variable "nice_common_api_key" {
+  description = "Nice Common API Key from ADO"
+  type        = string
+}
+
+variable "nice_hist_queuestats_key" {
+  description = "Nice API Key hist queue stats from ADO"
+  type        = string
+}
 
 
 variable "admins_arn" {
