@@ -16,3 +16,10 @@ tags = {
 
 pandas_layer_arn = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
+
+admins_arn = "arn:aws:iam::442426866507:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f"
+devs_arn = "arn:aws:iam::442426866507:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"
+target_database_name = "analytics_database"
+catalog_id = "632182196722"
+source_database_name = "connect_datalake"
+

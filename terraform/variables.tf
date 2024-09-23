@@ -60,3 +60,19 @@ variable "code_artifact_bucket_name" {
 #   description = "Nice API Key from ADO"
 #   type        = string
 # }
+
+
+variable "admins_arn" {
+  description = "This variable is for adding admin arn into lake formation policies"
+  type        = string
+}
+
+variable "devs_arn" {
+  description = "This variable is for adding dev arn into lake formation policies"
+  type        = string
+}
+
+variable "target_database_name"{
+  description = "This is the database to hold all the data for Nice and Connect in Lake formation"
+  type = string
+}
