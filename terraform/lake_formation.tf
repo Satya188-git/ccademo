@@ -19,21 +19,6 @@ module "lake-formation-nice" {
 
 }
 
-
-# Define the Lake Formation Resource Links
-resource "aws_lakeformation_resource_link" "example_table_link" {
-  name          = "example_table_link"  # Replace with your desired link name
-  database_name = module.aws_glue_catalog_database.nice_glue_database.name
-  resource_arn  = "arn:aws:glue:us-west-2:632182196722:connect_datalake" # Replace with your actual ARN
-
-  # This is the ARN of the Glue table you want to link to
-  table_arn     = "arn:aws:glue:us-west-2:632182196722:contact_evaluation_record/connect_datalake/${module.aws_glue_catalog_database.nice_glue_database.name}" 
-  depends_on = [module.lake-formation-nice, module.aws_glue_catalog_database]  # Ensure that the lake formation module is created first
-}
-
-
-
-
 # module "lf_role" {
 #   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
 #   version = "10.0.2"
