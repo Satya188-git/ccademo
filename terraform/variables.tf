@@ -76,3 +76,13 @@ variable "target_database_name"{
   description = "This is the database to hold all the data for Nice and Connect in Lake formation"
   type = string
 }
+
+variable "catalog_id"{
+  description = "This is the database to hold all the data for Nice and Connect in Lake formation"
+  type = string
+}
+
+variable "source_database_name"{
+  description = "This is the database to hold all the data for Nice and Connect in Lake formation"
+  type = string
+}
