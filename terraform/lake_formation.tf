@@ -20,18 +20,31 @@ module "lake-formation-nice" {
 }
 
 
+module "lf_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "10.0.2"
+  company_code      = var.company_code
+  application_code  = var.application_code
+  environment_code  = var.environment_code
+  region_code       = var.region_code
+  application_use   = "${var.application_use}-lake-formation"
+  description       = "This is a role for lake formation"
+  service_resources = ["glue.amazonaws.com"]
+  tags              = var.tags
+}
+
 module "glue-database" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
   version = "10.1.0"
-  depends_on = [ module.lake-formation-nice, module.gluecrawler_role ]
+  depends_on = [module.lake-formation-nice, module.lf_role]
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
   region_code      = var.region_code
   application_use  = var.application_use
 
-  iam_role_arn  = module.gluecrawler_role.arn
-  iam_role_name = module.gluecrawler_role.name
+  iam_role_arn  = module.lf_role.arn
+  iam_role_name = module.lf_role.name
 
   glue_database_map = {
     database1 = {
