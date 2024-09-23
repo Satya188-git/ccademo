@@ -14,49 +14,63 @@ module "lake-formation-nice" {
   
   assign_iam_admin    = true
   
-  # sso_admin_role_arns = [var.admins_arn , var.devs_arn]
-  # sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
+  sso_admin_role_arns = [var.admins_arn , var.devs_arn]
+  sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
 
 }
 
 
-module "lf_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "10.0.2"
-  company_code      = var.company_code
-  application_code  = var.application_code
-  environment_code  = var.environment_code
-  region_code       = var.region_code
-  application_use   = "${var.application_use}-lake-formation"
-  description       = "This is a role for lake formation"
-  service_resources = ["glue.amazonaws.com"]
-  tags              = var.tags
+# Define the Lake Formation Resource Links
+resource "aws_lakeformation_resource_link" "example_table_link" {
+  name          = "example_table_link"  # Replace with your desired link name
+  database_name = module.aws_glue_catalog_database.nice_glue_database.name
+  resource_arn  = "arn:aws:glue:us-west-2:632182196722:connect_datalake" # Replace with your actual ARN
+
+  # This is the ARN of the Glue table you want to link to
+  table_arn     = "arn:aws:glue:us-west-2:632182196722:contact_evaluation_record/connect_datalake/${module.aws_glue_catalog_database.nice_glue_database.name}" 
+  depends_on = [module.lake-formation-nice, module.aws_glue_catalog_database]  # Ensure that the lake formation module is created first
 }
 
-module "glue-database" {
-  source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
-  version = "10.1.0"
-  depends_on = [module.lake-formation-nice, module.lf_role]
-  company_code     = var.company_code
-  application_code = var.application_code
-  environment_code = var.environment_code
-  region_code      = var.region_code
-  application_use  = var.application_use
 
-  iam_role_arn  = module.lf_role.arn
-  iam_role_name = module.lf_role.name
 
-  glue_database_map = {
-    database1 = {
-      // job specific name here gets appended to standardized name
-      name = "analytics_database"
-      optional_arguments = {
-        description = "This is a common analytics database for both NICE and Connect Data"
-      }
-    }
-  }
-  tags = var.tags
-}
+
+# module "lf_role" {
+#   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+#   version = "10.0.2"
+#   company_code      = var.company_code
+#   application_code  = var.application_code
+#   environment_code  = var.environment_code
+#   region_code       = var.region_code
+#   application_use   = "${var.application_use}-lake-formation"
+#   description       = "This is a role for lake formation"
+#   service_resources = ["glue.amazonaws.com"]
+#   tags              = var.tags
+# }
+
+# module "glue-database" {
+#   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
+#   version = "10.1.0"
+#   depends_on = [module.lake-formation-nice, module.lf_role]
+#   company_code     = var.company_code
+#   application_code = var.application_code
+#   environment_code = var.environment_code
+#   region_code      = var.region_code
+#   application_use  = var.application_use
+
+#   iam_role_arn  = module.gluecrawler_role.arn
+#   iam_role_name = module.gluecrawler_role.name
+
+#   glue_database_map = {
+#     database1 = {
+#       // job specific name here gets appended to standardized name
+#       name = "analytics_database"
+#       optional_arguments = {
+#         description = "This is a common analytics database for both NICE and Connect Data"
+#       }
+#     }
+#   }
+#   tags = var.tags
+# }
 
 # resource "aws_glue_catalog_database" "glue_database_links" {
 #   depends_on  = [module.lake-formation-nice]
@@ -88,4 +102,5 @@ module "glue-database" {
 #   # Depends on the database creation
 #   depends_on = [aws_glue_catalog_database.glue_database_links]
 # }
+
 
