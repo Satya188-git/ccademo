@@ -12,40 +12,42 @@ module "lake-formation-nice" {
 
   s3_arns = []
 
-  assign_iam_admin    = true
- # iam_admin_role_arn  = [var.admins_arn , var.devs_arn]
-#  iam_admin_role_name = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
+  assign_iam_admin    = false
+  sso_admin_role_arns = [var.admins_arn , var.devs_arn]
+  sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
+  #iam_admin_role_arn  = [var.admins_arn , var.devs_arn]
+  #iam_admin_role_name = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
 
 }
 
-resource "aws_glue_catalog_database" "glue_database_links" {
-  depends_on  = [module.lake-formation-nice]
-  description = "Lake formation database created using terraform"
-  name        = "${var.target_database_name}_link"
-  target_database {
-    database_name = var.target_database_name
-    catalog_id    = "AwsDataCatalog"
-  }
-}
+# resource "aws_glue_catalog_database" "glue_database_links" {
+#   depends_on  = [module.lake-formation-nice]
+#   description = "Lake formation database created using terraform"
+#   name        = "${var.target_database_name}_link"
+#   target_database {
+#     database_name = var.target_database_name
+#     catalog_id    = "AwsDataCatalog"
+#   }
+# }
 
-resource "aws_glue_catalog_table" "glue_table_links" {
-  count = length(var.source_table_names)
+# resource "aws_glue_catalog_table" "glue_table_links" {
+#   count = length(var.source_table_names)
 
-  name          = "${element(var.source_table_names, count.index)}_link"
-  database_name = aws_glue_catalog_database.glue_database_links.name
-  catalog_id    = var.catalog_id # AWS Account ID of the source catalog (external AWS account)
+#   name          = "${element(var.source_table_names, count.index)}_link"
+#   database_name = aws_glue_catalog_database.glue_database_links.name
+#   catalog_id    = var.catalog_id # AWS Account ID of the source catalog (external AWS account)
 
-  table_type = "VIRTUAL_VIEW"  # This is important for resource links
-  parameters = {
-    "targetTable"     = jsonencode({
-      "CatalogId"     = var.catalog_id,             # The source AWS account ID
-      "DatabaseName"  = var.source_database_name,   # The source database name
-      "Name"          = element(var.source_table_names, count.index) # Table name in the source account
-    })
-    "EXTERNAL" = "TRUE"
-  }
+#   table_type = "VIRTUAL_VIEW"  # This is important for resource links
+#   parameters = {
+#     "targetTable"     = jsonencode({
+#       "CatalogId"     = var.catalog_id,             # The source AWS account ID
+#       "DatabaseName"  = var.source_database_name,   # The source database name
+#       "Name"          = element(var.source_table_names, count.index) # Table name in the source account
+#     })
+#     "EXTERNAL" = "TRUE"
+#   }
 
-  # Depends on the database creation
-  depends_on = [aws_glue_catalog_database.glue_database_links]
+#   # Depends on the database creation
+#   depends_on = [aws_glue_catalog_database.glue_database_links]
 }
 
