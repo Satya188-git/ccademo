@@ -14,7 +14,7 @@ module "lake-formation-nice" {
 
   assign_iam_admin    = true
   iam_admin_role_arn  = [var.admins_arn , devs_arn]
-  iam_admin_role_name = [element(split("/", var.admins_arn), 7), element(split("/", var.devs_arn), 7)]
+  iam_admin_role_name = [AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f, AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f]
 
 }
 
