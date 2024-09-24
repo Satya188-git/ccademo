@@ -11,7 +11,7 @@ module "lake-formation-nice" {
   depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
 
   set_glue_data_catalog_permissions = true
-  trusted_resource_owners           =  ["442426866507"]
+  trusted_resource_owner          = "442426866507"
 
   assign_iam_admin    = true
 
