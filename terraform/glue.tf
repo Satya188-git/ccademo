@@ -1,4 +1,4 @@
-
+# Create Database in Glue to store nice data fetched from api using lambda
 
 resource "aws_glue_catalog_database" "nice_glue_database" {
   name         = "nice_database_tf"
@@ -11,6 +11,7 @@ resource "aws_glue_catalog_database" "nice_glue_database" {
 # }
 
 
+# Create Glue Crawler in Glue to crawl the data generated using NICE Lambda
 module "nice_gluecrawler" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
   version = "10.0.0"

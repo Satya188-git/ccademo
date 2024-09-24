@@ -1,6 +1,4 @@
-
-
-# Lambda function for NICE API
+# Lambda function to call NICE API and write data to S3 Bucket
 module "nice_lambda" {
 
   depends_on = [module.lambda_role] 

@@ -1,3 +1,5 @@
+# Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
+
 module "lake-formation-nice" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
   version = "9.1.1"
@@ -18,9 +20,14 @@ module "lake-formation-nice" {
   iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
   
   sso_admin_role_arns = [module.lakeformation_admin.arn, var.admins_arn , var.devs_arn]
-  sso_admin_role_names  = [module.lakeformation_admin.name, "AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
-
+  sso_admin_role_names  = [
+    module.lakeformation_admin.name,
+    element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
+    element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
+  ]
 }
+
+# Module to create database using Lake formation
 
 module "gdc_table" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
@@ -34,15 +41,9 @@ module "gdc_table" {
   # glue catalog database
   glue_database_name = "analytics_database"
 
-  add_linked_database = true
-  target_catalog_id = var.producer_catalog_id
-  target_database_name = var.source_database_name
-  glue_catalog_map = {}
+  # add_linked_database = true
+  # target_catalog_id = var.producer_catalog_id
+  # target_database_name = var.source_database_name
+  # glue_catalog_map = {}
 
-  # glue_catalog_map = {
-  #   "sample_table_1" = {
-  #     name                           = "sample_table_1"
-  #     glue_catalog_table_description = "Table created using LF in GDC"
-  #   }
-  # }
 }
