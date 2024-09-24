@@ -35,8 +35,9 @@ module "gdc_table" {
   glue_database_name = "analytics_database"
 
   add_linked_database = true
-  target_catalog_id = "632182196722"
-  target_database_name = "connect_datalake"
+  target_catalog_id = var.producer_catalog_id
+  target_database_name = var.source_database_name
+  glue_catalog_map = {}
 
   # glue_catalog_map = {
   #   "sample_table_1" = {
