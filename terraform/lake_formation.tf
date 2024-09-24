@@ -55,18 +55,18 @@ module "gdc_table" {
   # glue catalog database
   glue_database_name = "analytics_database"
 
-  add_linked_database = true
-  target_catalog_id = "632182196722"
-  target_database_name = "connect_datalake"
+  # add_linked_database = true
+  # target_catalog_id = "632182196722"
+  # target_database_name = "connect_datalake"
 
-  glue_catalog_map = {
-    "sample_table_1" = {
-      name                           = "sample_table_1"
-      glue_catalog_table_description = "Table created using LF in GDC"
-      # glue_catalog_table_table_type  = local.glue_catalog_table_table_type
+  # glue_catalog_map = {
+  #   "sample_table_1" = {
+  #     name                           = "sample_table_1"
+  #     glue_catalog_table_description = "Table created using LF in GDC"
+  #     # glue_catalog_table_table_type  = local.glue_catalog_table_table_type
 
-    }
+  #   }
 
     
-  }
+  # }
 }
