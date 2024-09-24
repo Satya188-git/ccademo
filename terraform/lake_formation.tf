@@ -29,6 +29,20 @@ module "gdc_table" {
   tags = var.tags
   # glue catalog database
   glue_database_name = "analytics_database"
+  glue_catalog_database_description = "Glue database created using LF"
+  add_linked_database = true
+  target_catalog_id = "632182196722"
+  target_database_name = "connect_datalake"
+  glue_catalog_map = {
+    "sample_table_1" = {
+      name                           = "sample_table_1"
+      glue_catalog_table_description = "Table created using LF in GDC"
+      # glue_catalog_table_table_type  = local.glue_catalog_table_table_type
+
+    }
+
+    
+  }
 }
 
 # module "lf_role" {
