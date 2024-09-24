@@ -28,7 +28,7 @@ resource "aws_glue_catalog_table" "glue_table_links" {
   count = length(var.source_table_names)
 
   name          = "${element(var.source_table_names, count.index)}_link"
-  database_name = aws_glue_catalog_database.glue_database_links.name
+  database_name = aws_glue_catalog_database.nice_glue_database.name
   catalog_id    = var.catalog_id # AWS Account ID of the source catalog (external AWS account)
 
   table_type = "GOVERNED"  # This is important for resource links
