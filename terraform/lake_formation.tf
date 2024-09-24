@@ -11,11 +11,7 @@ module "lake-formation-nice" {
   depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
 
   set_glue_data_catalog_permissions = true
-  trusted_resource_owners           = [
-  "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-terraform-oidc-role",
-  "arn:aws:iam::442426866507:role/sdge-dcctr-dev-wus2-iam-role-ccc-analytics-lake-formation",
-  data.aws_iam_session_context.current.issuer_arn
-  ]
+  trusted_resource_owners           =  ["442426866507"]
 
   assign_iam_admin    = true
 
