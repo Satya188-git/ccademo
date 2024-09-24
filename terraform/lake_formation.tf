@@ -12,7 +12,7 @@ module "lake-formation-nice" {
 
   s3_arns = []
   
-  assign_iam_admin    = true
+  assign_iam_admin    = false
   
   sso_admin_role_arns = [var.admins_arn , var.devs_arn]
   sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
