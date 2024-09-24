@@ -41,3 +41,22 @@ resource "aws_iam_role_policy" "lambda_policy" {
     }
   )
 }
+
+module "gluecrawler_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "10.0.2"
+  company_code      = var.company_code
+  application_code  = var.application_code
+  environment_code  = var.environment_code
+  region_code       = var.region_code
+  application_use   = "${var.application_use}-glue-crawler"
+  description       = "This is a Glue role to run NICE and Connect crawlers and update respective tables in Athena"
+  service_resources = ["glue.amazonaws.com"]
+  tags              = var.tags
+}
+
+resource "aws_iam_role_policy" "glue_policy" {
+  name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-glue-crawler"
+  role   = module.gluecrawler_role.name
+  policy = templatefile("${path.module}/iampolicies/policy-iam-glue-assume-role.tmpl",{})
+}
