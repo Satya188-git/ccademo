@@ -29,7 +29,6 @@ module "gdc_table" {
   tags = var.tags
   # glue catalog database
   glue_database_name = "analytics_database"
-  glue_catalog_database_description = "Glue database created using LF"
   add_linked_database = true
   target_catalog_id = "632182196722"
   target_database_name = "connect_datalake"
