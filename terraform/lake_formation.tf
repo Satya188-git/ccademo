@@ -18,6 +18,18 @@ module "lake-formation-nice" {
   sso_admin_role_names  = ["AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
 
 }
+module "gdc_table" {
+  source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+  version = "10.0.4"
+  company_code      = var.company_code
+  application_code  = var.application_code
+  environment_code  = var.environment_code
+  region_code       = var.region_code
+  application_use   = "${var.application_use}-lf-gdc"
+  tags = var.tags
+  # glue catalog database
+  glue_database_name = "analytics_database"
+}
 
 # module "lf_role" {
 #   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
