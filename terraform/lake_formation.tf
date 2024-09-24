@@ -1,6 +1,6 @@
 # Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
 
-module "lake-formation-nice" {
+module "lake_formation_nice" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
   version = "9.1.1"
 
@@ -10,7 +10,8 @@ module "lake-formation-nice" {
   region_code      = var.region_code
   application_use  = var.application_use
 
-  depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
+  # depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
+  depends_on = [module.lakeformation_admin]
 
   set_glue_data_catalog_permissions = true
 
@@ -36,14 +37,36 @@ module "gdc_table" {
   application_code  = var.application_code
   environment_code  = var.environment_code
   region_code       = var.region_code
-  application_use   = "${var.application_use}-lf"
+  application_use   = "${var.application_use}"
   tags = var.tags
   # glue catalog database
   glue_database_name = "analytics_database"
-  glue_catalog_map = {}
+  glue_catalog_map = {
+
+  }
 
   # add_linked_database = true
   # target_catalog_id = var.producer_catalog_id
   # target_database_name = var.source_database_name
 
+}
+
+resource "aws_glue_catalog_table" "glue_table_links" {
+
+  count = length(var.source_table_names)
+  name          = "${element(var.source_table_names, count.index)}_link"
+  database_name = module.gdc_table.glue_catalog_database_name
+  catalog_id    = var.producer_catalog_id # AWS Account ID of the source catalog (external AWS account)
+
+  table_type = "GOVERNED"  # This is important for resource links
+  parameters = {
+    "targetTable"     = jsonencode({
+      "CatalogId"     = var.producer_catalog_id
+      "DatabaseName"  = var.source_database_name
+      "Name"          = element(var.source_table_names, count.index)
+    })
+  }
+
+  # Depends on the database creation
+  depends_on = [module.gdc_table, module.lakeformation_admin, module.lake_formation_nice]
 }
