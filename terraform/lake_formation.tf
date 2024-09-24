@@ -40,10 +40,10 @@ module "gdc_table" {
   tags = var.tags
   # glue catalog database
   glue_database_name = "analytics_database"
+  glue_catalog_map = {}
 
   # add_linked_database = true
   # target_catalog_id = var.producer_catalog_id
   # target_database_name = var.source_database_name
-  # glue_catalog_map = {}
 
 }
