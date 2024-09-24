@@ -22,6 +22,28 @@ module "lake-formation-nice" {
   sso_admin_role_names  = [module.lakeformation_admin.name, "AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
 
 }
+
+
+resource "aws_glue_catalog_table" "glue_table_links" {
+  count = length(var.source_table_names)
+
+  name          = "${element(var.source_table_names, count.index)}_link"
+  database_name = aws_glue_catalog_database.glue_database_links.name
+  catalog_id    = var.catalog_id # AWS Account ID of the source catalog (external AWS account)
+
+  table_type = "GOVERNED"  # This is important for resource links
+  parameters = {
+    "targetTable"     = jsonencode({
+      "CatalogId"     = "632182196722"
+      "DatabaseName"  = "connect_datalake"
+      "Name"          = element(var.source_table_names, count.index)
+    })
+  }
+
+  # Depends on the database creation
+  depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
+}
+
 # module "gdc_table" {
 #   source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
 #   version = "10.0.4"

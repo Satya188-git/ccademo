@@ -26,4 +26,12 @@ source_database_name = "connect_datalake"
 nice_common_api_key  = "#{nice-common-api-key}#" 
 nice_hist_queuestats_key  = "#{nice-hist-queuestats-key}#"
 
-
+source_table_names = [
+  "agent_statistic_record",
+  "agent_queue_statistic_record",
+  "contact_evaluation_record",
+  "contact_flow_events",
+  "contact_lens_conversational_analytics",
+  "contact_record",
+  "contact_statistic_record"
+ ]

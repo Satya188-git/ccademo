@@ -87,3 +87,8 @@ variable "source_database_name"{
   description = "This is the database to hold all the data for Nice and Connect in Lake formation"
   type = string
 }
+
+variable "source_table_names" {
+  description = "List of source table names from producer"
+  type        = list(string)
+}
