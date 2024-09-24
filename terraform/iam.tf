@@ -7,6 +7,6 @@ module "lakeformation_admin" {
   region_code       = var.region_code
   application_use   = var.application_use
   description       = "IAM role for Lake Formation"
-  service_resources = "glue.amazonaws.com"
+  service_resources = ["glue.amazonaws.com"]
   tags              = var.tags
 }
