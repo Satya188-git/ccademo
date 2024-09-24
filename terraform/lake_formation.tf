@@ -50,7 +50,7 @@ module "gdc_table" {
   application_code  = var.application_code
   environment_code  = var.environment_code
   region_code       = var.region_code
-  application_use   = "${var.application_use}-lf-gdc"
+  application_use   = "${var.application_use}-lf-gdc-test"
   tags = var.tags
   # glue catalog database
   glue_database_name = "analytics_database"
@@ -64,7 +64,5 @@ module "gdc_table" {
       name                           = "sample_table_1"
       glue_catalog_table_description = "Table created using LF in GDC"
     }
-
-    
   }
 }
