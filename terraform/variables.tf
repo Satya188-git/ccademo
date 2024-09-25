@@ -93,3 +93,7 @@ variable "source_table_names" {
   description = "List of source table names that needs to be fetched from producer"
   type        = list(string)
 }
+variable "quicksight_user_arns"{
+  description = "List of QS user arns to whome table permissions needs to be assigned"
+  type        = list(string)
+}

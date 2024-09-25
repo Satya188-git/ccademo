@@ -37,7 +37,7 @@ source_table_names = [
   "contact_statistic_record"
  ]
 
-quicksight_users = [
+quicksight_user_arns = [
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/RKadari@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/AKumar45@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SThodima@sdgecontractor.com",

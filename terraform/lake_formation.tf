@@ -14,7 +14,7 @@ module "lake_formation_nice" {
   depends_on = [module.lakeformation_admin]
 
   # set_glue_data_catalog_permissions = true
-  set_glue_data_catalog_permissions = false
+  set_glue_data_catalog_permissions = true
   use_lake_formation = false
 
   assign_iam_admin    = true
