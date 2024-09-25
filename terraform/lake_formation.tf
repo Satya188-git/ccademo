@@ -13,10 +13,11 @@ module "lake_formation_nice" {
   # depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
   depends_on = [module.lakeformation_admin]
 
-  set_glue_data_catalog_permissions = true
+  # set_glue_data_catalog_permissions = true
+  set_glue_data_catalog_permissions = false
+  use_lake_formation = false
 
   assign_iam_admin    = true
-
   iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
   iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
   
@@ -67,3 +68,16 @@ module "glue_data_catalog" {
 #   # Depends on the database creation
 #   depends_on = [module.glue_data_catalog, module.lakeformation_admin, module.lake_formation_nice]
 # }
+
+
+# resource "aws_lakeformation_permissions" "example" {
+#   permissions = ["SELECT"]
+#   principal   = "arn:aws:iam:us-east-1:123456789012:user/SanHolo"
+
+#   table_with_columns {
+#     database_name = aws_glue_catalog_table.example.database_name
+#     name          = aws_glue_catalog_table.example.name
+#     column_names  = ["event"]
+#   }
+# }
+
