@@ -28,9 +28,9 @@ module "lake_formation_nice" {
   ]
 }
 
-# Module to create database using Lake formation
+# Module to create database and tables using Lake formation
 
-module "gdc_table" {
+module "glue_data_catalog" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
   version = "10.0.4"
   company_code      = var.company_code
@@ -40,33 +40,30 @@ module "gdc_table" {
   application_use   = "${var.application_use}"
   tags = var.tags
   # glue catalog database
-  glue_database_name = "analytics_database"
-  glue_catalog_map = {
+  glue_database_name = "connect_database"
+  glue_catalog_map = {}
 
-  }
-
-  # add_linked_database = true
-  # target_catalog_id = var.producer_catalog_id
-  # target_database_name = var.source_database_name
-
+  add_linked_database = true
+  target_catalog_id = var.producer_catalog_id
+  target_database_name = var.source_database_name
 }
 
-resource "aws_glue_catalog_table" "glue_table_links" {
+# resource "aws_glue_catalog_table" "glue_table_links" {
 
-  count = length(var.source_table_names)
-  name          = "${element(var.source_table_names, count.index)}_link"
-  database_name = module.gdc_table.glue_catalog_database_name
-  catalog_id    = var.producer_catalog_id # AWS Account ID of the source catalog (external AWS account)
+#   count = length(var.source_table_names)
+#   name          = "${element(var.source_table_names, count.index)}_link"
+#   database_name = module.glue_data_catalog.glue_catalog_database_name
+#   catalog_id    = var.producer_catalog_id # AWS Account ID of the source catalog (external AWS account)
 
-  table_type = "GOVERNED"  # This is important for resource links
-  parameters = {
-    "targetTable"     = jsonencode({
-      "CatalogId"     = var.producer_catalog_id
-      "DatabaseName"  = var.source_database_name
-      "Name"          = element(var.source_table_names, count.index)
-    })
-  }
+#   table_type = "GOVERNED"  # This is important for resource links
+#   parameters = {
+#     "targetTable"     = jsonencode({
+#       "CatalogId"     = var.producer_catalog_id
+#       "DatabaseName"  = var.source_database_name
+#       "Name"          = element(var.source_table_names, count.index)
+#     })
+#   }
 
-  # Depends on the database creation
-  depends_on = [module.gdc_table, module.lakeformation_admin, module.lake_formation_nice]
-}
+#   # Depends on the database creation
+#   depends_on = [module.glue_data_catalog, module.lakeformation_admin, module.lake_formation_nice]
+# }
