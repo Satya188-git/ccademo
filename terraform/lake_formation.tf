@@ -177,7 +177,7 @@ resource "aws_lakeformation_permissions" "database" {
   count       = length(var.quicksight_user_arns)
   depends_on = [module.glue_data_catalog]
   principal                     = element(var.quicksight_user_arns, count.index )
-  permissions                   = ["DESCRIBE"]
+  permissions                   = ["DESCRIBE","CREATE_TABLE", "ALTER"]
   permissions_with_grant_option = ["DESCRIBE", "CREATE_TABLE", "ALTER"]
   database {
     name = module.glue_data_catalog.glue_catalog_database_name
