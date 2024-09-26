@@ -81,3 +81,61 @@ module "glue_data_catalog" {
 #   }
 # }
 
+
+##############################        New Changes             #######################################
+# resource "aws_lakeformation_permissions" "describe_permissions" {
+#   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+#   permissions = ["DESCRIBE"]
+
+#   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  
+#   resource {
+#     data_lake_principal {
+#       data_lake_principal_identifier = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+#     }
+#     table_with_columns {
+#       database_name = module.glue_data_catalog.glue_catalog_database_name
+#       name          = element(var.source_table_names, count.index % length(var.source_table_names))
+#     }
+#   }
+# }
+
+# resource "aws_lakeformation_permissions" "select_permissions" {
+#   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+#   permissions = ["SELECT"]
+
+#   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  
+#   resource {
+#     table_with_columns {
+#       database_name = module.glue_data_catalog.glue_catalog_database_name
+#       name          = element(var.source_table_names, count.index % length(var.source_table_names))
+#     }
+#   }
+# }
+
+resource "aws_lakeformation_permissions" "describe_permissions" {
+  depends_on = [module.lakeformation_admin, module.glue_data_catalog, module.lakeformation_admin]
+  count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+  permissions = ["DESCRIBE"]
+
+  principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  
+  table {
+    database_name = module.glue_data_catalog.glue_catalog_database_name
+    name          = element(var.source_table_names, count.index % length(var.source_table_names))
+  }
+}
+
+resource "aws_lakeformation_permissions" "select_permissions" {
+  depends_on = [module.lakeformation_admin, module.glue_data_catalog, module.lakeformation_admin, resource.describe_permissions]
+  count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+  permissions = ["SELECT"]
+
+  principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  
+  table {
+    database_name = module.glue_data_catalog.glue_catalog_database_name
+    name          = element(var.source_table_names, count.index % length(var.source_table_names))
+  }
+}
