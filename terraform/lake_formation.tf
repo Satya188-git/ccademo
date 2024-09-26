@@ -156,7 +156,7 @@ resource "aws_lakeformation_permissions" "describe_permissions" {
 }
 
 resource "aws_lakeformation_permissions" "select_permissions" {
-  depends_on = [module.glue_data_catalog]
+  depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.describe_permissions]
   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
   permissions = ["SELECT"]
 
