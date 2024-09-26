@@ -174,8 +174,9 @@ module "glue_data_catalog" {
 # }
 
 resource "aws_lakeformation_permissions" "database" {
+  count       = length(var.quicksight_user_arns)
   depends_on = [module.glue_data_catalog]
-  principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  principal                     = element(var.quicksight_user_arns)
   permissions                   = ["DESCRIBE"]
   permissions_with_grant_option = ["DESCRIBE"]
   database {
@@ -184,7 +185,7 @@ resource "aws_lakeformation_permissions" "database" {
 }
 
 resource "aws_lakeformation_permissions" "table" {
-  depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.describe_permissions]
+  depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.database]
   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
   principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   permissions                   = ["SELECT"]
