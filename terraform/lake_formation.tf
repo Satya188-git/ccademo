@@ -114,28 +114,56 @@ module "glue_data_catalog" {
 #   }
 # }
 
+##############################        New Changes             #######################################
+
+# resource "aws_lakeformation_permissions" "describe_permissions" {
+#   depends_on = [module.lakeformation_admin, module.glue_data_catalog, module.lakeformation_admin]
+#   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+#   permissions = ["DESCRIBE"]
+
+#   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  
+#   table {
+#     database_name = module.glue_data_catalog.glue_catalog_database_name
+#     name          = element(var.source_table_names, count.index % length(var.source_table_names))
+#   }
+# }
+
+# resource "aws_lakeformation_permissions" "select_permissions" {
+#   depends_on = [module.lakeformation_admin, module.glue_data_catalog, module.lakeformation_admin]
+#   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+#   permissions = ["SELECT"]
+
+#   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+  
+#   table {
+#     database_name = module.glue_data_catalog.glue_catalog_database_name
+#     name          = element(var.source_table_names, count.index % length(var.source_table_names))
+#   }
+# }
+
 resource "aws_lakeformation_permissions" "describe_permissions" {
-  depends_on = [module.lakeformation_admin, module.glue_data_catalog, module.lakeformation_admin]
+  depends_on = [module.glue_data_catalog]
   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
   permissions = ["DESCRIBE"]
 
   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   
   table {
-    database_name = module.glue_data_catalog.glue_catalog_database_name
+    database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
     name          = element(var.source_table_names, count.index % length(var.source_table_names))
   }
 }
 
 resource "aws_lakeformation_permissions" "select_permissions" {
-  depends_on = [module.lakeformation_admin, module.glue_data_catalog, module.lakeformation_admin]
+  depends_on = [module.glue_data_catalog]
   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
   permissions = ["SELECT"]
 
   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   
   table {
-    database_name = module.glue_data_catalog.glue_catalog_database_name
+    database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
     name          = element(var.source_table_names, count.index % length(var.source_table_names))
   }
 }
