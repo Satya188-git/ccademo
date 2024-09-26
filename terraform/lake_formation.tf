@@ -1,33 +1,33 @@
 # Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
 
-module "lake_formation_nice" {
-  source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
-  version = "9.1.1"
+# module "lake_formation_nice" {
+#   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
+#   version = "9.1.1"
 
-  company_code     = var.company_code
-  application_code = var.application_code
-  environment_code = var.environment_code
-  region_code      = var.region_code
-  application_use  = var.application_use
+#   company_code     = var.company_code
+#   application_code = var.application_code
+#   environment_code = var.environment_code
+#   region_code      = var.region_code
+#   application_use  = var.application_use
 
-  # depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
-  depends_on = [module.lakeformation_admin]
+#   # depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
+#   depends_on = [module.lakeformation_admin]
 
-  # set_glue_data_catalog_permissions = true
-  set_glue_data_catalog_permissions = true
-  use_lake_formation = false
+#   # set_glue_data_catalog_permissions = true
+#   set_glue_data_catalog_permissions = true
+#   use_lake_formation = false
 
-  # assign_iam_admin    = true
-  # iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
-  # iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+#   # assign_iam_admin    = true
+#   # iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
+#   # iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
   
-  sso_admin_role_arns = [module.lakeformation_admin.arn, var.admins_arn , var.devs_arn]
-  sso_admin_role_names  = [
-    module.lakeformation_admin.name,
-    element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
-    element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
-  ]
-}
+#   sso_admin_role_arns = [module.lakeformation_admin.arn, var.admins_arn , var.devs_arn]
+#   sso_admin_role_names  = [
+#     module.lakeformation_admin.name,
+#     element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
+#     element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
+#   ]
+# }
 
 # Module to create database and tables using Lake formation
 
@@ -41,7 +41,7 @@ module "glue_data_catalog" {
   application_use   = "${var.application_use}"
   tags = var.tags
   # glue catalog database
-  glue_database_name = "connect_database"
+  glue_database_name = "connect_database_test"
   glue_catalog_map = {}
 
   add_linked_database = true
