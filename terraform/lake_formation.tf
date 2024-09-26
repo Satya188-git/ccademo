@@ -14,8 +14,8 @@ module "lake_formation_nice" {
   depends_on = [module.lakeformation_admin]
 
   # set_glue_data_catalog_permissions = true
-  set_glue_data_catalog_permissions = true
-  use_lake_formation = false
+  set_glue_data_catalog_permissions = false
+  use_lake_formation = true
 
   assign_iam_admin    = true
   iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
@@ -185,15 +185,15 @@ resource "aws_lakeformation_permissions" "database" {
   }
 }
 
-resource "aws_lakeformation_permissions" "table" {
-  depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.database]
-  count       = length(var.quicksight_user_arns) * length(var.source_table_names)
-  principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
-  permissions                   = ["SELECT"]
-  permissions_with_grant_option = ["SELECT"]
-  table {
-    database_name = module.glue_data_catalog.glue_catalog_database_name
-    name          = element(var.source_table_names, count.index % length(var.source_table_names))
-    catalog_id = var.awsAccount
-  }
-}
+# resource "aws_lakeformation_permissions" "table" {
+#   depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.database]
+#   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+#   principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+#   permissions                   = ["SELECT"]
+#   permissions_with_grant_option = ["SELECT"]
+#   table {
+#     database_name = module.glue_data_catalog.glue_catalog_database_name
+#     name          = element(var.source_table_names, count.index % length(var.source_table_names))
+#     catalog_id = var.awsAccount
+#   }
+# }
