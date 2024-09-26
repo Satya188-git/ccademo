@@ -16,7 +16,7 @@ module "lake_formation" {
   application_use  = var.application_use
 
   # depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
-  depends_on = [module.lakeformation_admin]
+  # depends_on = [module.lakeformation_admin]
 
   # set_glue_data_catalog_permissions = true
   set_glue_data_catalog_permissions = true
