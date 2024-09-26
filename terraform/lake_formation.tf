@@ -177,8 +177,8 @@ resource "aws_lakeformation_permissions" "database" {
   count       = length(var.quicksight_user_arns)
   depends_on = [module.glue_data_catalog]
   principal                     = element(var.quicksight_user_arns, count.index )
-  permissions                   = ["DESCRIBE", "SELECT"]
-  permissions_with_grant_option = ["DESCRIBE", "SELECT"]
+  permissions                   = ["DESCRIBE"]
+  permissions_with_grant_option = ["DESCRIBE"]
   database {
     name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
   }
