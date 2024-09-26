@@ -35,7 +35,6 @@ module "lake_formation" {
 
 resource "aws_glue_catalog_database" "glue_database_links" {
   depends_on  = [module.lake_formation]
-  description = "Resource Link created on top of prodycer for connect data"
   name        = "${var.source_database_name}_link"
   target_database {
     database_name = var.source_database_name
