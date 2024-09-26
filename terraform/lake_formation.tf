@@ -177,21 +177,21 @@ resource "aws_lakeformation_permissions" "database" {
   count       = length(var.quicksight_user_arns)
   depends_on = [module.glue_data_catalog]
   principal                     = element(var.quicksight_user_arns, count.index )
-  permissions                   = ["DESCRIBE"]
-  permissions_with_grant_option = ["DESCRIBE"]
+  permissions                   = ["DESCRIBE", "SELECT"]
+  permissions_with_grant_option = ["DESCRIBE", "SELECT"]
   database {
     name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
   }
 }
 
-resource "aws_lakeformation_permissions" "table" {
-  depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.database]
-  count       = length(var.quicksight_user_arns) * length(var.source_table_names)
-  principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
-  permissions                   = ["SELECT"]
-  permissions_with_grant_option = ["SELECT"]
-  table {
-    database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
-    name          = element(var.source_table_names, count.index % length(var.source_table_names))
-  }
-}
+# resource "aws_lakeformation_permissions" "table" {
+#   depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.database]
+#   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
+#   principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
+#   permissions                   = ["SELECT"]
+#   permissions_with_grant_option = ["SELECT"]
+#   table {
+#     database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
+#     name          = element(var.source_table_names, count.index % length(var.source_table_names))
+#   }
+# }
