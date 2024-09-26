@@ -14,12 +14,12 @@ module "lake_formation_nice" {
   depends_on = [module.lakeformation_admin]
 
   # set_glue_data_catalog_permissions = true
-  set_glue_data_catalog_permissions = false
-  use_lake_formation = true
+  set_glue_data_catalog_permissions = true
+  use_lake_formation = false
 
-  assign_iam_admin    = true
-  iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
-  iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+  # assign_iam_admin    = true
+  # iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
+  # iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
   
   sso_admin_role_arns = [module.lakeformation_admin.arn, var.admins_arn , var.devs_arn]
   sso_admin_role_names  = [
