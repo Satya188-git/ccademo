@@ -149,9 +149,12 @@ resource "aws_lakeformation_permissions" "describe_permissions" {
 
   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   
-  table {
+  table_with_columns {
+    database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
     name          = element(var.source_table_names, count.index % length(var.source_table_names))
-  }
+    column_names  = ["*"]
+}
+
 }
 
 resource "aws_lakeformation_permissions" "select_permissions" {
@@ -161,7 +164,9 @@ resource "aws_lakeformation_permissions" "select_permissions" {
 
   principal = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   
-  table {
+  table_with_columns {
+    database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_database"
     name          = element(var.source_table_names, count.index % length(var.source_table_names))
-  }
+    column_names  = ["*"]
+}
 }
