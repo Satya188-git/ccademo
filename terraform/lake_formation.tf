@@ -56,7 +56,7 @@ resource "aws_lakeformation_permissions" "database" {
 }
 
 resource "aws_lakeformation_permissions" "table" {
-  depends_on = [module.glue_data_catalog, resource.aws_lakeformation_permissions.database]
+  depends_on = [resource.aws_glue_catalog_database.glue_database_links, resource.aws_lakeformation_permissions.database]
   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
   principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   permissions                   = ["SELECT","DESCRIBE" ]
