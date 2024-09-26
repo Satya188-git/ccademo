@@ -28,6 +28,7 @@ module "lake_formation" {
   
   sso_admin_role_arns = [ var.admins_arn , var.devs_arn]
   sso_admin_role_names  = [
+    module.lakeformation_admin.arn,
     element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
     element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
   ]
@@ -44,7 +45,7 @@ resource "aws_glue_catalog_database" "glue_database_links" {
 
 resource "aws_lakeformation_permissions" "database" {
   count       = length(var.quicksight_user_arns)
-  depends_on = [resource.aws_glue_catalog_database.glue_database_links]
+  depends_on = [module.lakeformation_admin, resource.aws_glue_catalog_database.glue_database_links]
   principal                     = element(var.quicksight_user_arns, count.index )
   permissions                   = ["DESCRIBE"]
   permissions_with_grant_option = ["DESCRIBE"]
@@ -55,7 +56,7 @@ resource "aws_lakeformation_permissions" "database" {
 }
 
 resource "aws_lakeformation_permissions" "table" {
-  depends_on = [resource.aws_glue_catalog_database.glue_database_links, resource.aws_lakeformation_permissions.database]
+  depends_on = [module.lakeformation_admin, resource.aws_glue_catalog_database.glue_database_links, resource.aws_lakeformation_permissions.database]
   count       = length(var.quicksight_user_arns) * length(var.source_table_names)
   principal                     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
   permissions                   = ["SELECT","DESCRIBE" ]
@@ -66,6 +67,7 @@ resource "aws_lakeformation_permissions" "table" {
     name          = element(var.source_table_names, count.index % length(var.source_table_names))
     catalog_id = var.awsAccount
   }
+  catalog_id = var.awsAccount
 }
 
 # Module to create database and tables using Lake formation
