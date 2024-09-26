@@ -50,7 +50,7 @@ resource "aws_lakeformation_permissions" "database" {
   permissions                   = ["DESCRIBE"]
   permissions_with_grant_option = ["DESCRIBE"]
   database {
-    name = module.aws_glue_catalog_database.glue_database_links.name
+    name = resource.aws_glue_catalog_database.glue_database_links.name
     catalog_id = var.awsAccount
   }
 }
@@ -62,7 +62,7 @@ resource "aws_lakeformation_permissions" "table" {
   permissions                   = ["SELECT","DESCRIBE" ]
   permissions_with_grant_option = ["SELECT","DESCRIBE"]
   table {
-    database_name = module.aws_glue_catalog_database.glue_database_links.name
+    database_name = resource.aws_glue_catalog_database.glue_database_links.name
     name          = element(var.source_table_names, count.index % length(var.source_table_names))
     catalog_id = var.awsAccount
   }
