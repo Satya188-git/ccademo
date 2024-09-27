@@ -57,8 +57,7 @@ module "lake_formation" {
 #     create_before_destroy = true
 #     ignore_changes        = []
 #   }
-
-}
+# }
 
 resource "aws_glue_catalog_database" "glue_database_links" {
   depends_on  = [module.lake_formation]
