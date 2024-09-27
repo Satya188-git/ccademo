@@ -3,6 +3,7 @@ module "lake_formation" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
   version = "9.1.1"
 
+  count            = length(var.quicksight_user_arns)
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
@@ -29,7 +30,6 @@ module "lake_formation" {
 
   data_permission_map = {
     permission1 = {
-      count         = length(var.quicksight_user_arns)
       type          = "database"
       # principal     = module.glue_data_catalog_connect_datalake.arn
       principal     = element(var.quicksight_user_arns, count.index)
@@ -37,7 +37,6 @@ module "lake_formation" {
       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
     }
     permission2 = {
-      count         = length(var.quicksight_user_arns)
       type          = "table"
       principal     = element(var.quicksight_user_arns,count.index)
       permissions   = ["SELECT"]
