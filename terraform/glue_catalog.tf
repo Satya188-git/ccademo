@@ -16,10 +16,6 @@ module "glue_data_catalog_connect_datalake" {
   target_catalog_id = var.producer_catalog_id
   target_database_name = var.source_database_name
   
-  lifecycle {
-    create_before_destroy = true
-    ignore_changes        = []
-  }
 }
 
 # Module to create data base for views in Lake formation
