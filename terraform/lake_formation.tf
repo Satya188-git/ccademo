@@ -38,9 +38,9 @@ module "lake_formation" {
     }
     permission2 = {
       type          = "table"
+      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
       principal     = element(var.quicksight_user_arns,count.index)
       permissions   = ["SELECT"]
-      principal     = element(var.quicksight_user_arns, floor(count.index / length(var.source_table_names)))
       wildcard      = true
     }
   }
