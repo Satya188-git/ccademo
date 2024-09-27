@@ -42,9 +42,9 @@ module "lake_formation" {
       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
       # principal     = element(var.quicksight_user_arns,count.index)
       principal = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
-      name = "contact_record"
+      # name = "contact_record"
       permissions   = ["SELECT"]
-      # wildcard      = true
+      wildcard      = true
     }
   }
 }
