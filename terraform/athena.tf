@@ -23,6 +23,7 @@ module "athena" {
 #   db_encryption_option   = "SSE_KMS"
 
 # option to create Athena DB and corresponding variables
+  create_workgroup = false
   create_athena_database = true
   db_force_destroy       = false
   athena_db_name         = "connect_views_athena_tf"
@@ -33,8 +34,7 @@ module "athena" {
   create_athena_named_query = true
   named_query_name          = "iac_test_query"
   named_query_description   = "iac test named query"
-  named_query_workgroup     = module.athena.athena_workgroup_id
-  named_query_database      = module.athena.athena_database_id
+  named_query_database      = "connect_views_athena_tf"
   #named_query_query         = "SELECT * FROM \"${module.glue-crawler.glue_database_name}\".\"test\" limit 10;"
   named_query_query = "SELECT contact_id, disconnect_reason, customer_endpoint_address FROM \"dev_connectdatalake\".\"dev_contact_record\";" 
 
