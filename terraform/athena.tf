@@ -28,7 +28,7 @@ module "athena" {
   db_force_destroy       = false
   athena_db_name         = "connect_views_athena_tf"
   athena_database_bucket = module.s3_bucket_athena_results.s3_bucket_id
-  db_encryption_option   = "SSE_KMS"
+  # db_encryption_option   = "SSE_KMS"
 #   db_kms_key_arn         = aws_kms_key.athena_kms_key.arn
 
   create_athena_named_query = true
