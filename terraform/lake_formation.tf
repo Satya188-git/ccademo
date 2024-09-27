@@ -1,9 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-data "aws_iam_session_context" "current" {
-  arn = data.aws_caller_identity.current.arn
-}
-
 # Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
 module "lake_formation" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"

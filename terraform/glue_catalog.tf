@@ -1,10 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-data "aws_iam_session_context" "current" {
-  arn = data.aws_caller_identity.current.arn
-}
-
-
 # Module to create connect data resource link in Lake formation
 module "glue_data_catalog_connect_datalake" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
