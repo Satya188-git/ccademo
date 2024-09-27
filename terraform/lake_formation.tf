@@ -14,7 +14,7 @@ module "lake_formation" {
   depends_on = [module.lakeformation_admin, module.glue_data_catalog_connect_datalake, module.glue_database_connect_datalake_views ]
 
   # set_glue_data_catalog_permissions = true
-  set_glue_data_catalog_permissions = false
+  set_glue_data_catalog_permissions = true
   use_lake_formation = true
 
   assign_iam_admin    = true
@@ -40,8 +40,9 @@ module "lake_formation" {
       type          = "table"
       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
       principal     = element(var.quicksight_user_arns,count.index)
+      name = "contact_record"
       permissions   = ["SELECT"]
-      wildcard      = true
+      # wildcard      = true
     }
   }
 }
