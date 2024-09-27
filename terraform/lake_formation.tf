@@ -3,7 +3,7 @@ module "lake_formation" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
   version = "9.1.1"
 
-  count            = length(var.quicksight_user_arns)
+  # count            = length(var.quicksight_user_arns)
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
@@ -32,14 +32,16 @@ module "lake_formation" {
     permission1 = {
       type          = "database"
       # principal     = module.glue_data_catalog_connect_datalake.arn
-      principal     = element(var.quicksight_user_arns, count.index)
+      # principal     = element(var.quicksight_user_arns, count.index)
+      principal = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
       permissions   = ["DESCRIBE"]
       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
     }
     permission2 = {
       type          = "table"
       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
-      principal     = element(var.quicksight_user_arns,count.index)
+      # principal     = element(var.quicksight_user_arns,count.index)
+      principal = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
       name = "contact_record"
       permissions   = ["SELECT"]
       # wildcard      = true
