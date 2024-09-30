@@ -216,7 +216,6 @@ parameters:
 extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
-    S3Info: ${{ parameters.S3Info }}
     Environments: ${{ parameters.Environments }}
     SCName: ${{ parameters.SCName }}
     TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}
