@@ -78,13 +78,13 @@ module "glue_database_connect_datalake_views" {
           columns_comment = "ess2"
         },
       ]
-      # storage_descriptor_ser_de_info = [
-      #   {
-      #     ser_de_info_name                  = "my-stream"
-      #     ser_de_info_serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
-      #     ser_de_info_parameters            = tomap({ "serialization.format" = 1 })
-      #   },
-      # ]
+      storage_descriptor_ser_de_info = [
+        {
+          ser_de_info_name                  = "my-stream"
+          ser_de_info_serialization_library = "'org.apache.hadoop.hive.serde2.OpenCSVSerde"
+          ser_de_info_parameters            = tomap({ "serialization.format" = 1 })
+        },
+      ]
     }
 
     # "sample_table_2" = {
