@@ -87,43 +87,56 @@ module "glue_database_connect_datalake_views" {
       ]
     }
 
-    # "sample_table_2" = {
-    #   name                           = "sample_table_2"
-    #   glue_catalog_table_description = local.glue_catalog_table_description
-    #   glue_catalog_table_table_type  = local.glue_catalog_table_table_type
-    #   glue_catalog_table_parameters = {
-    #     "sizeKey"        = 493378
-    #     "tmp"            = "none"
-    #     "test"           = "yes"
-    #     "classification" = "csv"
-    #   }
-    #   location                  = "s3://my-bucket/event-streams/my-stream"
-    #   input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
-    #   output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
-    #   compressed                = "true"
-    #   number_of_buckets         = "1"
-    #   bucket_columns            = tolist(["test"])
-    #   parameters                = tomap({ "test" = "test" })
-    #   stored_as_sub_directories = "false"
-    #   storage_descriptor_columns = [
-    #     {
-    #       columns_name    = "oid"
-    #       columns_type    = "double"
-    #       columns_comment = "oid"
-    #     },
-    #     {
-    #       columns_name    = "oid2"
-    #       columns_type    = "double"
-    #       columns_comment = "oid2"
-    #     },
-    #   ]
-    #   storage_descriptor_ser_de_info = [
-    #     {
-    #       ser_de_info_name                  = "my-stream"
-    #       ser_de_info_serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
-    #       ser_de_info_parameters            = tomap({ "serialization.format" = 1 })
-    #     },
-    #   ]
-    # }
+    "ivr_combined_data" = {
+      name                           = "ivr_combined_data"
+      glue_catalog_table_description = "IVR Combined data based on date filter"
+      view_original_text = var.view_original_text
+      view_expanded_text = var.view_original_text
+      glue_catalog_table_table_type  = "VIRTUAL_VIEW"
+      # glue_catalog_table_parameters = {
+      #   "classification" = "csv",
+
+      # }
+      # location                  = "s3://my-bucket/event-streams/my-stream"
+      # input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+      # output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+      # compressed                = "true"
+      # number_of_buckets         = "1"
+      # bucket_columns            = tolist(["test"])
+      # parameters                = tomap({ "test" = "test" })
+      stored_as_sub_directories = "false"
+      storage_descriptor_columns = [
+        {
+          columns_name    = "queue_id"
+          columns_type    = "string"
+          columns_comment = "queue_id"
+        },
+        {
+          columns_name    = "metrics"
+          columns_type    = "string"
+          columns_comment = "metrics"
+        },
+        {
+          columns_name    = "metric_value"
+          columns_type    = "float"
+          columns_comment = "metric_value"
+        },
+        {
+          columns_name    = "language"
+          columns_type    = "string"
+          columns_comment = "language"
+        },
+        {
+          columns_name    = "type"
+          columns_type    = "string"
+          columns_comment = "type"
+        },
+        {
+          columns_name    = "ess2"
+          columns_type    = "string"
+          columns_comment = "ess2"
+        },
+      ]
+    }
   }
 }
