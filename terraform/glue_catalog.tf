@@ -82,7 +82,7 @@ module "glue_database_connect_datalake_views" {
         {
           ser_de_info_name                  = "my-stream"
           ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
-          ser_de_info_parameters            = tomap({'field.delim' = ',','skip.header.line.count' = '1' })
+          ser_de_info_parameters            = tomap({"field.delim" = ",","skip.header.line.count" = "1" })
         },
       ]
     }
