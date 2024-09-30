@@ -11,7 +11,7 @@ module "glue_data_catalog_connect_datalake" {
   tags = var.tags
   # glue catalog database
   glue_database_name = "connect_datalake_link"
-  # glue_catalog_map = {}
+  glue_catalog_map = {}
 
   add_linked_database = true
   target_catalog_id = var.producer_catalog_id
