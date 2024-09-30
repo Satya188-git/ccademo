@@ -91,7 +91,7 @@ module "glue_database_connect_datalake_views" {
       name                           = "ivr_combined_data"
       glue_catalog_table_description = "IVR Combined data based on date filter"
       glue_catalog_table_view_original_text = var.view_original_text
-      glue_catalog_table_view_expanded_text = var.view_original_text
+      # glue_catalog_table_view_expanded_text = var.view_original_text
       glue_catalog_table_table_type  = "VIRTUAL_VIEW"
       # glue_catalog_table_parameters = {}
       # location                  = "s3://my-bucket/event-streams/my-stream"
@@ -102,38 +102,38 @@ module "glue_database_connect_datalake_views" {
       # bucket_columns            = tolist(["test"])
       # parameters                = tomap({ "test" = "test" })
       # stored_as_sub_directories = "false"
-      storage_descriptor_columns = [
-        {
-          columns_name    = "queue_id"
-          columns_type    = "string"
-          columns_comment = "queue_id"
-        },
-        {
-          columns_name    = "metrics"
-          columns_type    = "string"
-          columns_comment = "metrics"
-        },
-        {
-          columns_name    = "metric_value"
-          columns_type    = "float"
-          columns_comment = "metric_value"
-        },
-        {
-          columns_name    = "language"
-          columns_type    = "string"
-          columns_comment = "language"
-        },
-        {
-          columns_name    = "type"
-          columns_type    = "string"
-          columns_comment = "type"
-        },
-        {
-          columns_name    = "ess2"
-          columns_type    = "string"
-          columns_comment = "ess2"
-        },
-      ]
+      # storage_descriptor_columns = [
+      #   {
+      #     columns_name    = "queue_id"
+      #     columns_type    = "string"
+      #     columns_comment = "queue_id"
+      #   },
+      #   {
+      #     columns_name    = "metrics"
+      #     columns_type    = "string"
+      #     columns_comment = "metrics"
+      #   },
+      #   {
+      #     columns_name    = "metric_value"
+      #     columns_type    = "float"
+      #     columns_comment = "metric_value"
+      #   },
+      #   {
+      #     columns_name    = "language"
+      #     columns_type    = "string"
+      #     columns_comment = "language"
+      #   },
+      #   {
+      #     columns_name    = "type"
+      #     columns_type    = "string"
+      #     columns_comment = "type"
+      #   },
+      #   {
+      #     columns_name    = "ess2"
+      #     columns_type    = "string"
+      #     columns_comment = "ess2"
+      #   },
+      # ]
     }
   }
 }
