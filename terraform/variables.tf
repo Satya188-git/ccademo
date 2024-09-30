@@ -37,32 +37,11 @@ variable "tags" {
   description = "Common tags for all resources in this module."
 }
 
-variable "pandas_layer_arn" {
-  type = string
-  description = "AWSSDKPandas-Python311 Pandas Layer from AWS"
-}
-
-variable "code_artifact_bucket_name" {
-  description = "S3 bucket name for code artifacts"
-  type        = string
-}
 
 # variable "kms_key_id" {
 #   description = "Default KMS encryption KEY ID for the Secrets Manager"
 #   type        = string
 # }
-
-
-variable "nice_common_api_key" {
-  description = "Nice Common API Key from ADO"
-  type        = string
-}
-
-variable "nice_hist_queuestats_key" {
-  description = "Nice API Key hist queue stats from ADO"
-  type        = string
-}
-
 
 variable "admins_arn" {
   description = "This variable is for adding admin arn into lake formation policies"

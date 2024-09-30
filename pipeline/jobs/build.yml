@@ -1,19 +1,6 @@
 jobs:
-  - job:
-    displayName: 'Create and Publish Lambda Artifact for Hello World Function'
-    steps:
-    
-    - script: |
-        set -e
-        set -x
-
-        # Zip nice.py file for Lambda
-        LAMBDA_DIR='src/lambda/nice_lambda'
-        cd $LAMBDA_DIR
-        zip -r nice.zip nice.py
-        echo "Listing contents of the directory '$(pwd)'"
-        ls
-      displayName: 'Build Code Artifact For Hello World Lambda'
-    - publish: src/lambda/nice_lambda/nice.zip
-      artifact: nice_lambda
-      displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact named lambda_function'
+  # Template referenced from shared-it-devsecops-yaml repository
+  # This template uses no tasks that rely on software dependencies and does not need to honor canary mode.
+  - template: Pipeline-Templates/Standalone/Jobs/Linting/flake8.yml@DevSecOpsYAML
+    parameters: 
+      lintingConfig: "warn"
