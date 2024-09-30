@@ -39,7 +39,7 @@ module "athena" {
     named_query_name          = "connectapi"
     named_query_description   = "Connect API data from Producer S3"
     named_query_workgroup     = "primary"
-    named_query_database      = ""
+    named_query_database      = "sdge-dcctr-dev-wus2-glue-ccc-analytics-connect_datalake_views"
     #named_query_query         = "SELECT * FROM \"${module.glue-crawler.glue_database_name}\".\"test\" limit 10;"
     named_query_query = "SELECT * FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\" limit 10;"
 
