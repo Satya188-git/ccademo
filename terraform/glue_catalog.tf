@@ -90,8 +90,8 @@ module "glue_database_connect_datalake_views" {
     "ivr_combined_data" = {
       name                           = "ivr_combined_data"
       glue_catalog_table_description = "IVR Combined data based on date filter"
-      view_original_text = var.view_original_text
-      view_expanded_text = var.view_original_text
+      glue_catalog_table_view_original_text = var.view_original_text
+      glue_catalog_table_view_expanded_text = var.view_original_text
       glue_catalog_table_table_type  = "VIRTUAL_VIEW"
       # glue_catalog_table_parameters = {
       #   "classification" = "csv",
