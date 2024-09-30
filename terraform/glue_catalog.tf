@@ -144,3 +144,13 @@ resource "aws_athena_named_query" "my_named_query" {
   database  = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
   query     = var.view_original_text
 }
+
+resource "terraform_data" "crete_athena_view" {
+  triggers_replace = [
+    aws_athena_named_query.my_named_query.id
+  ]
+
+  provisioner "local-exec" {
+    command = "aws athena start-query-execution --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog"
+  }
+}
