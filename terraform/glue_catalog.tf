@@ -1,4 +1,5 @@
 # Module to create connect data resource link in Lake formation
+# Create a resource link from connect datalake
 module "glue_data_catalog_connect_datalake" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
   version = "10.0.4"
