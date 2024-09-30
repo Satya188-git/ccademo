@@ -85,7 +85,7 @@ module "glue_database_connect_datalake_views" {
           ser_de_info_parameters            = tomap({"field.delim" = ",","skip.header.line.count" = "1" })
         },
       ]
-    }
+    },
 
     "ivr_combined_data" = {
       name                           = "ivr_combined_data"
@@ -93,10 +93,7 @@ module "glue_database_connect_datalake_views" {
       glue_catalog_table_view_original_text = var.view_original_text
       glue_catalog_table_view_expanded_text = var.view_original_text
       glue_catalog_table_table_type  = "VIRTUAL_VIEW"
-      # glue_catalog_table_parameters = {
-      #   "classification" = "csv",
-
-      # }
+      # glue_catalog_table_parameters = {}
       # location                  = "s3://my-bucket/event-streams/my-stream"
       # input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
       # output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
@@ -104,7 +101,7 @@ module "glue_database_connect_datalake_views" {
       # number_of_buckets         = "1"
       # bucket_columns            = tolist(["test"])
       # parameters                = tomap({ "test" = "test" })
-      stored_as_sub_directories = "false"
+      # stored_as_sub_directories = "false"
       storage_descriptor_columns = [
         {
           columns_name    = "queue_id"
