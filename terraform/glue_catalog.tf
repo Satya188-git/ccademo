@@ -19,10 +19,10 @@ module "glue_data_catalog_connect_datalake" {
 }
 
 # Module to create data base for views in Lake formation
-module "glue_database_connect_datalake_views" {
-  source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
-  version = "10.1.0"
 
+module "glue_database_connect_datalake_views" {
+  source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+  version = "10.0.4"
   company_code      = var.company_code
   application_code  = var.application_code
   environment_code  = var.environment_code
@@ -30,10 +30,9 @@ module "glue_database_connect_datalake_views" {
   application_use   = "${var.application_use}"
   tags = var.tags
 
-  iam_role_arn  = module.lakeformation_admin.arn
-  iam_role_name = module.lakeformation_admin.name
-
-  glue_catalog_map = {
+  # glue catalog database
+  glue_database_name = "connect_datalake_views"
+  glue_database_map = {
     "connectapi" = {
       name                           = "connectapi"
       glue_catalog_table_description = "Table created using TF for connect api data"
