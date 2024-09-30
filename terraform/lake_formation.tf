@@ -10,20 +10,24 @@ module "lake_formation" {
   region_code      = var.region_code
   application_use  = var.application_use
 
-  # depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
+  depends_on = [module.glue_database_connect_datalake_views, module.lakeformation_admin, module.glue_data_catalog_connect_datalake]
   # depends_on = [module.lakeformation_admin, module.glue_data_catalog_connect_datalake, module.glue_database_connect_datalake_views ]
 
-  # set_glue_data_catalog_permissions = true
-  set_glue_data_catalog_permissions = true
-  use_lake_formation = false
+  set_glue_data_catalog_permissions = false
+  use_lake_formation = true
 
   assign_iam_admin    = true
   iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
   iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
   
-  sso_admin_role_arns = [ var.admins_arn , var.devs_arn]
-  sso_admin_role_names  = [
+  sso_admin_role_arns = [
     module.lakeformation_admin.arn,
+    var.admins_arn,
+    var.devs_arn
+  ]
+
+  sso_admin_role_names  = [
+    module.lakeformation_admin.name,
     element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
     element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
   ]
