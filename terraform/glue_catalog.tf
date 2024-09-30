@@ -151,6 +151,6 @@ resource "terraform_data" "crete_athena_view" {
   ]
 
   provisioner "local-exec" {
-    command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog"
+    command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
   }
 }
