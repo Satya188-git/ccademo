@@ -3,8 +3,13 @@ module "lake_formation" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
   version = "9.1.1"
 
+  # depends_on = [
+  #   module.glue_database_connect_datalake_views,
+  #   module.lakeformation_admin,
+  #   module.glue_data_catalog_connect_datalake,
+  # ]
+
   depends_on = [
-    module.glue_database_connect_datalake_views,
     module.lakeformation_admin,
     module.glue_data_catalog_connect_datalake,
   ]
@@ -15,8 +20,6 @@ module "lake_formation" {
   environment_code = var.environment_code
   region_code      = var.region_code
   application_use  = var.application_use
-
-  # depends_on = [module.lakeformation_admin, module.glue_data_catalog_connect_datalake, module.glue_database_connect_datalake_views ]
 
   set_glue_data_catalog_permissions = true
   use_lake_formation = false
