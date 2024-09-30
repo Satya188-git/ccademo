@@ -71,44 +71,44 @@ module "glue_data_catalog_connect_datalake" {
       # ]
     }
 
-    "sample_table_2" = {
-      name                           = "sample_table_2"
-      glue_catalog_table_description = local.glue_catalog_table_description
-      glue_catalog_table_table_type  = local.glue_catalog_table_table_type
-      glue_catalog_table_parameters = {
-        "sizeKey"        = 493378
-        "tmp"            = "none"
-        "test"           = "yes"
-        "classification" = "csv"
-      }
-      location                  = "s3://my-bucket/event-streams/my-stream"
-      input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
-      output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
-      compressed                = "true"
-      number_of_buckets         = "1"
-      bucket_columns            = tolist(["test"])
-      parameters                = tomap({ "test" = "test" })
-      stored_as_sub_directories = "false"
-      storage_descriptor_columns = [
-        {
-          columns_name    = "oid"
-          columns_type    = "double"
-          columns_comment = "oid"
-        },
-        {
-          columns_name    = "oid2"
-          columns_type    = "double"
-          columns_comment = "oid2"
-        },
-      ]
-      storage_descriptor_ser_de_info = [
-        {
-          ser_de_info_name                  = "my-stream"
-          ser_de_info_serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
-          ser_de_info_parameters            = tomap({ "serialization.format" = 1 })
-        },
-      ]
-    }
+    # "sample_table_2" = {
+    #   name                           = "sample_table_2"
+    #   glue_catalog_table_description = local.glue_catalog_table_description
+    #   glue_catalog_table_table_type  = local.glue_catalog_table_table_type
+    #   glue_catalog_table_parameters = {
+    #     "sizeKey"        = 493378
+    #     "tmp"            = "none"
+    #     "test"           = "yes"
+    #     "classification" = "csv"
+    #   }
+    #   location                  = "s3://my-bucket/event-streams/my-stream"
+    #   input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+    #   output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+    #   compressed                = "true"
+    #   number_of_buckets         = "1"
+    #   bucket_columns            = tolist(["test"])
+    #   parameters                = tomap({ "test" = "test" })
+    #   stored_as_sub_directories = "false"
+    #   storage_descriptor_columns = [
+    #     {
+    #       columns_name    = "oid"
+    #       columns_type    = "double"
+    #       columns_comment = "oid"
+    #     },
+    #     {
+    #       columns_name    = "oid2"
+    #       columns_type    = "double"
+    #       columns_comment = "oid2"
+    #     },
+    #   ]
+    #   storage_descriptor_ser_de_info = [
+    #     {
+    #       ser_de_info_name                  = "my-stream"
+    #       ser_de_info_serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+    #       ser_de_info_parameters            = tomap({ "serialization.format" = 1 })
+    #     },
+    #   ]
+    # }
   }
   
 }
