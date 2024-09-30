@@ -32,7 +32,7 @@ module "glue_database_connect_datalake_views" {
 
   # glue catalog database
   glue_database_name = "connect_datalake_views"
-  glue_database_map = {
+  glue_catalog_map = {
     "connectapi" = {
       name                           = "connectapi"
       glue_catalog_table_description = "Table created using TF for connect api data"

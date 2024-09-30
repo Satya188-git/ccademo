@@ -3,18 +3,12 @@ module "lake_formation" {
   source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
   version = "9.1.1"
 
-  # depends_on = [
-  #   module.glue_database_connect_datalake_views,
-  #   module.lakeformation_admin,
-  #   module.glue_data_catalog_connect_datalake,
-  # ]
-
   depends_on = [
+    module.glue_database_connect_datalake_views,
     module.lakeformation_admin,
     module.glue_data_catalog_connect_datalake,
   ]
 
-  # count            = length(var.quicksight_user_arns)
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
