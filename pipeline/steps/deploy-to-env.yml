@@ -18,6 +18,23 @@ steps:
       python3 -m pip install artifacts-keyring; python3 -m pip install boto3
     displayName: 'Install Boto3'
 
+  -script: |
+      echo "Configuring the aws cli"
+      aws configure set aws_access_key_id "#{aws-access-key-id}#"
+      aws configure set aws_secret_access_key "#{aws-secret-access-key-id}#"
+      aws configure set region us-west-2
+      aws configure set output json
+      echo "Configured the aws cli"
+      aws s3 ls
+    displayName: 'aws cli config'
+
+
+
+# - task: PythonScript@0
+#   inputs:
+#     scriptSource: 'filePath'
+#     scriptPath: 'src/python/main.py'
+
 # Deactivate Virtual Environment and Clean-up
   - script: |
       echo "Cleaning up Virtual Environment"
