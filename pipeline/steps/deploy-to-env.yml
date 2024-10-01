@@ -2,4 +2,26 @@
 # Deployment stage runs after Terraform Stages.
 steps:
   - script: |
-      echo "Deployment Step"
+      echo "Deployment Step after terrafrom!"
+  
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.11'
+      addToPath: true
+      architecture: 'x64'
+
+# create virtual environment, install pre reqs,package
+  - script: |
+      echo "Creating new virtualenv"
+      python3 -m venv --clear .env
+      source .env/bin/activate 
+      python3 -m pip install artifacts-keyring; python3 -m pip install boto3
+    displayName: 'Install Boto3'
+
+# Deactivate Virtual Environment and Clean-up
+  - script: |
+      echo "Cleaning up Virtual Environment"
+      if [ -d ".env" ]; then echo "removing virtual environment" ; rm -rf .env ; else echo ".env directory doesn't exist" ; fi
+      pip freeze
+    displayName: 'Destroy VirtualEnv'
+    workingDirectory: $(System.DefaultWorkingDirectory)
