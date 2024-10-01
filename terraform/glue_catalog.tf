@@ -85,56 +85,59 @@ module "glue_database_connect_datalake_views" {
           ser_de_info_parameters            = tomap({"field.delim" = ",","skip.header.line.count" = "1" })
         },
       ]
+    },
+    "ivr_combined_data" = {
+      name                           = "ivr_combined_data"
+      glue_catalog_table_description = "IVR Combined data based on date filter"
+      glue_catalog_table_view_original_text = <<EOT 
+      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
+      EOT
+      glue_catalog_table_view_expanded_text = <<EOT
+      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
+      EOT
+      glue_catalog_table_table_type  = "VIRTUAL_VIEW"
+      # glue_catalog_table_parameters = {}
+      location                  = "s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
+      # input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+      # output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+      # compressed                = "true"
+      # number_of_buckets         = "1"
+      # bucket_columns            = tolist(["test"])
+      # parameters                = tomap({ "test" = "test" })
+      # stored_as_sub_directories = "false"
+      # storage_descriptor_columns = [
+      #   {
+      #     columns_name    = "queue_id"
+      #     columns_type    = "string"
+      #     columns_comment = "queue_id"
+      #   },
+      #   {
+      #     columns_name    = "metrics"
+      #     columns_type    = "string"
+      #     columns_comment = "metrics"
+      #   },
+      #   {
+      #     columns_name    = "metric_value"
+      #     columns_type    = "float"
+      #     columns_comment = "metric_value"
+      #   },
+      #   {
+      #     columns_name    = "language"
+      #     columns_type    = "string"
+      #     columns_comment = "language"
+      #   },
+      #   {
+      #     columns_name    = "type"
+      #     columns_type    = "string"
+      #     columns_comment = "type"
+      #   },
+      #   {
+      #     columns_name    = "ess2"
+      #     columns_type    = "string"
+      #     columns_comment = "ess2"
+      #   },
+      # ]
     }
-
-    # "ivr_combined_data" = {
-    #   name                           = "ivr_combined_data"
-    #   glue_catalog_table_description = "IVR Combined data based on date filter"
-    #   glue_catalog_table_view_original_text = var.view_original_text
-    #   # glue_catalog_table_view_expanded_text = var.view_original_text
-    #   glue_catalog_table_table_type  = "VIRTUAL_VIEW"
-    #   # glue_catalog_table_parameters = {}
-    #   # location                  = "s3://my-bucket/event-streams/my-stream"
-    #   # input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
-    #   # output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
-    #   # compressed                = "true"
-    #   # number_of_buckets         = "1"
-    #   # bucket_columns            = tolist(["test"])
-    #   # parameters                = tomap({ "test" = "test" })
-    #   # stored_as_sub_directories = "false"
-    #   # storage_descriptor_columns = [
-    #   #   {
-    #   #     columns_name    = "queue_id"
-    #   #     columns_type    = "string"
-    #   #     columns_comment = "queue_id"
-    #   #   },
-    #   #   {
-    #   #     columns_name    = "metrics"
-    #   #     columns_type    = "string"
-    #   #     columns_comment = "metrics"
-    #   #   },
-    #   #   {
-    #   #     columns_name    = "metric_value"
-    #   #     columns_type    = "float"
-    #   #     columns_comment = "metric_value"
-    #   #   },
-    #   #   {
-    #   #     columns_name    = "language"
-    #   #     columns_type    = "string"
-    #   #     columns_comment = "language"
-    #   #   },
-    #   #   {
-    #   #     columns_name    = "type"
-    #   #     columns_type    = "string"
-    #   #     columns_comment = "type"
-    #   #   },
-    #   #   {
-    #   #     columns_name    = "ess2"
-    #   #     columns_type    = "string"
-    #   #     columns_comment = "ess2"
-    #   #   },
-    #   # ]
-    # }
   }
 }
 
@@ -154,21 +157,3 @@ module "glue_database_connect_datalake_views" {
 #     command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
 #   }
 # }
-
-
-
-resource "aws_glue_catalog_table" "athena_view" {
-  database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
-  name          = "temp_tf_view"
-
-  table_type = "VIRTUAL_VIEW"
-
-  view_expanded_text = <<EOT
-  SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
-  EOT
-
-  view_original_text = <<EOT
-  SELECT * FROM
-  sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
-  EOT
-}
