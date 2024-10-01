@@ -18,17 +18,17 @@ steps:
       python3 -m pip install artifacts-keyring; python3 -m pip install boto3
     displayName: 'Install Boto3'
 
-  -script: |
+  - script: |
+      $AWS-ACCESS-KEY-ID = "#{aws-access-key-id}#"
+      $AWS-SECRET-ACCESS-KEY-ID = "#{aws-secret-access-key-id}#"
       echo "Configuring the aws cli"
-      aws configure set aws_access_key_id "#{aws-access-key-id}#"
-      aws configure set aws_secret_access_key "#{aws-secret-access-key-id}#"
+      aws configure set aws_access_key_id $(AWS-ACCESS-KEY-ID)
+      aws configure set aws_secret_access_key $($AWS-SECRET-ACCESS-KEY-ID)
       aws configure set region us-west-2
       aws configure set output json
       echo "Configured the aws cli"
       aws s3 ls
     displayName: 'aws cli config'
-
-
 
 # - task: PythonScript@0
 #   inputs:
