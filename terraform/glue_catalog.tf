@@ -138,19 +138,37 @@ module "glue_database_connect_datalake_views" {
   }
 }
 
-resource "aws_athena_named_query" "my_named_query" {
-  name      = "ivr_combined_data"
-  workgroup = "primary"
-  database  = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
-  query     = var.view_original_text
-}
+# resource "aws_athena_named_query" "my_named_query" {
+#   name      = "ivr_combined_data"
+#   workgroup = "primary"
+#   database  = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
+#   query     = var.view_original_text
+# }
 
-resource "terraform_data" "crete_athena_view" {
-  triggers_replace = [
-    aws_athena_named_query.my_named_query.id
-  ]
+# resource "terraform_data" "crete_athena_view" {
+#   triggers_replace = [
+#     aws_athena_named_query.my_named_query.id
+#   ]
 
-  provisioner "local-exec" {
-    command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
-  }
+#   provisioner "local-exec" {
+#     command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
+#   }
+# }
+
+
+
+resource "aws_glue_catalog_table" "athena_view" {
+  database_name = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
+  name          = "temp_tf_view"
+
+  table_type = "VIRTUAL_VIEW"
+
+  view_expanded_text = <<EOT
+  SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
+  EOT
+
+  view_original_text = <<EOT
+  SELECT * FROM
+  sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
+  EOT
 }
