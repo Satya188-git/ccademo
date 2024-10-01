@@ -47,4 +47,4 @@ quicksight_user_arns = [
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SMothuku@sdgecontractor.com"
 ]
 
-view_original_text = "CREATE OR REPLACE VIEW \"view_tf\" AS SELECT * FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views\".\"connectapi\" limit 10"
+view_original_text = "CREATE OR REPLACE VIEW view_tf AS SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10"
