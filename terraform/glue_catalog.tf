@@ -89,12 +89,19 @@ module "glue_database_connect_datalake_views" {
     "ivr_combined_data" = {
       name                           = "ivr_combined_data"
       glue_catalog_table_description = "IVR Combined data based on date filter"
-      glue_catalog_table_view_original_text = <<EOT 
-      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10
-      EOT
-      glue_catalog_table_view_expanded_text = <<EOT
-      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10
-      EOT
+      glue_catalog_table_view_original_text = "/* Presto View: 
+      base64encode(jsonencode(
+        {"catalog": "awsdatacatalog",
+            "schema": "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views",
+            "originalSql": "SELECT instance_id, aws_account_id, contact_id FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\"",
+            "columns":[
+                {"name":"instance_id", "type":"varchar"},
+                {"name":"aws_account_id", "type":"varchar"},
+                {"name":"contact_id", "type":"varchar"}
+            ]
+        ))*/"
+        
+      glue_catalog_table_view_expanded_text = "/* Presto View */"
       glue_catalog_table_table_type  = "VIRTUAL_VIEW"
       # glue_catalog_table_parameters = {}
       location                  = "s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
