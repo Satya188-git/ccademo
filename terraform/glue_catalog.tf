@@ -90,10 +90,10 @@ module "glue_database_connect_datalake_views" {
       name                           = "ivr_combined_data"
       glue_catalog_table_description = "IVR Combined data based on date filter"
       glue_catalog_table_view_original_text = <<EOT 
-      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
+      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10
       EOT
       glue_catalog_table_view_expanded_text = <<EOT
-      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10;
+      SELECT * FROM sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views.connectapi limit 10
       EOT
       glue_catalog_table_table_type  = "VIRTUAL_VIEW"
       # glue_catalog_table_parameters = {}
