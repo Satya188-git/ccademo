@@ -33,11 +33,13 @@ steps:
     inputs:
       awsCredentials: "sdge-cs-cccanalytics-dev"
       regionName: "us-west-2"
+      awsCommand: "s3"
+      awsSubCommand: "ls"
 
   - script: |
       echo "Listing the buckets"
       aws s3 ls
-    displayName: 'Listing the buckets'
+    displayName: 'Listing the buckets once again'
 
 # - task: PythonScript@0
 #   inputs:
