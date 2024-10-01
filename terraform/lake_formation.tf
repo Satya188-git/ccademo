@@ -16,7 +16,7 @@ module "lake_formation" {
   application_use  = var.application_use
 
   set_glue_data_catalog_permissions = true
-  use_lake_formation = false
+  use_lake_formation = true
 
   assign_iam_admin    = true
   iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn

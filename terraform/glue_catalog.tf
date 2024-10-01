@@ -84,27 +84,28 @@ module "glue_database_connect_datalake_views" {
           ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
           ser_de_info_parameters            = tomap({"field.delim" = ",","skip.header.line.count" = "1" })
         },
-      ]
-    },
-    "ivr_combined_data" = {
-      name                           = "ivr_combined_data"
-      glue_catalog_table_description = "IVR Combined data based on date filter"
-      glue_catalog_table_view_original_text = "/* Presto View: 
-      base64encode(jsonencode(
-        {"catalog": "awsdatacatalog",
-            "schema": "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views",
-            "originalSql": "SELECT instance_id, aws_account_id, contact_id FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\"",
-            "columns":[
-                {"name":"instance_id", "type":"varchar"},
-                {"name":"aws_account_id", "type":"varchar"},
-                {"name":"contact_id", "type":"varchar"}
-            ]
-        ))*/"
-        
-      glue_catalog_table_view_expanded_text = "/* Presto View */"
-      glue_catalog_table_table_type  = "VIRTUAL_VIEW"
-      # glue_catalog_table_parameters = {}
-      location                  = "s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
+      ]}
+
+    # },
+    # "ivr_combined_data" = {
+    #   name                           = "ivr_combined_data"
+    #   glue_catalog_table_description = "IVR Combined data based on date filter"
+    #   glue_catalog_table_view_original_text = "/* Presto View: 
+    #   base64encode(jsonencode(
+    #     {"catalog": "awsdatacatalog",
+    #         "schema": "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views",
+    #         "originalSql": "SELECT instance_id, aws_account_id, contact_id FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\"",
+    #         "columns":[
+    #             {"name":"instance_id", "type":"varchar"},
+    #             {"name":"aws_account_id", "type":"varchar"},
+    #             {"name":"contact_id", "type":"varchar"}
+    #         ]
+    #     ))*/"
+
+    #   glue_catalog_table_view_expanded_text = "/* Presto View */"
+    #   glue_catalog_table_table_type  = "VIRTUAL_VIEW"
+    #   # glue_catalog_table_parameters = {}
+      # location                  = "s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
       # input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
       # output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
       # compressed                = "true"
@@ -144,23 +145,25 @@ module "glue_database_connect_datalake_views" {
       #     columns_comment = "ess2"
       #   },
       # ]
-    }
+    # }
   }
 }
 
-# resource "aws_athena_named_query" "my_named_query" {
-#   name      = "ivr_combined_data"
-#   workgroup = "primary"
-#   database  = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
-#   query     = var.view_original_text
-# }
+resource "aws_athena_named_query" "my_named_query" {
+  name      = "ivr_combined_data"
+  workgroup = "primary"
+  database  = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
+  query     = var.view_original_text
+}
 
-# resource "terraform_data" "crete_athena_view" {
-#   triggers_replace = [
-#     aws_athena_named_query.my_named_query.id
-#   ]
+resource "terraform_data" "crete_athena_view" {
+  triggers_replace = [
+    aws_athena_named_query.my_named_query.id
+  ]
 
-#   provisioner "local-exec" {
-#     command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
-#   }
-# }
+  provisioner "local-exec" {
+    # command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
+  command = " aws athena start-query-execution --query-string \"CREATE OR REPLACE VIEW ivr_combined_data AS SELECT instance_id, aws_account_id, contact_id FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\";" --query-execution-context Database=sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/ --region us-west-2 --work-group primary"
+  }
+
+}
