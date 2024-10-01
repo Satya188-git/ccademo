@@ -27,14 +27,18 @@ steps:
   #     echo "Configured the aws cli"
   #     aws s3 ls
   #   displayName: 'aws cli config'
-  
+
   - task: AWSCLI@1
     displayName: "Start listing s3 buckets"
     inputs:
       awsCredentials: "sdge-cs-cccanalytics-dev"
       regionName: "us-west-2"
-      awsCommand: "aws s3 ls"
-      
+
+  - script: |
+      echo "Listing the buckets"
+      aws s3 ls
+    displayName: 'Listing the buckets'
+
 # - task: PythonScript@0
 #   inputs:
 #     scriptSource: 'filePath'
