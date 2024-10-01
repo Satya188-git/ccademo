@@ -10,7 +10,7 @@ module "glue_data_catalog_connect_datalake" {
   application_use   = "${var.application_use}"
   tags = var.tags
   # glue catalog database
-  glue_database_name = "connect_datalake_link"
+  glue_database_name = "connect-datalake-link"
   glue_catalog_map = {}
 
   add_linked_database = true
@@ -19,7 +19,6 @@ module "glue_data_catalog_connect_datalake" {
 }
 
 # Module to create data base for views in Lake formation
-
 module "glue_database_connect_datalake_views" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
   version = "10.0.4"
@@ -31,139 +30,6 @@ module "glue_database_connect_datalake_views" {
   tags = var.tags
 
   # glue catalog database
-  glue_database_name = "connect_datalake_views"
-  glue_catalog_map = {
-    "connectapi" = {
-      name                           = "connectapi"
-      glue_catalog_table_description = "Table created using TF for connect api data"
-      glue_catalog_table_table_type  = "EXTERNAL"
-      glue_catalog_table_parameters = {
-        "classification" = "csv"
-      }
-      location                  = "s3://sdge-dhepk-sbx-wus2-s3-einstein-aws-connect/RealTimeMetrics/"
-      input_format              = "org.apache.hadoop.mapred.TextInputFormat"
-      output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
-      compressed                = false
-      # number_of_buckets         = "1"
-      stored_as_sub_directories = "false"
-      storage_descriptor_columns = [
-        {
-          columns_name    = "queue_id"
-          columns_type    = "string"
-          columns_comment = "queue_id"
-        },
-        {
-          columns_name    = "metrics"
-          columns_type    = "string"
-          columns_comment = "metrics"
-        },
-        {
-          columns_name    = "metric_value"
-          columns_type    = "float"
-          columns_comment = "metric_value"
-        },
-        {
-          columns_name    = "language"
-          columns_type    = "string"
-          columns_comment = "language"
-        },
-        {
-          columns_name    = "type"
-          columns_type    = "string"
-          columns_comment = "type"
-        },
-        {
-          columns_name    = "ess2"
-          columns_type    = "string"
-          columns_comment = "ess2"
-        },
-      ]
-      storage_descriptor_ser_de_info = [
-        {
-          ser_de_info_name                  = "my-stream"
-          ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
-          ser_de_info_parameters            = tomap({"field.delim" = ",","skip.header.line.count" = "1" })
-        },
-      ]}
-
-    # },
-    # "ivr_combined_data" = {
-    #   name                           = "ivr_combined_data"
-    #   glue_catalog_table_description = "IVR Combined data based on date filter"
-    #   glue_catalog_table_view_original_text = "/* Presto View: 
-    #   base64encode(jsonencode(
-    #     {"catalog": "awsdatacatalog",
-    #         "schema": "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views",
-    #         "originalSql": "SELECT instance_id, aws_account_id, contact_id FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\"",
-    #         "columns":[
-    #             {"name":"instance_id", "type":"varchar"},
-    #             {"name":"aws_account_id", "type":"varchar"},
-    #             {"name":"contact_id", "type":"varchar"}
-    #         ]
-    #     ))*/"
-
-    #   glue_catalog_table_view_expanded_text = "/* Presto View */"
-    #   glue_catalog_table_table_type  = "VIRTUAL_VIEW"
-    #   # glue_catalog_table_parameters = {}
-      # location                  = "s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
-      # input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
-      # output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
-      # compressed                = "true"
-      # number_of_buckets         = "1"
-      # bucket_columns            = tolist(["test"])
-      # parameters                = tomap({ "test" = "test" })
-      # stored_as_sub_directories = "false"
-      # storage_descriptor_columns = [
-      #   {
-      #     columns_name    = "queue_id"
-      #     columns_type    = "string"
-      #     columns_comment = "queue_id"
-      #   },
-      #   {
-      #     columns_name    = "metrics"
-      #     columns_type    = "string"
-      #     columns_comment = "metrics"
-      #   },
-      #   {
-      #     columns_name    = "metric_value"
-      #     columns_type    = "float"
-      #     columns_comment = "metric_value"
-      #   },
-      #   {
-      #     columns_name    = "language"
-      #     columns_type    = "string"
-      #     columns_comment = "language"
-      #   },
-      #   {
-      #     columns_name    = "type"
-      #     columns_type    = "string"
-      #     columns_comment = "type"
-      #   },
-      #   {
-      #     columns_name    = "ess2"
-      #     columns_type    = "string"
-      #     columns_comment = "ess2"
-      #   },
-      # ]
-    # }
-  }
+  glue_database_name = "connect-datalake-views"
+  glue_catalog_map = {}
 }
-
-# resource "aws_athena_named_query" "my_named_query" {
-#   name      = "ivr_combined_data"
-#   workgroup = "primary"
-#   database  = "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views"
-#   query     = var.view_original_text
-# }
-
-# resource "terraform_data" "crete_athena_view" {
-#   triggers_replace = [
-#     aws_athena_named_query.my_named_query.id
-#   ]
-
-#   provisioner "local-exec" {
-#     # command = "aws athena start-query-execution --region us-west-2 --query-string \"${aws_athena_named_query.my_named_query.query}\" --work-group ${aws_athena_named_query.my_named_query.workgroup} --query-execution-context Database=${aws_athena_named_query.my_named_query.database},Catalog=AwsDataCatalog  --result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
-#   command = " aws athena start-query-execution --query-string \"CREATE OR REPLACE VIEW ivr_combined_data AS SELECT instance_id, aws_account_id, contact_id FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_link\".\"contact_record\";\n" --query-execution-context Database=sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect_datalake_views  --region us-west-2 --work-group primary--result-configuration OutputLocation=s3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/"
-#   }
-
-# }

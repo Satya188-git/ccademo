@@ -1,6 +1,6 @@
 awsAccount       = "619071332326"
 assume_role      = "arn:aws:iam::619071332326:role/fondo/sdge-dcctr-dev-iam-role-tfc"
-environment_code = "dev"
+environment_code = "qa"
 company_code      = "sdge"
 application_code  = "dcctr"
 region_code       = "wus2"
@@ -13,7 +13,6 @@ tags = {
     "sempra:gov:cmdb-ci-id"  = "APM1234567"
     "data-classification"    = "Data privacy classification ex: public sensitive confidential"
   }
-
 
 admins_arn = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f"
 devs_arn = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"
