@@ -6,7 +6,7 @@ steps:
   
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.11'
+      versionSpec: '3.11.1'
       addToPath: true
       architecture: 'x64'
 
@@ -19,11 +19,9 @@ steps:
     displayName: 'Install Boto3'
 
   - script: |
-      $AWS-ACCESS-KEY-ID = "#{aws-access-key-id}#"
-      $AWS-SECRET-ACCESS-KEY-ID = "#{aws-secret-access-key-id}#"
       echo "Configuring the aws cli"
-      aws configure set aws_access_key_id $(AWS-ACCESS-KEY-ID)
-      aws configure set aws_secret_access_key $($AWS-SECRET-ACCESS-KEY-ID)
+      aws configure set aws_access_key_id $(aws-access-key-id)
+      aws configure set aws_secret_access_key $(aws-secret-access-key-id)
       aws configure set region us-west-2
       aws configure set output json
       echo "Configured the aws cli"
