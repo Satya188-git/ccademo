@@ -18,36 +18,36 @@ steps:
       python3 -m pip install artifacts-keyring; python3 -m pip install boto3
     displayName: 'Install Boto3'
 
-  # - script: |
-  #     echo "Configuring the aws cli"
-  #     aws configure set aws_access_key_id $(aws-access-key-id)
-  #     aws configure set aws_secret_access_key $(aws-secret-access-key-id)
-  #     aws configure set region us-west-2
-  #     aws configure set output json
-  #     echo "Configured the aws cli"
-  #     aws s3 ls
-  #   displayName: 'aws cli config'
+  - script: |
+      echo "Configuring the aws cli"
+      aws configure set aws_access_key_id $[ variablegroups.sdge-cs-cccanalytics-dev.aws-access-key-id ]
+      aws configure set aws_secret_access_key $[ variablegroups.sdge-cs-cccanalytics-dev.aws-secret-access-key-id ]
+      aws configure set region us-west-2
+      aws configure set output json
+      echo "Configured the aws cli"
+      aws s3 ls
+    displayName: 'aws cli config'
 
-  - task: AWSCLI@1
-    displayName: "Start listing s3 buckets"
-    inputs:
-      awsCredentials: "sdge-cs-cccanalytics-dev"
-      regionName: "us-west-2"
-      awsCommand: "s3"
-      awsSubCommand: "ls"
+  # - task: AWSCLI@1
+  #   displayName: "Start listing s3 buckets"
+  #   inputs:
+  #     awsCredentials: "sdge-cs-cccanalytics-dev"
+  #     regionName: "us-west-2"
+  #     awsCommand: "s3"
+  #     awsSubCommand: "ls"
 
-  - task: AWSShellScript@1
-    continueOnError: False
-    inputs:
-      awsCredentials: ${{ parameters.awsCredentials }}
-      regionName: 'us-west-2'
-      scriptType: 'inline'
-      failOnStderr: True
-      inlineScript: |
-        ls
-        echo "Beginning the bake process"
-    displayName: "Bake stage"
-    name: bakeImageTest
+  # - task: AWSShellScript@1
+  #   continueOnError: False
+  #   inputs:
+  #     awsCredentials: ${{ parameters.awsCredentials }}
+  #     regionName: 'us-west-2'
+  #     scriptType: 'inline'
+  #     failOnStderr: True
+  #     inlineScript: |
+  #       ls
+  #       echo "Beginning the bake process"
+  #   displayName: "Bake stage"
+  #   name: bakeImageTest
 
 # - task: PythonScript@0
 #   inputs:
