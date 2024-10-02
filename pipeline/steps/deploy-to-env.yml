@@ -36,10 +36,18 @@ steps:
       awsCommand: "s3"
       awsSubCommand: "ls"
 
-  - script: |
-      echo "Listing the buckets"
-      aws s3 ls
-    displayName: 'Listing the buckets once again'
+  - task: AWSShellScript@1
+    continueOnError: False
+    inputs:
+      awsCredentials: ${{ parameters.awsCredentials }}
+      regionName: 'us-west-2'
+      scriptType: 'inline'
+      failOnStderr: True
+      inlineScript: |
+        ls
+        echo "Beginning the bake process"
+    displayName: "Bake stage"
+    name: bakeImageTest
 
 # - task: PythonScript@0
 #   inputs:
