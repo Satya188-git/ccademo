@@ -18,16 +18,33 @@ steps:
       python3 -m pip install artifacts-keyring; python3 -m pip install boto3
     displayName: 'Install Boto3'
 
+  - task: AWSCLI@1
+    inputs:
+      awsCredentials: "sdge-cs-cccanalytics-dev"
+      regionName: "us-west-2"  # Change to your desired region
+
   - script: |
-      echo "Configuring the aws cli"
-      aws configure set aws_access_key_id $(sdge-cs-cccanalytics-dev.aws-access-key-id)
-      aws configure set aws_secret_access_key $(sdge-cs-cccanalytics-dev.aws-secret-access-key-id)
-      aws configure set region us-west-2
-      aws configure set output json
-      echo "Configured the aws cli"
+      # Configure AWS CLI
+      aws_access_key_id=$(aws configure get aws_access_key_id)
+      aws_secret_access_key=$(aws configure get aws_secret_access_key)
+
+      aws configure set aws_access_key_id $aws_access_key_id
+      aws configure set aws_secret_access_key $aws_secret_access_key
+      aws configure set default.region us-west-2  # Change to your desired region
+
+      # Your AWS CLI commands here
       aws s3 ls
-      python athena_pyscript/create_view.py
-    displayName: 'aws cli config'
+    displayName: 'Run AWS CLI commands'
+  # - script: |
+  #     echo "Configuring the aws cli"
+  #     aws configure set aws_access_key_id $(sdge-cs-cccanalytics-dev.aws-access-key-id)
+  #     aws configure set aws_secret_access_key $(sdge-cs-cccanalytics-dev.aws-secret-access-key-id)
+  #     aws configure set region us-west-2
+  #     aws configure set output json
+  #     echo "Configured the aws cli"
+  #     aws s3 ls
+  #     python athena_pyscript/create_view.py
+  #   displayName: 'aws cli config'
   # - task: AWSCLI@1
   #   displayName: "Start listing s3 buckets"
   #   inputs:
