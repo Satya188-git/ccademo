@@ -18,23 +18,24 @@ steps:
       python3 -m pip install artifacts-keyring; python3 -m pip install boto3
     displayName: 'Install Boto3'
 
-  - task: AWSCLI@1
-    inputs:
-      awsCredentials: "sdge-cs-cccanalytics-dev"
-      regionName: "us-west-2"  # Change to your desired region
+  # - task: AWSCLI@1
+  #   inputs:
+  #     awsCredentials: "sdge-cs-cccanalytics-dev"
+  #     regionName: "us-west-2"  # Change to your desired region
 
   - script: |
-      # Configure AWS CLI
-      aws_access_key_id=$(aws configure get aws_access_key_id)
-      aws_secret_access_key=$(aws configure get aws_secret_access_key)
-
-      aws configure set aws_access_key_id $aws_access_key_id
-      aws configure set aws_secret_access_key $aws_secret_access_key
-      aws configure set default.region us-west-2  # Change to your desired region
-
-      # Your AWS CLI commands here
-      aws s3 ls
-    displayName: 'Run AWS CLI commands'
+      export AWS_ACCESS_KEY_ID=$(aws-access-key-id);
+      export AWS_SECRET_ACCESS_KEY=$(aws-secret-access-key)
+      OUTPUT_PROFILE="AWSCLI-AssumeRole"
+      echo "Assuming role $(awsAssumeRole)"
+      sts=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
+      echo "Converting sts to array"
+      stsarray=($sts)
+      aws configure set aws_access_key_id "${stsarray[0]}" --profile "$OUTPUT_PROFILE"
+      aws configure set aws_secret_access_key "${stsarray[1]}" --profile "$OUTPUT_PROFILE"
+      aws configure set aws_session_token "${stsarray[2]}" --profile "$OUTPUT_PROFILE"
+      echo "AWS account credentials stored in the profile named $OUTPUT_PROFILE"
+    displayName: 'Run AWS CLI commands to setup AWS CLI'
   # - script: |
   #     echo "Configuring the aws cli"
   #     aws configure set aws_access_key_id $(sdge-cs-cccanalytics-dev.aws-access-key-id)
