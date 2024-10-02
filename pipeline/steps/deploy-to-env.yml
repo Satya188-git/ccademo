@@ -68,13 +68,16 @@ steps:
       echo "AWS account credentials stored in the profile named $OUTPUT_PROFILE"
 
       # Test if the credentials work by listing S3 buckets
-      echo "Testing s3 ls"
-      if ! aws s3 ls --profile "$OUTPUT_PROFILE"; then
-          echo "Failed to list S3 buckets. The role may not have been assumed successfully."
-          exit 1
-      fi
+      # echo "Testing s3 ls"
+      # if ! aws s3 ls --profile "$OUTPUT_PROFILE"; then
+      #     echo "Failed to list S3 buckets. The role may not have been assumed successfully."
+      #     exit 1
+      # fi
 
-      echo "S3 buckets listed successfully."
+      # echo "S3 buckets listed successfully."
+      echo "Running Python file from artifacts!"
+      python $(Pipeline.Workspace)/athena_pyscript/create_view.py
+      echo "Script complete!"
     displayName: 'Run AWS CLI commands to configure AWS CLI'
   # - script: |
   #     echo "Configuring the aws cli"
