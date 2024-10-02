@@ -4,7 +4,10 @@ jobs:
   - template: Pipeline-Templates/Standalone/Jobs/Linting/flake8.yml@DevSecOpsYAML
     parameters: 
       lintingConfig: "warn"
-  
-  - publish: src/pyscripts/create_view.py
-    artifact: athena_view
-    displayName: 'Publish the python script to create athena view as an artifact'
+
+ - job:
+    displayName: 'Create and Publish Python Artifact for Athena View Creation'
+    steps:  
+    - publish: src/pyscripts/create_view.py
+      artifact: athena_view
+      displayName: 'Publish the python script to create athena view as an artifact'
