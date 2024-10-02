@@ -1,10 +1,4 @@
 jobs:
-  # Template referenced from shared-it-devsecops-yaml repository
-  # This template uses no tasks that rely on software dependencies and does not need to honor canary mode.
-  - template: Pipeline-Templates/Standalone/Jobs/Linting/flake8.yml@DevSecOpsYAML
-    parameters: 
-      lintingConfig: "warn"
-
  - job:
     displayName: 'Create and Publish Python Artifact for Athena View Creation'
     steps:  
