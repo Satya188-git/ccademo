@@ -10,6 +10,6 @@ jobs:
         echo "Listing contents of the directory '$(pwd)'"
         ls
       displayName: 'Build Code Artifact For Athena view'
-    - publish: src\pyscripts\create_view.py
+    - publish: src/pyscripts/create_view.py
       artifact: nice_lambda
       displayName: 'Publish the python script to create athena view as an artifact'
