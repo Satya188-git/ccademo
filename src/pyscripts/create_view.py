@@ -1,5 +1,5 @@
 import boto3
-client = boto3.client('athena')
+client = boto3.client('athena', region_name='us-west-2')
 
 response = client.start_query_execution(
     QueryString="""CREATE OR REPLACE VIEW ivr_combined_2509data_ext_table AS ( select *,
