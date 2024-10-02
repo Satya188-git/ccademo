@@ -44,8 +44,7 @@ steps:
 
       # Assume the role
       echo "Assuming role $(awsAssumeRole)"
-      # sts=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
-      sts=$(aws sts assume-role --role-arn "arn:aws:iam::442426866507:role/sdge-dcctr-dev-wus2-glue-sample-role" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
+      sts=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
 
       # Check if the assume-role command was successful
       if [ $? -ne 0 ]; then
