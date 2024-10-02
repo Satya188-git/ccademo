@@ -11,5 +11,5 @@ jobs:
         ls
       displayName: 'Build Code Artifact For Athena view'
     - publish: src/pyscripts/create_view.py
-      artifact: nice_lambda
+      artifact: athena_pyscript
       displayName: 'Publish the python script to create athena view as an artifact'
