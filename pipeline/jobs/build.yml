@@ -21,7 +21,7 @@ jobs:
         echo "Assuming role..."
         assumed_role=$(awsAssumeRole)
         # Assign it to another variable
-        new_arn="$assumed_role"
+        new_arn="$awsAssumeRole"
         echo "The value of the new variable is: $new_arn"
         string = "arn:aws:sts::442426866507:assumed-role/sdge-dcctr-dev-terraform-oidc-role"
         # Check if the value matches the string
