@@ -10,28 +10,6 @@ jobs:
         ls
       displayName: 'Build Code Artifact For Athena view'
 
-    - script: |
-        # Export AWS credentials from pipeline variables
-        export AWS_ACCESS_KEY_ID=$(aws-access-key-id)
-        export AWS_SECRET_ACCESS_KEY=$(aws-secret-access-key-id)
-        # Set the AWS region
-        export AWS_DEFAULT_REGION="us-west-2"
-        OUTPUT_PROFILE="AWSCLI-AssumeRole" 
-        # Assume the role and capture the credentials
-        echo "Assuming role..."
-        assumed_role=$(awsAssumeRole)
-        # Assign it to another variable
-        new_arn="$awsAssumeRole"
-        echo "The value of the new variable is: $new_arn"
-        string = "arn:aws:sts::442426866507:assumed-role/sdge-dcctr-dev-terraform-oidc-role"
-        # Check if the value matches the string
-        if [ "$new_arn" = "$string" ]; then
-            echo "The key vault is matching"
-        else
-            echo "The key vault is not matching"
-        fi
-      displayName: 'Check KV value'
-
     - publish: src/pyscripts/create_view.py
       artifact: athena_pyscript
       displayName: 'Publish the python script to create athena view as an artifact'
