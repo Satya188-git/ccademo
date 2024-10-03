@@ -19,7 +19,8 @@ jobs:
         OUTPUT_PROFILE="AWSCLI-AssumeRole" 
         # Assume the role and capture the credentials
         echo "Assuming role..."
-        echo "$(awsAssumeRole)"
+        new_arn = $(awsAssumeRole)
+        echo "$(new_arn)"
         string = "arn:aws:sts::442426866507:assumed-role/sdge-dcctr-dev-terraform-oidc-role"
         # Check if the value matches the string
         if [ "$awsAssumeRole" = "$string" ]; then
