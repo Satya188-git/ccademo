@@ -8,6 +8,7 @@ jobs:
 
         echo "Listing contents of the directory '$(pwd)'"
         ls
+        echo "Env is $(Environment)"
       displayName: 'Build Code Artifact For Athena view'
 
     - publish: src/pyscripts/create_view.py
