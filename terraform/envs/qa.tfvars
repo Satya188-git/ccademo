@@ -9,7 +9,7 @@ tags = {
     "billing-guid"           = "BC4AD0602D58DD1889ED839BF5929FCA"
     "portfolio"              = "DCCTR"
     "support-group"          = "Distribution list in email format"
-    "sempra:gov:environment" = "DEV"
+    "sempra:gov:environment" = "QA"
     "sempra:gov:cmdb-ci-id"  = "APM1234567"
     "data-classification"    = "Data privacy classification ex: public sensitive confidential"
   }

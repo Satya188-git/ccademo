@@ -1,6 +1,6 @@
 jobs:
   - job:
-    displayName: 'Create and Publish Python Artifact for Athena View Creation'
+    displayName: 'Publish Artifact for Athena View'
     steps:
     - script: |
         set -e
@@ -8,10 +8,8 @@ jobs:
 
         echo "Listing contents of the directory '$(pwd)'"
         ls
-        echo "Env is $(workspace-name)"
-
-      displayName: 'Build Code Artifact For Athena view'
+      displayName: 'List Dir'
 
     - publish: src/pyscripts/create_view.py
       artifact: athena_pyscript
-      displayName: 'Publish the python script to create athena view as an artifact'
+      displayName: 'Publish the PyScript to create athena view as an artifact'
