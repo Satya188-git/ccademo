@@ -19,11 +19,13 @@ jobs:
         OUTPUT_PROFILE="AWSCLI-AssumeRole" 
         # Assume the role and capture the credentials
         echo "Assuming role..."
-        new_arn = $(awsAssumeRole)
-        echo "$(new_arn)"
+        assumed_role=$(awsAssumeRole)
+        # Assign it to another variable
+        new_arn="$assumed_role"
+        echo "The value of the new variable is: $new_arn"
         string = "arn:aws:sts::442426866507:assumed-role/sdge-dcctr-dev-terraform-oidc-role"
         # Check if the value matches the string
-        if [ "$awsAssumeRole" = "$string" ]; then
+        if [ "$new_arn" = "$string" ]; then
             echo "The key vault is matching"
         else
             echo "The key vault is not matching"
