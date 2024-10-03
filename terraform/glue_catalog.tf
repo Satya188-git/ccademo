@@ -8,7 +8,8 @@ module "glue_data_catalog_connect_datalake" {
   environment_code      = var.environment_code
   region_code           = var.region_code
   application_use       = "${var.application_use}"
-  tags = var.tags
+  tags                  = var.tags
+  
   # glue catalog database
   glue_database_name    = "connect-datalake-link"
   glue_catalog_map      = {}
@@ -16,6 +17,7 @@ module "glue_data_catalog_connect_datalake" {
   add_linked_database   = true
   target_catalog_id     = var.producer_catalog_id
   target_database_name  = var.source_database_name
+  depends_on            = [module.lake_formation]
 }
 
 # Module to create data base for views in Lake formation
@@ -32,4 +34,5 @@ module "glue_database_connect_datalake_views" {
   # glue catalog database
   glue_database_name    = "connect-datalake-views"
   glue_catalog_map      = {}
+  depends_on            = [module.lake_formation]
 }
