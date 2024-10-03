@@ -14,9 +14,10 @@ steps:
   - script: |
       echo "Creating new virtualenv"
       python3 -m venv --clear .env
-      source .env/bin/activate 
-      python3 -m pip install artifacts-keyring; python3 -m pip install boto3
-    displayName: 'Install Boto3'
+      source .env/bin/activate
+      echo "Installing the dependencies"
+      python3 -m pip install --upgrade pip; python3 -m pip install artifacts-keyring; python3 -m pip install boto3
+    displayName: 'Create VENV'
 
   # - task: AWSCLI@1
   #   inputs:
