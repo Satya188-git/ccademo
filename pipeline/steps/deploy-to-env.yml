@@ -48,20 +48,15 @@ steps:
         # Optionally, print the assumed role ARN for confirmation
         ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
-        # Now you can run any AWS CLI commands with the assumed role credentials
-        # For example, listing S3 buckets:
-        echo "Listing S3 buckets in region $AWS_DEFAULT_REGION..."
-        aws s3 ls
+        echo "Running Python file from artifacts!"
+        python $(Pipeline.Workspace)/athena_pyscript/create_view.py
+        echo "Script complete!"
       else
         echo "Failed to assume role."
         exit 1
       fi
-
-      # echo "S3 buckets listed successfully."
-      # echo "Running Python file from artifacts!"
-      # python $(Pipeline.Workspace)/athena_pyscript/create_view.py
-      # echo "Script complete!"
-    displayName: 'Run AWS CLI commands to configure AWS CLI'
+      
+    displayName: 'Run AWS CLI commands & Py Script'
 
 # Deactivate Virtual Environment and Clean-up
   - script: |
