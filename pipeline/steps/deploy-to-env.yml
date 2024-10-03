@@ -34,7 +34,7 @@ steps:
 
       # Assume the role and capture the credentials
       echo "Assuming role..."
-      echo "arn:aws:iam::$(awsAccount):role/fondo/sdge-dcctr-$(Environment)-terraform-oidc-role"
+      # echo "arn:aws:iam::$(awsAccount):role/fondo/sdge-dcctr-$(Environment)-terraform-oidc-role"
       
       ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "arn:aws:iam::$(awsAccount):role/fondo/sdge-dcctr-$(Environment)-terraform-oidc-role" --role-session-name "$OUTPUT_PROFILE" --output json)
       

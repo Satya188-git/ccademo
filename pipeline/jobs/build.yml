@@ -2,13 +2,13 @@ jobs:
   - job:
     displayName: 'Publish Artifact for Athena View'
     steps:
-    - script: |
-        set -e
-        set -x
+    # - script: |
+    #     set -e
+    #     set -x
 
-        echo "Listing contents of the directory '$(pwd)'"
-        ls
-      displayName: 'List Dir'
+    #     echo "Listing contents of the directory '$(pwd)'"
+    #     ls
+    #   displayName: 'List Dir'
 
     - publish: src/pyscripts/create_view.py
       artifact: athena_pyscript

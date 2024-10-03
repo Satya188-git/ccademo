@@ -76,7 +76,3 @@ variable "quicksight_user_arns"{
   description = "List of QS user arns to whome table permissions needs to be assigned"
   type        = list(string)
 }
-variable "view_original_text" {
-  description = "SQL query on top of which a view needs to be created"
-  type = string
-}
