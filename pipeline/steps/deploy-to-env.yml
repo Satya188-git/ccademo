@@ -24,100 +24,44 @@ steps:
   #     regionName: "us-west-2"  # Change to your desired region
 
   - script: |
-      # export AWS_ACCESS_KEY_ID=$(aws-access-key-id);
-      # export AWS_SECRET_ACCESS_KEY=$(aws-secret-access-key-id)
-      # OUTPUT_PROFILE="AWSCLI-AssumeRole"
-      # echo "Assuming role $(awsAssumeRole)"
-      # sts=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
-      # echo "Converting sts to array"
-      # stsarray=($sts)
-      # aws configure set aws_access_key_id "${stsarray[0]}" --profile "$OUTPUT_PROFILE"
-      # aws configure set aws_secret_access_key "${stsarray[1]}" --profile "$OUTPUT_PROFILE"
-      # aws configure set aws_session_token "${stsarray[2]}" --profile "$OUTPUT_PROFILE"
-      # echo "AWS account credentials stored in the profile named $OUTPUT_PROFILE"
-      # echo "Testing s3 ls"
-      # aws s3 
-      # Assuming you have functions to get access keys
+      # Export AWS credentials from pipeline variables
       export AWS_ACCESS_KEY_ID=$(aws-access-key-id)
       export AWS_SECRET_ACCESS_KEY=$(aws-secret-access-key-id)
-      OUTPUT_PROFILE="AWSCLI-AssumeRole"
+      # Set the AWS region
+      export AWS_DEFAULT_REGION="us-west-2"
+      OUTPUT_PROFILE="AWSCLI-AssumeRole" 
 
-      # Assume the role
-      echo "Assuming role $(awsAssumeRole)"
-      # sts=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
-      
-      sts=$(aws sts assume-role --role-arn "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-terraform-oidc-role" --role-session-name "$OUTPUT_PROFILE" --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text)
-      echo $(sts)
-
-
+      # Assume the role and capture the credentials
+      echo "Assuming role..."
+      ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-terraform-oidc-role" --role-session-name "$OUTPUT_PROFILE" --output json)
       # Check if the assume-role command was successful
-      if [ $? -ne 0 ]; then
-          echo "Failed to assume role."
-          exit 1
+
+      if [ $? -eq 0 ]; then
+        # Extract credentials
+        ACCESS_KEY=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.AccessKeyId')
+        SECRET_KEY=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SecretAccessKey')
+        SESSION_TOKEN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SessionToken')
+        # Export the new session credentials for subsequent AWS CLI commands
+        export AWS_ACCESS_KEY_ID=$ACCESS_KEY
+        export AWS_SECRET_ACCESS_KEY=$SECRET_KEY
+        export AWS_SESSION_TOKEN=$SESSION_TOKEN
+        # Optionally, print the assumed role ARN for confirmation
+        ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
+        echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
+        # Now you can run any AWS CLI commands with the assumed role credentials
+        # For example, listing S3 buckets:
+        echo "Listing S3 buckets in region $AWS_DEFAULT_REGION..."
+        aws s3 ls
+      else
+        echo "Failed to assume role."
+        exit 1
       fi
-
-      echo "Converting sts to array"
-      stsarray=($sts)
-
-      # Check if the sts array has exactly 3 elements
-      if [ ${#stsarray[@]} -ne 3 ]; then
-          echo "Failed to retrieve valid STS credentials."
-          exit 1
-      fi
-
-      aws configure set aws_access_key_id "${stsarray[0]}" --profile "$OUTPUT_PROFILE"
-      aws configure set aws_secret_access_key "${stsarray[1]}" --profile "$OUTPUT_PROFILE"
-      aws configure set aws_session_token "${stsarray[2]}" --profile "$OUTPUT_PROFILE"
-
-      echo "AWS account credentials stored in the profile named $OUTPUT_PROFILE"
-
-      # Test if the credentials work by listing S3 buckets
-      # echo "Testing s3 ls"
-      # if ! aws s3 ls --profile "$OUTPUT_PROFILE"; then
-      #     echo "Failed to list S3 buckets. The role may not have been assumed successfully."
-      #     exit 1
-      # fi
 
       # echo "S3 buckets listed successfully."
-      echo "Running Python file from artifacts!"
-      python $(Pipeline.Workspace)/athena_pyscript/create_view.py
-      echo "Script complete!"
+      # echo "Running Python file from artifacts!"
+      # python $(Pipeline.Workspace)/athena_pyscript/create_view.py
+      # echo "Script complete!"
     displayName: 'Run AWS CLI commands to configure AWS CLI'
-  # - script: |
-  #     echo "Configuring the aws cli"
-  #     aws configure set aws_access_key_id $(sdge-cs-cccanalytics-dev.aws-access-key-id)
-  #     aws configure set aws_secret_access_key $(sdge-cs-cccanalytics-dev.aws-secret-access-key-id)
-  #     aws configure set region us-west-2
-  #     aws configure set output json
-  #     echo "Configured the aws cli"
-  #     aws s3 ls
-  #     python athena_pyscript/create_view.py
-  #   displayName: 'aws cli config'
-  # - task: AWSCLI@1
-  #   displayName: "Start listing s3 buckets"
-  #   inputs:
-  #     awsCredentials: "sdge-cs-cccanalytics-dev"
-  #     regionName: "us-west-2"
-  #     awsCommand: "s3"
-  #     awsSubCommand: "ls"
-
-  # - task: AWSShellScript@1
-  #   continueOnError: False
-  #   inputs:
-  #     awsCredentials: ${{ parameters.awsCredentials }}
-  #     regionName: 'us-west-2'
-  #     scriptType: 'inline'
-  #     failOnStderr: True
-  #     inlineScript: |
-  #       ls
-  #       echo "Beginning the bake process"
-  #   displayName: "Bake stage"
-  #   name: bakeImageTest
-
-# - task: PythonScript@0
-#   inputs:
-#     scriptSource: 'filePath'
-#     scriptPath: 'src/python/main.py'
 
 # Deactivate Virtual Environment and Clean-up
   - script: |
