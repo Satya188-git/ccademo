@@ -35,6 +35,15 @@ steps:
       # Assume the role and capture the credentials
       echo "Assuming role..."
       echo "$(awsAssumeRole)"
+      string = "arn:aws:sts::442426866507:assumed-role/sdge-dcctr-dev-terraform-oidc-role"
+
+      # Check if the value matches the string
+      if [ "$awsAssumeRole" = "$string" ]; then
+          echo "The key vault is matching"
+      else
+          echo "The key vault is not matching"
+      fi
+
       ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --output json)
       
       # Check if the assume-role command was successful
