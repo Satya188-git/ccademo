@@ -28,12 +28,34 @@ module "lake_formation" {
                                         element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
                                       ]
 
-  # depends_on                      = [
-  #                                    module.glue_database_connect_datalake_views,
-  #                                    module.lakeformation_admin,
-  #                                    module.glue_data_catalog_connect_datalake,
-  #                                   ]
-  depends_on                        = [module.lakeformation_admin]
+  depends_on                      = [
+                                      module.lakeformation_admin,
+                                      module.glue_database_connect_datalake_views,
+                                      module.glue_data_catalog_cis_main,
+                                      module.glue_data_catalog_connect_datalake,
+                                    ]
+
+  # Adding DESCRIBE Permission on databases
+  data_permission_map             = {
+    permission1     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_connect_datalake
+    },
+    permission2     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_cis_main
+    },
+    permission3 = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_connect_datalake
+    }
+  }
 }
 
 
