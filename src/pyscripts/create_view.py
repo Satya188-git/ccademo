@@ -1,7 +1,8 @@
 import boto3
+
 client = boto3.client('athena', region_name='us-west-2')
 
-response = client.start_query_execution(
+start_query_response = client.start_query_execution(
     QueryString="""CREATE OR REPLACE VIEW ivr_combined_2509data_ext_table AS ( select *,
 	CASE
 		WHEN l3_tag IN (
@@ -98,4 +99,15 @@ FROM (
     WorkGroup='primary'
 )
 
-print(response)
+print(f"The status of the execution using API call is : {start_query_response['ResponseMetadata']['HTTPStatusCode']}")
+print(f"The execution id is : {start_query_response['QueryExecutionId']}")
+
+
+if start_query_response['QueryExecutionId'] !='':
+	query_status = client.get_query_execution(
+        QueryExecutionId = start_query_response['QueryExecutionId']
+    )
+	print(f"The api response code for query execution is : {query_status['ResponseMetadata']['HTTPStatusCode']}")
+	print(f"The status fof query execution is : {query_status['QueryExecution']['Status']['State']}")
+else:
+	print("The query is not submitted!. Please check the issue")

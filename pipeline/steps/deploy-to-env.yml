@@ -56,7 +56,7 @@ steps:
         exit 1
       fi
       
-    displayName: 'Run AWS CLI commands & Py Script'
+    displayName: 'Assume OIDC Role and run the PY Script'
 
 # Deactivate Virtual Environment and Clean-up
   - script: |
