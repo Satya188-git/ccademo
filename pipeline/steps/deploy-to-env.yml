@@ -35,7 +35,7 @@ steps:
       # Assume the role and capture the credentials
       echo "Assuming role..."
       echo "$(awsAssumeRole)"
-      role_assumed = "$(awsAssumeRole)"
+      set role_assumed = "$(awsAssumeRole)"
       echo "role assumed: "
       echo $role_assumed
 
