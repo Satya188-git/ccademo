@@ -36,7 +36,7 @@ steps:
       echo "Assuming role..."
       echo "Role ARN: $(awsAssumeRole)"
 
-      ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --output json)
+      ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn $(awsAssumeRole) --role-session-name "$OUTPUT_PROFILE" --output json)
       
       # Check if the assume-role command was successful
 
