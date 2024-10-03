@@ -41,19 +41,19 @@ module "lake_formation" {
       type          = "database"
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_connect_datalake
+      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
     },
     permission2     = {
       type          = "database"
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_cis_main
+      database_name = module.glue_data_catalog_cis_main.glue_catalog_database_name
     },
     permission3 = {
       type          = "database"
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_connect_datalake
+      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
     }
   }
 }
