@@ -54,7 +54,8 @@ parameters:
     type: object
     default:
     - env: dev
-
+    - env: qa
+    
 #Base portion of service connection name, generally pipeline name
   - name: SCName
     default: sdge-cs-cccanalytics
