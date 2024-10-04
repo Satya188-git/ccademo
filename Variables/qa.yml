@@ -1,6 +1,6 @@
 variables:
   - name: terraformOrg
-    value: $(company_code)-dev
+    value: $(company_code)-qa
   - name: terraformWorkspace
     value: '$(terraformOrg)_$(adoRepoName)'
   - name: workspace-name
