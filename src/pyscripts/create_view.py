@@ -95,7 +95,7 @@ start_query_response = client.start_query_execution(
 					ELSE 'BLANK'
 				END AS l3_tag
 			FROM \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
-				inner join \"sdge-dcctr-{env}}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" as csr on ctr.contact_id = csr.contact_id
+				inner join \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" as csr on ctr.contact_id = csr.contact_id
 			where ctr.channel = 'VOICE' and ctr.initiation_method = 'INBOUND'
 			and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'));""",
 QueryExecutionContext={
