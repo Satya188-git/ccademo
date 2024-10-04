@@ -27,13 +27,13 @@ module "lake_formation" {
                                         element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
                                         element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
                                       ]
-
-  depends_on                      = [
-                                      module.lakeformation_admin,
-                                      module.glue_database_connect_datalake_views,
-                                      module.glue_data_catalog_cis_main,
-                                      module.glue_data_catalog_connect_datalake,
-                                    ]
+  depends_on                      = [module.lakeformation_admin]
+  # depends_on                      = [
+  #                                     module.lakeformation_admin,
+  #                                     module.glue_database_connect_datalake_views,
+  #                                     module.glue_data_catalog_cis_main,
+  #                                     module.glue_data_catalog_connect_datalake,
+  #                                   ]
 
   # Adding DESCRIBE Permission on databases
   # data_permission_map             = {

@@ -1,9 +1,20 @@
 import boto3
 import time
-client = boto3.client('athena', region_name='us-west-2')
+import sys
+client = boto3.client('athena')
 
+# Reading the command line arguments for env and view name
+# Skip the first argument as its the script name
+args = sys.argv[1:]
+env = args[0]
+view_name = args[1]
+
+print("env : ", env)
+print("View to be created :", view_name)
+
+print("Executing the view: ")
 start_query_response = client.start_query_execution(
-    QueryString="""CREATE OR REPLACE VIEW ivr_combined_2509data_ext_table AS ( select *,
+    QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS ( select *,
 	CASE
 		WHEN l3_tag IN (
 			'Abandoned - Self Service Attempt',
@@ -30,7 +41,7 @@ start_query_response = client.start_query_execution(
 			'Transfer - User - Self Service Attempt w/o Success'
 		) THEN 'Transfer- User' ELSE 'NA'
 	END AS l2_tag
-FROM (
+	FROM (
 		SELECT ctr.contact_id,
 			ctr.channel,
 			ctr.initiation_method,
@@ -83,18 +94,16 @@ FROM (
 				and ctr.attributes [ 'self_service_success' ] = 'false' THEN '  Transfer - User - Self Service Attempt w/o Success' 
 				ELSE 'BLANK'
 			END AS l3_tag
-		FROM \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
-			inner join \"sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" as csr on ctr.contact_id = csr.contact_id
+		FROM \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
+			inner join \"sdge-dcctr-{env}}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" as csr on ctr.contact_id = csr.contact_id
 		where ctr.channel = 'VOICE' and ctr.initiation_method = 'INBOUND'
-		and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'
-	)
-);""",
-    QueryExecutionContext={
-        'Database': "sdge-dcctr-dev-wus2-gdc-ccc-analytics-connect-datalake-views",
+		and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'));""",
+	QueryExecutionContext={
+        'Database': f"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
     },
     ResultConfiguration={
-        'OutputLocation': 's3://sdge-dcctr-dev-wus2-s3-ccc-analytics-athena-results/athena_views/',
+        'OutputLocation': f's3://sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results/athena_views/',
     },
     WorkGroup='primary'
 )

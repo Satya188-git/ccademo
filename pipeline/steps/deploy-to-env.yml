@@ -53,7 +53,7 @@ steps:
         ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
         echo "Running Python file from artifacts!"
-        python $(Pipeline.Workspace)/athena_pyscript/create_view.py
+        python $(Pipeline.Workspace)/athena_pyscript/create_view.py "$(Environment)" "ivr_combined_2509data_ext_table"
         echo "Script complete!"
       else
         echo "Failed to assume role."
