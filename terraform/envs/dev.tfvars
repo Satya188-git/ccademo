@@ -14,17 +14,13 @@ tags = {
     "data-classification"    = "Data privacy classification ex: public sensitive confidential"
   }
 
-pandas_layer_arn = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
-code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
 
 admins_arn = "arn:aws:iam::442426866507:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f"
 devs_arn = "arn:aws:iam::442426866507:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"
+
 target_database_name = "analytics_database"
 producer_catalog_id = "632182196722"
 source_database_name = "connect_datalake"
-
-nice_common_api_key  = "#{nice-common-api-key}#" 
-nice_hist_queuestats_key  = "#{nice-hist-queuestats-key}#"
 
 source_table_names = [
   "agent_statistic_record",
@@ -35,3 +31,18 @@ source_table_names = [
   "contact_record",
   "contact_statistic_record"
  ]
+
+quicksight_user_arns = [
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/RKadari@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/AKumar45@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SThodima@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SNayak1@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/IMishra@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/VWahal@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/HKumar3@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SNayak1@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/PSharma6@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SMothuku@sdgecontractor.com"
+]

@@ -22,5 +22,3 @@ provider "aws" {
   #   role_arn = var.assume_role
   # }
 }
-
-#test

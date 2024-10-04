@@ -1,48 +1,62 @@
-module "lake-formation-nice" {
-  source  = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
-  version = "9.1.1"
-
-  company_code     = var.company_code
-  application_code = var.application_code
-  environment_code = var.environment_code
-  region_code      = var.region_code
-  application_use  = var.application_use
-
-  depends_on = [aws_glue_catalog_database.nice_glue_database, module.lakeformation_admin]
+# Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
+module "lake_formation" {
+  
+  source                            = "app.terraform.io/SempraUtilities/seu-lake-formation/aws"
+  version                           = "9.1.1"
+  company_code                      = var.company_code
+  application_code                  = var.application_code
+  environment_code                  = var.environment_code
+  region_code                       = var.region_code
+  application_use                   = var.application_use
 
   set_glue_data_catalog_permissions = true
+  use_lake_formation                = true
 
-  assign_iam_admin    = true
-
-  iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
-  iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+  assign_iam_admin                  = true
+  iam_admin_role_arn                = data.aws_iam_session_context.current.issuer_arn
+  iam_admin_role_name               = data.aws_iam_session_context.current.issuer_name
   
-  sso_admin_role_arns = [module.lakeformation_admin.arn, var.admins_arn , var.devs_arn]
-  sso_admin_role_names  = [module.lakeformation_admin.name, "AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f", "AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"]
+  sso_admin_role_arns               = [ 
+                                        module.lakeformation_admin.arn,
+                                        var.admins_arn,
+                                        var.devs_arn
+                                      ]
 
-}
+  sso_admin_role_names              = [ 
+                                        module.lakeformation_admin.name,
+                                        element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
+                                        element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
+                                      ]
+  depends_on                      = [module.lakeformation_admin]
+  # depends_on                      = [
+  #                                     module.lakeformation_admin,
+  #                                     module.glue_database_connect_datalake_views,
+  #                                     module.glue_data_catalog_cis_main,
+  #                                     module.glue_data_catalog_connect_datalake,
+  #                                   ]
 
-module "gdc_table" {
-  source  = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
-  version = "10.0.4"
-  company_code      = var.company_code
-  application_code  = var.application_code
-  environment_code  = var.environment_code
-  region_code       = var.region_code
-  application_use   = "${var.application_use}-lf"
-  tags = var.tags
-  # glue catalog database
-  glue_database_name = "analytics_database"
-
-  add_linked_database = true
-  target_catalog_id = var.producer_catalog_id
-  target_database_name = var.source_database_name
-  glue_catalog_map = {}
-
-  # glue_catalog_map = {
-  #   "sample_table_1" = {
-  #     name                           = "sample_table_1"
-  #     glue_catalog_table_description = "Table created using LF in GDC"
+  # Adding DESCRIBE Permission on databases
+  # data_permission_map             = {
+  #   permission1     = {
+  #     type          = "database"
+  #     principal     = var.devs_arn
+  #     permissions   = ["DESCRIBE"]
+  #     database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+  #   },
+  #   permission2     = {
+  #     type          = "database"
+  #     principal     = var.devs_arn
+  #     permissions   = ["DESCRIBE"]
+  #     database_name = module.glue_data_catalog_cis_main.glue_catalog_database_name
+  #   },
+  #   permission3 = {
+  #     type          = "database"
+  #     principal     = var.devs_arn
+  #     permissions   = ["DESCRIBE"]
+  #     database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
   #   }
   # }
 }
+
+
+

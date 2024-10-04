@@ -1,19 +1,104 @@
 jobs:
   - job:
-    displayName: 'Create and Publish Lambda Artifact for Hello World Function'
+    displayName: 'Create and Publish Artifacts for Quicksight Artifact and Athena View'
     steps:
-    
     - script: |
-        set -e
-        set -x
+        # Export AWS credentials from pipeline variables
+        export AWS_ACCESS_KEY_ID=$(aws-access-key-id)
+        export AWS_SECRET_ACCESS_KEY=$(aws-secret-access-key-id)
+        # Set the AWS region
+        export AWS_DEFAULT_REGION="us-west-2"
+        OUTPUT_PROFILE="AWSCLI-AssumeRole" 
 
-        # Zip nice.py file for Lambda
-        LAMBDA_DIR='src/lambda/nice_lambda'
-        cd $LAMBDA_DIR
-        zip -r nice.zip nice.py
-        echo "Listing contents of the directory '$(pwd)'"
-        ls
-      displayName: 'Build Code Artifact For Hello World Lambda'
-    - publish: src/lambda/nice_lambda/nice.zip
-      artifact: nice_lambda
-      displayName: 'Publish Hello World Lambda zip as an Azure Pipeline Artifact named lambda_function'
+        # Assume the role and capture the credentials
+        echo "Assuming role..."
+        echo "$(awsAssumeRole)"
+        # ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "$(awsAssumeRole)" --role-session-name "$OUTPUT_PROFILE" --output json)
+
+        ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-terraform-oidc-role" --role-session-name "$OUTPUT_PROFILE" --output json)
+        # Check if the assume-role command was successful
+
+        if [ $? -eq 0 ]; then
+          # Extract credentials
+          ACCESS_KEY=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.AccessKeyId')
+          SECRET_KEY=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SecretAccessKey')
+          SESSION_TOKEN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SessionToken')
+          # Export the new session credentials for subsequent AWS CLI commands
+          export AWS_ACCESS_KEY_ID=$ACCESS_KEY
+          export AWS_SECRET_ACCESS_KEY=$SECRET_KEY
+          export AWS_SESSION_TOKEN=$SESSION_TOKEN
+          ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
+          echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
+          echo "Creating the quicksight file!"
+          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-IVR' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/40ebf7be-50e2-49ed-8136-78aa0117aa65" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
+          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-WBDB' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/08a4b21e-e016-41d7-85d2-b7478d4deb98" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
+
+          awsAccountId="442426866507"
+          jobId="sdge-export-job-IVR"
+          
+          while true; do
+            # Get the job details
+            response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
+
+            # Check if the command was successful
+            if [ $? -eq 0 ]; then
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+                    downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
+                    # Download the file
+                    curl -o "./assetbundle-sdge-export-job-IVR.qs" $downloadUrl
+                    ls
+                    echo "File downloaded successfully for IVR"
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+          done
+          awsAccountId="442426866507"
+          jobId="sdge-export-job-WBDB"
+          
+          while true; do
+            # Get the job details
+            response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
+
+            # Check if the command was successful
+            if [ $? -eq 0 ]; then
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+                    downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
+                    # Download the file
+                    curl -o "./assetbundle-sdge-export-job-WBDB.qs" $downloadUrl
+                    ls
+                    echo "File downloaded successfully WBDB"
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+          done
+        else
+            echo "Failed to assume role."
+            exit 1
+        fi
+      displayName: 'Build Code Artifact For Quicksight Deployment'
+
+    - publish: src/pyscripts/create_view.py
+      artifact: athena_pyscript
+      displayName: 'Publish the PyScript to create athena view as an artifact'
+
+    - publish: assetbundle-sdge-export-job-IVR.qs
+      artifact: QS_Bundle_IVR
+      displayName: 'Publish the IVR Quicksight artifact to the pipeline'
+
+    - publish: assetbundle-sdge-export-job-WBDB.qs
+      artifact: QS_Bundle_WBDB
+      displayName: 'Publish the WBDB Quicksight artifact to the pipeline'

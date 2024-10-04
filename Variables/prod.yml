@@ -1,6 +1,6 @@
 variables:
   - name: terraformOrg
-    value: $(company_code)-dev
+    value: $(company_code)-prd
   - name: terraformWorkspace
     value: '$(terraformOrg)_$(adoRepoName)'
   - name: workspace-name
@@ -14,3 +14,5 @@ variables:
   - name: terraformDeployDirectory
     value: '$(Pipeline.Workspace)/terraform'
   - group: 'sdge-cs-cccanalytics-prod'
+  - name: qstargetenv
+    value:  'prd'
