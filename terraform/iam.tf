@@ -1,3 +1,4 @@
+# IAM Role for lake formation
 module "lakeformation_admin" {
   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
   version = "10.0.2"
