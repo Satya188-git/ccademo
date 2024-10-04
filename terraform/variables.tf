@@ -53,11 +53,6 @@ variable "devs_arn" {
   type        = string
 }
 
-variable "target_database_name"{
-  description = "This is the database names suffix to hold all the data for Nice and Connect in Lake formation"
-  type = string
-}
-
 variable "producer_catalog_id"{
   description = "This is the producer data catalog id or AWS Account ID"
   type = string
@@ -75,4 +70,14 @@ variable "source_table_names" {
 variable "quicksight_user_arns"{
   description = "List of QS user arns to whome table permissions needs to be assigned"
   type        = list(string)
+}
+
+variable "connect_api_catalog_id"{
+  description = "This is the producer data catalog id or AWS Account ID for Connect API Data"
+  type = string
+}
+
+variable "connect_api_db_name"{
+  description = "This is the database name in the producer account for connect api data"
+  type = string
 }
