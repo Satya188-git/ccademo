@@ -14,3 +14,5 @@ variables:
   - name: terraformDeployDirectory
     value: '$(Pipeline.Workspace)/terraform'
   - group: 'sdge-cs-cccanalytics-qa'
+  - name: qstargetenv
+    value:  'qa'
