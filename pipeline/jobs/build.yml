@@ -31,7 +31,7 @@ jobs:
           echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
           echo "Creating the quicksight file!"
           aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-IVR' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/40ebf7be-50e2-49ed-8136-78aa0117aa65" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
-          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-WBDB' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/1234f5c6-1e6c-403a-b28a-418554355dbc" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
+          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-WBDB' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/08a4b21e-e016-41d7-85d2-b7478d4deb98" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
 
           awsAccountId="442426866507"
           jobId="sdge-export-job-IVR"
