@@ -54,7 +54,8 @@ module "lake_formation" {
   depends_on                      = [
                                       module.lakeformation_admin,
                                       module.glue_data_catalog_connect_datalake,
-                                      module.glue_database_connect_datalake_views
+                                      module.glue_database_connect_datalake_views,
+                                      module.glue_data_catalog_customer_cismain
                                     ]
 
   # Adding DESCRIBE Permission on databases
@@ -70,6 +71,12 @@ module "lake_formation" {
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+    },
+    permission3     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
     }
   }
 }
