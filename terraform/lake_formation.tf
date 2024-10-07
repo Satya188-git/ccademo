@@ -29,9 +29,7 @@ module "lake_formation" {
                                       ]
   depends_on                      = [
                                       module.lakeformation_admin,
-                                      module.glue_database_connect_datalake_views,
-                                      module.glue_data_catalog_connect_api,
-                                      module.glue_data_catalog_connect_datalake,
+                                      module.glue_data_catalog_connect_datalake
                                     ]
 
   # Adding DESCRIBE Permission on databases
