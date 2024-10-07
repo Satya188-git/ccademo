@@ -21,22 +21,22 @@ module "glue_data_catalog_connect_datalake" {
 }
 
 # Module to create data base for views in Lake formation
-module "glue_database_connect_datalake_views" {
-  source                = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
-  version               = "10.0.4"
-  company_code          = var.company_code
-  application_code      = var.application_code
-  environment_code      = var.environment_code
-  region_code           = var.region_code
-  application_use       = "${var.application_use}"
-  tags                  = var.tags
+# module "glue_database_connect_datalake_views" {
+#   source                = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+#   version               = "10.0.4"
+#   company_code          = var.company_code
+#   application_code      = var.application_code
+#   environment_code      = var.environment_code
+#   region_code           = var.region_code
+#   application_use       = "${var.application_use}"
+#   tags                  = var.tags
 
-  # glue catalog database
-  glue_database_name    = "connect-datalake-views"
-  glue_catalog_map      = {}
-  # depends_on = [ module.lake_formation ]
+#   # glue catalog database
+#   glue_database_name    = "connect-datalake-views"
+#   glue_catalog_map      = {}
+#   # depends_on = [ module.lake_formation ]
 
-}
+# }
 
 # Create a resource link from Connect API
 module "glue_data_catalog_connect_api" {
@@ -57,4 +57,29 @@ module "glue_data_catalog_connect_api" {
   target_catalog_id     = var.connect_api_catalog_id
   target_database_name  = var.connect_api_db_name
   # depends_on = [ module.lake_formation ]
+}
+
+module "glue_database_connect_datalake_views" {
+  source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
+  version = "10.1.0"
+
+  company_code          = var.company_code
+  application_code      = var.application_code
+  environment_code      = var.environment_code
+  region_code           = var.region_code
+  application_use       = "${var.application_use}"
+  tags                  = var.tags
+
+  iam_role_arn  = module.lakeformation_admin.arn
+  iam_role_name = module.lakeformation_admin.name
+
+  glue_database_map = {
+    database1 = {
+      // job specific name here gets appended to standardized name
+      name = "connect-datalake-views"
+      optional_arguments = {
+        description = "This is database to store custom views created by developers"
+      }
+    }
+  }
 }
