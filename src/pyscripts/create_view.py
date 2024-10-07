@@ -7,7 +7,9 @@ client = boto3.client('athena')
 # Skip the first argument as its the script name
 args = sys.argv[1:]
 env = args[0]
-view_name = args[1]
+
+# The view name that needs to be created
+view_name = "ivr_combined_2509data_ext_table"
 
 print("env : ", env)
 print("View to be created :", view_name)

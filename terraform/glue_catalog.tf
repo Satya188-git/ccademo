@@ -17,7 +17,7 @@ module "glue_data_catalog_connect_datalake" {
   add_linked_database   = true
   target_catalog_id     = var.producer_catalog_id
   target_database_name  = var.source_database_name
-  depends_on = [ module.lake_formation ]
+  # depends_on = [ module.lake_formation ]
 }
 
 # Module to create data base for views in Lake formation
@@ -34,12 +34,12 @@ module "glue_database_connect_datalake_views" {
   # glue catalog database
   glue_database_name    = "connect-datalake-views"
   glue_catalog_map      = {}
-  depends_on = [ module.lake_formation ]
+  # depends_on = [ module.lake_formation ]
 
 }
 
 # Create a resource link from Connect API
-module "glue_data_catalog_cis_main" {
+module "glue_data_catalog_connect_api" {
   source                = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
   version               = "10.0.4"
   company_code          = var.company_code
@@ -56,5 +56,5 @@ module "glue_data_catalog_cis_main" {
   add_linked_database   = true
   target_catalog_id     = var.connect_api_catalog_id
   target_database_name  = var.connect_api_db_name
-  depends_on = [ module.lake_formation ]
+  # depends_on = [ module.lake_formation ]
 }
