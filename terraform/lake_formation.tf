@@ -1,23 +1,23 @@
 # Create Resource Link for Connect API
-resource "aws_glue_catalog_database" "glue_connect_api_link" {
-  lifecycle {
-    ignore_changes = [
-      description
-    ]
-  } 
-  name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-connect-api-link"
-  target_database {
-    catalog_id    = var.connect_api_catalog_id
-    database_name = var.connect_api_db_name
-  }
-  create_table_default_permission {
-    permissions = ["SELECT"]
+# resource "aws_glue_catalog_database" "glue_connect_api_link" {
+#   lifecycle {
+#     ignore_changes = [
+#       description
+#     ]
+#   } 
+#   name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-connect-api-link"
+#   target_database {
+#     catalog_id    = var.connect_api_catalog_id
+#     database_name = var.connect_api_db_name
+#   }
+#   create_table_default_permission {
+#     permissions = ["SELECT"]
 
-    principal {
-      data_lake_principal_identifier = "IAM_ALLOWED_PRINCIPALS"
-    }
-  }
-}
+#     principal {
+#       data_lake_principal_identifier = "IAM_ALLOWED_PRINCIPALS"
+#     }
+#   }
+# }
 
 
 # Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
@@ -58,26 +58,20 @@ module "lake_formation" {
                                     ]
 
   # Adding DESCRIBE Permission on databases
-  # data_permission_map             = {
-  #   permission1     = {
-  #     type          = "database"
-  #     principal     = var.devs_arn
-  #     permissions   = ["DESCRIBE"]
-  #     database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
-  #   },
-  #   permission2     = {
-  #     type          = "database"
-  #     principal     = var.devs_arn
-  #     permissions   = ["DESCRIBE"]
-  #     database_name = module.glue_data_catalog_cis_main.glue_catalog_database_name
-  #   },
-  #   permission3 = {
-  #     type          = "database"
-  #     principal     = var.devs_arn
-  #     permissions   = ["DESCRIBE"]
-  #     database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
-  #   }
-  # }
+  data_permission_map             = {
+    permission1     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+    },
+    permission2     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+    }
+  }
 }
 
 
