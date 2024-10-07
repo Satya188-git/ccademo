@@ -16,7 +16,7 @@ resource "aws_iam_role_policy" "lf_policy" {
   name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-lf-policy"
   role   = module.lakeformation_admin.name
   policy = templatefile(
-    "${path.module}/iampolicies/policy-iam-glue-assume-role.tmpl",
+    "${path.module}/iampolicies/policy-iam-lf-assume-role.tmpl",
     {}
   )
 }
