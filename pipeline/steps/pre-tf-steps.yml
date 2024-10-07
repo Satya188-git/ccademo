@@ -59,30 +59,31 @@ steps:
             exit 1
         fi
       done
-      aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-WBDB' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_WBDB/assetbundle-sdge-export-job-WBDB.qs  --failure-action ROLLBACK
 
-      jobId="sdge-export-job-WBDB"
+    #   aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-WBDB' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_WBDB/assetbundle-sdge-export-job-WBDB.qs  --failure-action ROLLBACK
+
+    #   jobId="sdge-export-job-WBDB"
       
-      while true; do
-        # Get the job details
-        response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
+    #   while true; do
+    #     # Get the job details
+    #     response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
 
-        # Check if the command was successful
-        if [ $? -eq 0 ]; then
-            jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
-            if [ "$jobStatus" == "SUCCESSFUL" ]; then
-                echo "Quicksight Package deployed"
-                aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "168c6220-5dbd-4a73-a6fb-caa0553084f0" --name "connectapi" --physical-table-map "{\"38939462-7280-4626-8dc7-c1bbe70d09cd\":{\"RelationalTable\":{\"DataSourceArn\":\"arn:aws:quicksight:us-west-2:442426866507:datasource/d6d5c21d-d1be-4895-9256-3fbf8222a4c7\",\"Catalog\":\"AwsDataCatalog\",\"Schema\":\"$(qstargetenv)_connectdatalake\",\"Name\":\"connectapi\",\"InputColumns\":[{\"Name\":\"queue_id\",\"Type\":\"STRING\"},{\"Name\":\"metrics\",\"Type\":\"STRING\"},{\"Name\":\"metric_value\",\"Type\":\"DECIMAL\"},{\"Name\":\"language\",\"Type\":\"STRING\"},{\"Name\":\"type\",\"Type\":\"STRING\"},{\"Name\":\"ess2\",\"Type\":\"STRING\"}]}}}" --import-mode DIRECT_QUERY --logical-table-map "{\"25b1f640-9223-4d94-9927-fd52122f730c\":{\"Alias\":\"connectapi\",\"DataTransforms\":[{\"ProjectOperation\":{\"ProjectedColumns\":[\"queue_id\",\"metrics\",\"metric_value\",\"language\",\"type\",\"ess2\"]}}],\"Source\":{\"PhysicalTableId\":\"38939462-7280-4626-8dc7-c1bbe70d09cd\"}}}"
-                break
-            else
-                echo "Job status is not successful: $jobStatus"
-                sleep 10
-            fi
-        else
-            echo "Failed to get the job details"
-            exit 1
-        fi
-      done
+    #     # Check if the command was successful
+    #     if [ $? -eq 0 ]; then
+    #         jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+    #         if [ "$jobStatus" == "SUCCESSFUL" ]; then
+    #             echo "Quicksight Package deployed"
+    #             aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "168c6220-5dbd-4a73-a6fb-caa0553084f0" --name "connectapi" --physical-table-map "{\"38939462-7280-4626-8dc7-c1bbe70d09cd\":{\"RelationalTable\":{\"DataSourceArn\":\"arn:aws:quicksight:us-west-2:442426866507:datasource/d6d5c21d-d1be-4895-9256-3fbf8222a4c7\",\"Catalog\":\"AwsDataCatalog\",\"Schema\":\"$(qstargetenv)_connectdatalake\",\"Name\":\"connectapi\",\"InputColumns\":[{\"Name\":\"queue_id\",\"Type\":\"STRING\"},{\"Name\":\"metrics\",\"Type\":\"STRING\"},{\"Name\":\"metric_value\",\"Type\":\"DECIMAL\"},{\"Name\":\"language\",\"Type\":\"STRING\"},{\"Name\":\"type\",\"Type\":\"STRING\"},{\"Name\":\"ess2\",\"Type\":\"STRING\"}]}}}" --import-mode DIRECT_QUERY --logical-table-map "{\"25b1f640-9223-4d94-9927-fd52122f730c\":{\"Alias\":\"connectapi\",\"DataTransforms\":[{\"ProjectOperation\":{\"ProjectedColumns\":[\"queue_id\",\"metrics\",\"metric_value\",\"language\",\"type\",\"ess2\"]}}],\"Source\":{\"PhysicalTableId\":\"38939462-7280-4626-8dc7-c1bbe70d09cd\"}}}"
+    #             break
+    #         else
+    #             echo "Job status is not successful: $jobStatus"
+    #             sleep 10
+    #         fi
+    #     else
+    #         echo "Failed to get the job details"
+    #         exit 1
+    #     fi
+    #   done
     else
         echo "Failed to assume role."
         exit 1
