@@ -55,7 +55,8 @@ module "lake_formation" {
                                       module.lakeformation_admin,
                                       module.glue_data_catalog_connect_datalake,
                                       module.glue_database_connect_datalake_views,
-                                      module.glue_data_catalog_customer_cismain
+                                      module.glue_data_catalog_customer_cismain,
+                                      module.glue_data_catalog_public_census
                                     ]
 
   # Adding DESCRIBE Permission on databases
@@ -77,6 +78,12 @@ module "lake_formation" {
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
+    },
+    permission4     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_public_census.glue_catalog_database_name
     }
   }
 }

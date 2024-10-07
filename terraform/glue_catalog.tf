@@ -75,3 +75,25 @@ module "glue_data_catalog_customer_cismain" {
   target_catalog_id     = var.connect_api_catalog_id
   target_database_name  = "sdge_dev_wus2_customer_cismain"
 }
+
+
+
+# Create a resource link from Public census
+module "glue_data_catalog_public_census" {
+  source                = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+  version               = "10.0.4"
+  company_code          = var.company_code
+  application_code      = var.application_code
+  environment_code      = var.environment_code
+  region_code           = var.region_code
+  application_use       = "${var.application_use}"
+  tags                  = var.tags
+  
+  # glue catalog database
+  glue_database_name    = "public-census-link"
+  glue_catalog_map      = {}
+
+  add_linked_database   = true
+  target_catalog_id     = var.connect_api_catalog_id
+  target_database_name  = "sdge_prd_wus2_public_census"
+}
