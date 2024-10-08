@@ -66,18 +66,21 @@ module "lake_formation" {
       principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
       permissions   = ["DESCRIBE"]
       database_name = var.source_database_name
+      catalog_id = var.producer_catalog_id
     },
     permission2     = {
       type          = "database"
       principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
       permissions   = ["DESCRIBE"]
       database_name = var.connect_api_db_name
+      catalog_id = var.connect_api_catalog_id
     },
     permission3     = {
       type          = "database"
       principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
       permissions   = ["DESCRIBE"]
       database_name = "sdge_dev_wus2_customer_cismain"
+      catalog_id = var.connect_api_catalog_id
     }
 }
 }
