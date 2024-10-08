@@ -88,7 +88,6 @@ resource "aws_lakeformation_permissions" "lf_cis_main" {
  
   table {
     database_name       = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
-    name                = null
     wildcard            = true
   }
 }
