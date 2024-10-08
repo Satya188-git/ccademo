@@ -56,30 +56,30 @@ module "glue_database_connect_datalake_views" {
 # }
 
 
-# Create a resource link from CIS Main
-module "glue_data_catalog_customer_cismain" {
-  source                = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
-  version               = "10.0.4"
-  company_code          = var.company_code
-  application_code      = var.application_code
-  environment_code      = var.environment_code
-  region_code           = var.region_code
-  application_use       = "${var.application_use}"
-  tags                  = var.tags
+# # Create a resource link from CIS Main
+# module "glue_data_catalog_customer_cismain" {
+#   source                = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+#   version               = "10.0.4"
+#   company_code          = var.company_code
+#   application_code      = var.application_code
+#   environment_code      = var.environment_code
+#   region_code           = var.region_code
+#   application_use       = "${var.application_use}"
+#   tags                  = var.tags
   
-  lifecycle {
-    create_before_destroy = true
-    ignore_changes        = all
-  }
+#   lifecycle {
+#     create_before_destroy = false
+#     ignore_changes        = all
+#   }
 
-  # glue catalog database
-  glue_database_name    = "customer-cismain-link"
-  glue_catalog_map      = {}
+#   # glue catalog database
+#   glue_database_name    = "customer-cismain-link"
+#   glue_catalog_map      = {}
 
-  add_linked_database   = true
-  target_catalog_id     = var.connect_api_catalog_id
-  target_database_name  = "sdge_dev_wus2_customer_cismain"
-}
+#   add_linked_database   = true
+#   target_catalog_id     = var.connect_api_catalog_id
+#   target_database_name  = "sdge_dev_wus2_customer_cismain"
+# }
 
 
 
