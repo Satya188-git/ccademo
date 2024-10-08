@@ -84,9 +84,10 @@ module "lake_formation" {
 
 resource "aws_lakeformation_permissions" "lf_cis_main" {
   principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
-  permissions = ["ALL", "DESCRIBE"]
+  permissions = ["DESCRIBE", "SELECT"]
   
   table {
+    catalog_id   = var.connect_api_catalog_id
     database_name = "sdge_dev_wus2_customer_cismain"
     name = "contract_account_attributes"
   }
