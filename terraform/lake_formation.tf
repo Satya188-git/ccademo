@@ -60,26 +60,26 @@ module "lake_formation" {
                                     ]
 
 #  # Adding DESCRIBE Permission on databases
-#   data_permission_map             = {
-#     permission1     = {
-#       type          = "database"
-#       principal     = var.devs_arn
-#       permissions   = ["DESCRIBE"]
-#       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
-#     },
-#     permission2     = {
-#       type          = "database"
-#       principal     = var.devs_arn
-#       permissions   = ["DESCRIBE"]
-#       database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-#     },
-#     permission3     = {
-#       type          = "database"
-#       principal     = var.devs_arn
-#       permissions   = ["DESCRIBE"]
-#       database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
-#     }
-# }
+  data_permission_map             = {
+    permission1     = {
+      type          = "database"
+      principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+      permissions   = ["DESCRIBE"]
+      database_name = var.source_database_name
+    },
+    permission2     = {
+      type          = "database"
+      principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+      permissions   = ["DESCRIBE"]
+      database_name = var.connect_api_db_name
+    },
+    permission3     = {
+      type          = "database"
+      principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+      permissions   = ["DESCRIBE"]
+      database_name = "sdge_dev_wus2_customer_cismain"
+    }
+}
 }
 
 # resource "aws_lakeformation_permissions" "lf_cis_main_db" {
