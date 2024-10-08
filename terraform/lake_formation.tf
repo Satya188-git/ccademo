@@ -79,6 +79,7 @@ module "lake_formation" {
       database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
     }
 }
+}
 
 
 
