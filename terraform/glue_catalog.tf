@@ -67,6 +67,11 @@ module "glue_data_catalog_customer_cismain" {
   application_use       = "${var.application_use}"
   tags                  = var.tags
   
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes        = all
+  }
+
   # glue catalog database
   glue_database_name    = "customer-cismain-link"
   glue_catalog_map      = {}
