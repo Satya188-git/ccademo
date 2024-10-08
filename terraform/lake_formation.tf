@@ -82,4 +82,13 @@ module "lake_formation" {
 }
 
 
-
+resource "aws_lakeformation_permissions" "lf_cis_main" {
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["ALL", "DELETE", "DESCRIBE", "INSERT", "ALTER", "DROP"]
+ 
+  table {
+    database_name       = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
+    name                = null
+    wildcard            = true
+  }
+}

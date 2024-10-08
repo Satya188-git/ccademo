@@ -84,7 +84,7 @@ module "glue_database_connect_datalake_views" {
 resource "aws_glue_catalog_database" "glue_data_catalog_customer_cismain" {
   name         = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-cismain-link"
   catalog_id   = var.awsAccount
-
+  tags = var.tags
   lifecycle {
     ignore_changes = [
       description
