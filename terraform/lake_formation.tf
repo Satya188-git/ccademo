@@ -59,7 +59,7 @@ module "lake_formation" {
                                       aws_glue_catalog_database.glue_data_catalog_customer_connect
                                     ]
 
-  # Adding DESCRIBE Permission on databases
+#  # Adding DESCRIBE Permission on databases
 #   data_permission_map             = {
 #     permission1     = {
 #       type          = "database"
