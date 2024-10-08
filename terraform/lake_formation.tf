@@ -85,12 +85,11 @@ module "lake_formation" {
 
 
 resource "aws_lakeformation_permissions" "lf_cis_main_table" {
-  depends_on = [ aws_lakeformation_permissions.lf_cis_main_db ]
   principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
   permissions = ["SELECT"]
   
   table {
-    database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+    database_name = "sdge-dcctr-dev-wus2-ccc-analytics-customer-cismain-link"
     # name = "contract_account_attributes"
     wildcard = true
   }
