@@ -59,26 +59,26 @@ module "lake_formation" {
                                     ]
 
   # Adding DESCRIBE Permission on databases
-  data_permission_map             = {
-    permission1     = {
-      type          = "database"
-      principal     = var.devs_arn
-      permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
-    },
-    permission2     = {
-      type          = "database"
-      principal     = var.devs_arn
-      permissions   = ["DESCRIBE"]
-      database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-    },
-    permission3     = {
-      type          = "database"
-      principal     = var.devs_arn
-      permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
-    }
-}
+#   data_permission_map             = {
+#     permission1     = {
+#       type          = "database"
+#       principal     = var.devs_arn
+#       permissions   = ["DESCRIBE"]
+#       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+#     },
+#     permission2     = {
+#       type          = "database"
+#       principal     = var.devs_arn
+#       permissions   = ["DESCRIBE"]
+#       database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+#     },
+#     permission3     = {
+#       type          = "database"
+#       principal     = var.devs_arn
+#       permissions   = ["DESCRIBE"]
+#       database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
+#     }
+# }
 }
 
 
