@@ -77,14 +77,7 @@ module "lake_formation" {
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = module.glue_data_catalog_customer_cismain.glue_catalog_database_name
-    },
-    permission4     = {
-      type          = "database"
-      principal     = var.devs_arn
-      permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_public_census.glue_catalog_database_name
     }
-  }
 }
 
 
