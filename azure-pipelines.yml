@@ -42,7 +42,7 @@ parameters:
 #DevSecOps gets alerts for jobs that run longer than 120 minutes.
 #No action is taken against long running jobs, but we may ask why its taking so long if it consistently occurrs
   - name: TimeoutInMinutes
-    default: 300
+    default: 60
     displayName: "Job Timeout in Minutes"
     type: string
 
