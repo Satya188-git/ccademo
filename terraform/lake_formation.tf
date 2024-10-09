@@ -78,8 +78,16 @@ module "lake_formation" {
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
+    },
+    permission3     = {
+      type          = "table"
+      principal     = var.devs_arn
+      permissions   = ["SELECT"]
+      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+      wildcard = true
     }
-}
+
+  }
 }
 
 
