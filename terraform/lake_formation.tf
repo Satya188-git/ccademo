@@ -79,7 +79,7 @@ module "lake_formation" {
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
     },
-    permission3     = {
+    permission4     = {
       type          = "table"
       catalog_id = var.connect_api_catalog_id
       principal     = var.devs_arn
