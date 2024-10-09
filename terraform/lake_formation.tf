@@ -63,19 +63,19 @@ module "lake_formation" {
   data_permission_map             = {
     permission1     = {
       type          = "database"
-      principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+      principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
     },
     permission2     = {
       type          = "database"
-      principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+      principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
     },
     permission3     = {
       type          = "database"
-      principal     = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+      principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = "sdge-dcctr-dev-wus2-ccc-analytics-customer-cismain-link"
     }
@@ -84,13 +84,13 @@ module "lake_formation" {
 
 
 
-resource "aws_lakeformation_permissions" "lf_cis_main_table" {
-  principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
-  permissions = ["SELECT"]
+# resource "aws_lakeformation_permissions" "lf_cis_main_table" {
+#   principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
+#   permissions = ["SELECT"]
   
-  table {
-    database_name = "sdge-dcctr-dev-wus2-ccc-analytics-customer-cismain-link"
-    # name = "contract_account_attributes"
-    wildcard = true
-  }
-}
+#   table {
+#     database_name = "sdge-dcctr-dev-wus2-ccc-analytics-customer-cismain-link"
+#     # name = "contract_account_attributes"
+#     wildcard = true
+#   }
+# }
