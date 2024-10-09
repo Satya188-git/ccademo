@@ -81,10 +81,9 @@ module "lake_formation" {
     },
     permission4     = {
       type          = "table"
-      catalog_id = var.connect_api_catalog_id
       principal     = var.devs_arn
       permissions   = ["SELECT"]
-      database_name = var.connect_api_db_name
+      database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
       wildcard = true
     }
 
