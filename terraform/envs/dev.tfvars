@@ -23,7 +23,6 @@ source_database_name = "connect_datalake"
 
 connect_api_catalog_id = "685757275861"
 connect_api_db_name = "sdge_dev_wus2_customer_connect"
-
 source_table_names = [
   "agent_statistic_record",
   "agent_queue_statistic_record",
