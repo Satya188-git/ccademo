@@ -35,7 +35,7 @@ module "lake_formation" {
   use_lake_formation                = true
 
   assign_iam_admin                  = true
-  # trusted_resource_owners_id        = [var.connect_api_catalog_id, var.producer_catalog_id]
+  trusted_resource_owners_id        = [var.connect_api_catalog_id, var.producer_catalog_id]
 
   iam_admin_role_arn                = data.aws_iam_session_context.current.issuer_arn
   iam_admin_role_name               = data.aws_iam_session_context.current.issuer_name
@@ -100,6 +100,19 @@ resource "aws_lakeformation_permissions" "gdc_views_permissions" {
   table {
     database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
     catalog_id = var.awsAccount
+    wildcard = true
+  }
+}
+
+resource "aws_lakeformation_permissions" "gdc_data_lake_link_permissions" {
+  count       = length(var.quicksight_user_arns)
+  depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
+  principal                     = element(var.quicksight_user_arns, count.index )
+  permissions                   = ["SELECT"]
+  permissions_with_grant_option = ["SELECT"]
+  table {
+    database_name = var.source_database_name
+    catalog_id = var.producer_catalog_id
     wildcard = true
   }
 }
