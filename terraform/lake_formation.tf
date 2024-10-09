@@ -59,7 +59,7 @@ module "lake_formation" {
                                       aws_glue_catalog_database.glue_data_catalog_customer_connect
                                     ]
 
-#  # Adding DESCRIBE Permission on databases
+# Adding DESCRIBE Permission on databases
   data_permission_map             = {
     permission1     = {
       type          = "database"
@@ -81,7 +81,7 @@ module "lake_formation" {
     },
     permission4     = {
       type          = "table"
-      principal     = var.devs_arn
+      principal     = var.quicksight_user_arns
       permissions   = ["SELECT"]
       database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
       wildcard = true
