@@ -83,7 +83,7 @@ module "lake_formation" {
       type          = "table"
       principal     = var.devs_arn
       permissions   = ["SELECT"]
-      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+      database_name = var.source_database_name
       wildcard = true
     }
 
