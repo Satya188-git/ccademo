@@ -77,7 +77,7 @@ module "lake_formation" {
       type          = "database"
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
-      database_name = "sdge-dcctr-dev-wus2-ccc-analytics-customer-cismain-link"
+      database_name = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
     }
 }
 }
