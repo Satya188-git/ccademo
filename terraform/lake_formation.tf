@@ -81,6 +81,7 @@ module "lake_formation" {
     },
     permission3     = {
       type          = "table"
+      catalog_id = var.connect_api_catalog_id
       principal     = var.devs_arn
       permissions   = ["SELECT"]
       database_name = var.source_database_name
