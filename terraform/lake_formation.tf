@@ -78,19 +78,31 @@ module "lake_formation" {
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
-    },
-    permission4     = {
-      type          = "table"
-      principal     = var.quicksight_user_arns
-      permissions   = ["SELECT"]
-      database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-      wildcard = true
     }
+    # ,
+    # permission4     = {
+    #   type          = "table"
+    #   principal     = var.quicksight_user_arns
+    #   permissions   = ["SELECT"]
+    #   database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+    #   wildcard = true
+    # }
 
   }
 }
 
-
+resource "aws_lakeformation_permissions" "gdc_views_permissions" {
+  count       = length(var.quicksight_user_arns)
+  depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
+  principal                     = element(var.quicksight_user_arns, count.index )
+  permissions                   = ["SELECT"]
+  permissions_with_grant_option = ["SELECT"]
+  table {
+    database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+    catalog_id = var.awsAccount
+    wildcard = true
+  }
+}
 
 # resource "aws_lakeformation_permissions" "lf_cis_main_table" {
 #   principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
