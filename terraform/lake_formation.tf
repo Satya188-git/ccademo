@@ -84,7 +84,7 @@ module "lake_formation" {
       catalog_id = var.connect_api_catalog_id
       principal     = var.devs_arn
       permissions   = ["SELECT"]
-      database_name = var.source_database_name
+      database_name = var.connect_api_db_name
       wildcard = true
     }
 
