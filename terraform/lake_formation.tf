@@ -35,7 +35,7 @@ module "lake_formation" {
   use_lake_formation                = true
 
   assign_iam_admin                  = true
-  trusted_resource_owners_id        = [var.connect_api_catalog_id, var.producer_catalog_id]
+  # trusted_resource_owners_id        = [var.connect_api_catalog_id, var.producer_catalog_id]
 
   iam_admin_role_arn                = data.aws_iam_session_context.current.issuer_arn
   iam_admin_role_name               = data.aws_iam_session_context.current.issuer_name
