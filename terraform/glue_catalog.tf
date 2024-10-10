@@ -90,8 +90,6 @@ resource "aws_glue_catalog_database" "glue_data_catalog_customer_cismain" {
       description
     ]
   }
-
-  // Optional Linked Database
   target_database {
     catalog_id    = var.connect_api_catalog_id
     database_name = "sdge_${var.environment_code}_wus2_customer_cismain"
