@@ -42,7 +42,7 @@ start_query_response = client.start_query_execution(
 		) THEN 'Contained- Abandoned'
 		WHEN l3_tag IN (
 			'Transfer - System - Agent',
-			' Transfer - System - Exception'
+			'Transfer - System - Exception'
 		) THEN 'Transfer- System'
 		WHEN l3_tag IN (
 			'Transfer - User - Self Service Attempt - Success',
