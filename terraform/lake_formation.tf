@@ -88,7 +88,7 @@ module "lake_formation" {
     #   wildcard = true
     # }
 
-  }
+  # }
 }
 
 # resource "aws_lakeformation_permissions" "gdc_views_permissions" {
