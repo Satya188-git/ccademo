@@ -81,23 +81,23 @@ module "glue_database_connect_datalake_views" {
 #   target_database_name  = "sdge_dev_wus2_customer_cismain"
 # }
 
-resource "aws_glue_catalog_database" "glue_data_catalog_customer_cismain" {
-  name         = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-cismain-link"
-  catalog_id   = var.awsAccount
-  tags = var.tags
-  lifecycle {
-    ignore_changes = [
-      description
-    ]
-  }
-  target_database {
-    catalog_id    = var.connect_api_catalog_id
-    database_name = "sdge_${var.environment_code}_wus2_customer_cismain"
-  }
-}
+# resource "aws_glue_catalog_database" "glue_data_catalog_customer_cismain" {
+#   name         = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-cismain-link"
+#   catalog_id   = var.awsAccount
+#   tags = var.tags
+#   lifecycle {
+#     ignore_changes = [
+#       description
+#     ]
+#   }
+#   target_database {
+#     catalog_id    = var.connect_api_catalog_id
+#     database_name = "sdge_${var.environment_code}_wus2_customer_cismain"
+#   }
+# }
 
-resource "aws_glue_catalog_database" "glue_data_catalog_customer_connect" {
-  name         = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-connect-link"
+resource "aws_glue_catalog_database" "glue_data_catalog_customer_connectchatbot" {
+  name         = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-connectchatbot-link"
   catalog_id   = var.awsAccount
   tags = var.tags
   lifecycle {

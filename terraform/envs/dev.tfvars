@@ -22,7 +22,7 @@ producer_catalog_id = "632182196722"
 source_database_name = "connect_datalake"
 
 connect_api_catalog_id = "685757275861"
-connect_api_db_name = "sdge_dev_wus2_customer_connect"
+connect_api_db_name = "sdge_dev_wus2_customer_connectchatbot"
 
 source_table_names = [
   "agent_statistic_record",

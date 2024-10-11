@@ -55,8 +55,7 @@ module "lake_formation" {
                                       module.lakeformation_admin,
                                       module.glue_data_catalog_connect_datalake,
                                       module.glue_database_connect_datalake_views,
-                                      aws_glue_catalog_database.glue_data_catalog_customer_cismain,
-                                      aws_glue_catalog_database.glue_data_catalog_customer_connect
+                                      aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot
                                     ]
 
 # # Adding DESCRIBE Permission on databases
