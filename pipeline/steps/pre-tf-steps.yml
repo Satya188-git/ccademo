@@ -47,6 +47,7 @@ steps:
         # jobId="sdge-export-job-IVR"
 
         echo "started the asset bundle import job"
+        
         while true; do
             # Get the job details
             response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'saipraneeth-import-qs-bundle')
