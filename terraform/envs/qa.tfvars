@@ -34,16 +34,16 @@ source_table_names = [
  ]
 
 quicksight_user_arns = [
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_39b96139a7d09053/RKadari@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_39b96139a7d09053/SRacharl@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_39b96139a7d09053/SNayak1@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/AKumar45@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/SThodima@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/SNayak1@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/IMishra@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/SRacharl@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/VWahal@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/HKumar3@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/PSharma6@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_946c306c9d5c3025/SMothuku@sdgecontractor.com"
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/RKadari@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SNayak1@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/AKumar45@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/SThodima@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/SNayak1@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/IMishra@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/VWahal@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/HKumar3@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/PSharma6@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025/SMothuku@sdgecontractor.com"
 ]

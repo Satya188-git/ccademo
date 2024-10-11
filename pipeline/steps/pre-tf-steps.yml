@@ -45,7 +45,7 @@ steps:
         aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'saipraneeth-import-qs-bundle' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_IVR/assetbundle-sdge-export-job-IVR.qs --override-parameters "{\"DataSources\":[{\"DataSourceId\":\"86e7235f-b068-49af-aec2-795b4db569ad\",\"Name\":\"saipraneeth_devop_qs_testing\",\"DataSourceParameters\":{\"AthenaParameters\":{\"WorkGroup\":\"primary\"}},\"SslProperties\":{\"DisableSsl\":false}}],\"DataSets\":[{\"DataSetId\":\"7077ae2d-683e-4651-99f2-38e8efc2a42a\",\"Name\":\"ivr_data_saipraneeth_devop_qs\"}]}" --failure-action ROLLBACK
 
         # jobId="sdge-export-job-IVR"
-        jobId = "saipraneeth-import-qs-bundle"
+
         echo "started the asset bundle import job"
         while true; do
             # Get the job details
