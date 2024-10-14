@@ -52,4 +52,33 @@ resource "aws_glue_catalog_database" "glue_data_catalog_customer_connectchatbot"
     catalog_id    = var.connect_api_catalog_id
     database_name = var.connect_api_db_name
   }
+
+  create_table_default_permission {
+    permissions = ["SELECT"]
+
+    principal {
+      data_lake_principal_identifier = "IAM_ALLOWED_PRINCIPALS"
+    }
+  }
 }
+
+# Create Resource Link for Connect API
+# resource "aws_glue_catalog_database" "glue_connect_api_link" {
+#   lifecycle {
+#     ignore_changes = [
+#       description
+#     ]
+#   } 
+#   name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-connect-api-link"
+#   target_database {
+#     catalog_id    = var.connect_api_catalog_id
+#     database_name = var.connect_api_db_name
+#   }
+#   create_table_default_permission {
+#     permissions = ["SELECT"]
+
+#     principal {
+#       data_lake_principal_identifier = "IAM_ALLOWED_PRINCIPALS"
+#     }
+#   }
+# }

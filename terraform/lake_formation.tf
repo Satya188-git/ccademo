@@ -1,25 +1,3 @@
-# Create Resource Link for Connect API
-# resource "aws_glue_catalog_database" "glue_connect_api_link" {
-#   lifecycle {
-#     ignore_changes = [
-#       description
-#     ]
-#   } 
-#   name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-connect-api-link"
-#   target_database {
-#     catalog_id    = var.connect_api_catalog_id
-#     database_name = var.connect_api_db_name
-#   }
-#   create_table_default_permission {
-#     permissions = ["SELECT"]
-
-#     principal {
-#       data_lake_principal_identifier = "IAM_ALLOWED_PRINCIPALS"
-#     }
-#   }
-# }
-
-
 # Module to add SSO and admin roles to the Lake formation's Administrative roles and tasks
 module "lake_formation" {
   
@@ -90,29 +68,29 @@ module "lake_formation" {
   # }
 }
 
-resource "aws_lakeformation_permissions" "gdc_views_permissions" {
-  depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
-  principal                     = "IAM_ALLOWED_PRINCIPALS"
-  permissions                   = ["SELECT"]
-  permissions_with_grant_option = ["SELECT"]
-  table {
-    database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-    catalog_id = var.awsAccount
-    wildcard = true
-  }
-}
+# resource "aws_lakeformation_permissions" "gdc_views_permissions" {
+#   depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
+#   principal                     = "IAM_ALLOWED_PRINCIPALS"
+#   permissions                   = ["SELECT"]
+#   permissions_with_grant_option = ["SELECT"]
+#   table {
+#     database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+#     catalog_id = var.awsAccount
+#     wildcard = true
+#   }
+# }
 
-resource "aws_lakeformation_permissions" "gdc_data_lake_link_permissions" {
-  depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
-  principal                     = "IAM_ALLOWED_PRINCIPALS"
-  permissions                   = ["SELECT"]
-  permissions_with_grant_option = ["SELECT"]
-  table {
-    database_name = var.source_database_name
-    catalog_id = var.producer_catalog_id
-    wildcard = true
-  }
-}
+# resource "aws_lakeformation_permissions" "gdc_data_lake_link_permissions" {
+#   depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
+#   principal                     = "IAM_ALLOWED_PRINCIPALS"
+#   permissions                   = ["SELECT"]
+#   permissions_with_grant_option = ["SELECT"]
+#   table {
+#     database_name = var.source_database_name
+#     catalog_id = var.producer_catalog_id
+#     wildcard = true
+#   }
+# }
 
 # resource "aws_lakeformation_permissions" "lf_cis_main_table" {
 #   principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
