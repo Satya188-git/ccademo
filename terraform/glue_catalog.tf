@@ -71,17 +71,28 @@ resource "aws_glue_catalog_database" "glue_data_catalog_connect_datalake" {
   }
 }
 
-resource "aws_glue_catalog_table" "shared_connect_link" {
-  for_each      = toset(var.source_table_names) # Create a map from the list for iteration
-  
-  name          = each.key
+resource "aws_glue_catalog_table" "shared_connect_cont_static_link" {
+  name          = "contact_statistic_record"  # Name for the resource link table
   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
-  table_type    = "LINK"
-
+ 
+  table_type = "LINK"
+ 
   target_table {
-    catalog_id     = var.producer_catalog_id
-    database_name  = each.value.source_database_name
-    name           = each.key
+    catalog_id   = var.producer_catalog_id  # Replace with the AWS account ID where the original table resides
+    database_name = var.source_database_name  # The original Glue database name in the other account
+    name          = "contact_statistic_record"  # The original table name in the shared Glue database
   }
 }
 
+resource "aws_glue_catalog_table" "shared_connect_cont_record_link" {
+  name          = "contact_record"  # Name for the resource link table
+  database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+ 
+  table_type = "LINK"
+ 
+  target_table {
+    catalog_id   = var.producer_catalog_id  # Replace with the AWS account ID where the original table resides
+    database_name = var.source_database_name  # The original Glue database name in the other account
+    name          = "contact_record"  # The original table name in the shared Glue database
+  }
+}
