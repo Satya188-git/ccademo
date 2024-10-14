@@ -113,25 +113,3 @@ module "lake_formation" {
 #   }
 # }
 
-# resource "aws_lakeformation_permissions" "gdc_data_lake_link_permissions" {
-#   depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
-#   principal                     = "IAM_ALLOWED_PRINCIPALS"
-#   permissions                   = ["SELECT"]
-#   permissions_with_grant_option = ["SELECT"]
-#   table {
-#     database_name = var.source_database_name
-#     catalog_id = var.producer_catalog_id
-#     wildcard = true
-#   }
-# }
-
-# resource "aws_lakeformation_permissions" "lf_cis_main_table" {
-#   principal   = "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com"
-#   permissions = ["SELECT"]
-  
-#   table {
-#     database_name = "sdge-dcctr-dev-wus2-ccc-analytics-customer-cismain-link"
-#     # name = "contract_account_attributes"
-#     wildcard = true
-#   }
-# }
