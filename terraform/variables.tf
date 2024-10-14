@@ -53,6 +53,11 @@ variable "devs_arn" {
   type        = string
 }
 
+variable "qs_arn" {
+  description = "This variable is for adding qs arn into lake formation policies"
+  type        = string
+}
+
 variable "producer_catalog_id"{
   description = "This is the producer data catalog id or AWS Account ID"
   type = string

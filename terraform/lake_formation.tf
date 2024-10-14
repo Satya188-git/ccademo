@@ -40,21 +40,48 @@ module "lake_formation" {
   data_permission_map             = {
     permission1     = {
       type          = "database"
-      principal     = var.devs_arn
+      principal     = var.admins_arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission2     = {
       type          = "database"
-      principal     = var.devs_arn
+      principal     = var.admins_arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission3     = {
       type          = "database"
-      principal     = var.devs_arn
+      principal     = var.admins_arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
+    },
+    permission4     = {
+      type          = "table"
+      principal     = var.admins_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+      wildcard      = true
+    },
+    permission5     = {
+      type          = "table"
+      principal     = var.devs_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+      wildcard      = true
+    },
+    permission6     = {
+      type          = "database"
+      principal     = var.qs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    },
+    permission7     = {
+      type          = "table"
+      principal     = var.qs_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+      wildcard      = true
     }
   }
 }

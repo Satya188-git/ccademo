@@ -16,7 +16,7 @@ tags = {
 
 admins_arn = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053"
 devs_arn = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025"
-
+qs_arn = "arn:aws:iam::619071332326:role/service-role/aws-quicksight-service-role-v0"
 producer_catalog_id = "632182196722"
 source_database_name = "connect_datalake"
 
