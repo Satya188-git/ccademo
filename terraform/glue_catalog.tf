@@ -14,9 +14,9 @@ module "glue_data_catalog_connect_datalake" {
   glue_database_name    = "connect-datalake-link"
   glue_catalog_map      = {}
 
-  add_linked_database   = true
-  target_catalog_id     = var.producer_catalog_id
-  target_database_name  = var.source_database_name
+  # add_linked_database   = true
+  # target_catalog_id     = var.producer_catalog_id
+  # target_database_name  = var.source_database_name
 }
 
 # Module to create data base for views in Lake formation
@@ -46,8 +46,8 @@ resource "aws_glue_catalog_database" "glue_data_catalog_customer_connectchatbot"
     ]
   }
   // Optional Linked Database
-  target_database {
-    catalog_id    = var.connect_api_catalog_id
-    database_name = var.connect_api_db_name
-  }
+  # target_database {
+  #   catalog_id    = var.connect_api_catalog_id
+  #   database_name = var.connect_api_db_name
+  # }
 }
