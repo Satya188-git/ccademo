@@ -74,9 +74,12 @@ resource "aws_glue_catalog_database" "glue_data_catalog_connect_datalake" {
 resource "aws_glue_catalog_table" "shared_connect_cont_static_link" {
   name          = "contact_statistic_record"  # Name for the resource link table
   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
- 
+  lifecycle {
+    ignore_changes = [
+      description
+    ]
+  }
   table_type = "LINK"
- 
   target_table {
     catalog_id   = var.producer_catalog_id  # Replace with the AWS account ID where the original table resides
     database_name = var.source_database_name  # The original Glue database name in the other account
@@ -87,9 +90,12 @@ resource "aws_glue_catalog_table" "shared_connect_cont_static_link" {
 resource "aws_glue_catalog_table" "shared_connect_cont_record_link" {
   name          = "contact_record"  # Name for the resource link table
   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
- 
+  lifecycle {
+    ignore_changes = [
+      description
+    ]
+  }
   table_type = "LINK"
- 
   target_table {
     catalog_id   = var.producer_catalog_id  # Replace with the AWS account ID where the original table resides
     database_name = var.source_database_name  # The original Glue database name in the other account
