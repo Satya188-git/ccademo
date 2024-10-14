@@ -41,19 +41,19 @@ module "lake_formation" {
     permission1     = {
       type          = "database"
       principal     = var.admins_arn
-      permissions   = ["DESCRIBE", "ALTER"]
+      permissions   = ["ALL", "DELETE", "DESCRIBE", "INSERT", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission2     = {
       type          = "database"
       principal     = var.admins_arn
-      permissions   = ["DESCRIBE","ALTER"]
+      permissions   = ["ALL", "DELETE", "DESCRIBE", "INSERT", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission3     = {
       type          = "database"
       principal     = var.admins_arn
-      permissions   = ["DESCRIBE","ALTER"]
+      permissions   = ["ALL", "DELETE", "DESCRIBE", "INSERT", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
     },
     permission4     = {
@@ -73,7 +73,7 @@ module "lake_formation" {
     permission6     = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE","ALTER"]
+      permissions   = ["ALL", "DELETE", "DESCRIBE", "INSERT", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission7     = {
@@ -86,7 +86,7 @@ module "lake_formation" {
     permission8     = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE","ALTER"]
+      permissions   = ["ALL", "DELETE", "DESCRIBE", "INSERT", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission9     = {
@@ -94,7 +94,7 @@ module "lake_formation" {
       principal     = var.qs_arn
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-      target_name  = "ivr_combined_2509data_ext_table"
+      table_name  = "ivr_combined_2509data_ext_table"
     }
 
   }
