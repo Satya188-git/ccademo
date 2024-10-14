@@ -88,14 +88,15 @@ module "lake_formation" {
       principal     = var.qs_arn
       permissions   = ["DESCRIBE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    },
-    permission9     = {
-      type          = "table"
-      principal     = var.qs_arn
-      permissions   = ["SELECT"]
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-      table_name  = "ivr_combined_2509data_ext_table"
     }
+    # ,
+    # permission9     = {
+    #   type          = "table"
+    #   principal     = var.qs_arn
+    #   permissions   = ["SELECT"]
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   table_name  = "ivr_combined_2509data_ext_table"
+    # }
 
   }
 }
