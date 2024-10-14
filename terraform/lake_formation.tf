@@ -31,8 +31,8 @@ module "lake_formation" {
                                       ]
   depends_on                      = [
                                       module.lakeformation_admin,
-                                      module.glue_data_catalog_connect_datalake,
-                                      module.glue_database_connect_datalake_views,
+                                      aws_glue_catalog_database.glue_data_catalog_connect_datalake,
+                                      aws_glue_catalog_database.glue_database_connect_datalake_views,
                                       aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot
                                     ]
 
@@ -42,13 +42,13 @@ module "lake_formation" {
       type          = "database"
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
-      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission2     = {
       type          = "database"
       principal     = var.devs_arn
       permissions   = ["DESCRIBE"]
-      database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission3     = {
       type          = "database"
