@@ -32,7 +32,7 @@ module "lake_formation" {
   application_use                   = var.application_use
 
   set_glue_data_catalog_permissions = true
-  use_lake_formation                = true
+  use_lake_formation                = false
 
   assign_iam_admin                  = true
   trusted_resource_owners_id        = [var.connect_api_catalog_id, var.producer_catalog_id]
