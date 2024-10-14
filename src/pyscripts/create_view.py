@@ -140,12 +140,12 @@ FROM (
 				ELSE 'Uncategorised'
 			END AS l3_tag,
 			ctr.attributes
-			FROM \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
-				inner join \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" as csr on ctr.contact_id = csr.contact_id
+			FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
+				inner join \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" as csr on ctr.contact_id = csr.contact_id
 			where upper(ctr.channel) = 'VOICE' and upper(ctr.initiation_method) = 'INBOUND'
 			and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'));""",
 QueryExecutionContext={
-        'Database': f"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-views",
+        'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
     },
 ResultConfiguration={
