@@ -10,7 +10,7 @@ module "lake_formation" {
   application_use                   = var.application_use
 
   set_glue_data_catalog_permissions = true
-  use_lake_formation                = false
+  use_lake_formation                = true
 
   assign_iam_admin                  = true
   trusted_resource_owners_id        = [var.connect_api_catalog_id, var.producer_catalog_id]
@@ -36,36 +36,27 @@ module "lake_formation" {
                                       aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot
                                     ]
 
-# # Adding DESCRIBE Permission on databases
-#   data_permission_map             = {
-#     permission1     = {
-#       type          = "database"
-#       principal     = var.devs_arn
-#       permissions   = ["DESCRIBE"]
-#       database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
-#     },
-#     permission2     = {
-#       type          = "database"
-#       principal     = var.devs_arn
-#       permissions   = ["DESCRIBE"]
-#       database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-#     },
-#     permission3     = {
-#       type          = "database"
-#       principal     = var.devs_arn
-#       permissions   = ["DESCRIBE"]
-#       database_name = aws_glue_catalog_database.glue_data_catalog_customer_cismain.name
-#     }
-    # ,
-    # permission4     = {
-    #   type          = "table"
-    #   principal     = var.quicksight_user_arns
-    #   permissions   = ["SELECT"]
-    #   database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-    #   wildcard = true
-    # }
-
-  # }
+# Adding DESCRIBE Permission on databases
+  data_permission_map             = {
+    permission1     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_data_catalog_connect_datalake.glue_catalog_database_name
+    },
+    permission2     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
+    },
+    permission3     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
+    }
+  }
 }
 
 # resource "aws_lakeformation_permissions" "gdc_views_permissions" {
