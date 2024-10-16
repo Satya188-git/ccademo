@@ -165,10 +165,10 @@ if start_query_response['QueryExecutionId'] !='':
 	print(f"The api response code for query execution is : {query_status['ResponseMetadata']['HTTPStatusCode']}")
 	print(f"The status of query execution is : {query_status['QueryExecution']['Status']['State']}")
 	while ((query_status['QueryExecution']['Status']['State'] == 'QUEUED') or (query_status['QueryExecution']['Status']['State'] == 'RUNNING')):
-	time.sleep(5)
-	query_status = client.get_query_execution(
-				QueryExecutionId = start_query_response['QueryExecutionId']
-			)
-	print(f"The latest status of query execution is : {query_status['QueryExecution']['Status']['State']}")
+		time.sleep(5)
+		query_status = client.get_query_execution(
+					QueryExecutionId = start_query_response['QueryExecutionId']
+				)
+		print(f"The latest status of query execution is : {query_status['QueryExecution']['Status']['State']}")
 else:
 	print("The query is not submitted!. Please check the issue")
