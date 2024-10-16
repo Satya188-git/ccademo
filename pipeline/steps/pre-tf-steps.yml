@@ -28,8 +28,7 @@ steps:
         ls
         echo $(Pipeline.Workspace)
 
-        # jobId="sdge-export-job-IVR"
-        jobId='saipraneeth-import-qs-bundle'
+        jobId="sdge-export-job-IVR"
         
 
         # Asset bundle import job for IVR
