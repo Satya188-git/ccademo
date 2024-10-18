@@ -6,7 +6,7 @@ steps:
   
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.11.1'
+      versionSpec: '3.11'
       addToPath: true
       architecture: 'x64'
 
@@ -53,8 +53,10 @@ steps:
         ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
         echo "Running Python file from artifacts!"
-        python $(Pipeline.Workspace)/athena_pyscript/create_view.py "$(Environment)" "ivr_combined_2509data_ext_table"
-        echo "Script complete!"
+        python $(Pipeline.Workspace)/athena_pyscript1/create_view1.py "$(Environment)"
+        echo "Script1 complete!"
+        python $(Pipeline.Workspace)/athena_pyscript2/create_view2.py "$(Environment)"
+        echo "Script2 complete!"
       else
         echo "Failed to assume role."
         exit 1

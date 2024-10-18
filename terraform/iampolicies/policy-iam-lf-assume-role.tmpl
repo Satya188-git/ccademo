@@ -4,19 +4,22 @@
         {   "Sid": "BasicGluePermissions",
             "Effect": "Allow",
             "Action": [
+                "lakeformation:*",
                 "glue:*",
                 "s3:GetBucketLocation",
                 "s3:ListBucket",
                 "s3:ListAllMyBuckets",
                 "s3:GetBucketAcl",
-                "iam:ListRolePolicies",
-                "iam:GetRole",
-                "iam:GetRolePolicy",
-                "cloudwatch:PutMetricData"  ,
 				"s3:CreateBucket",
 				"s3:GetObject",
                 "s3:PutObject",
-                "s3:DeleteObject"
+                "s3:DeleteObject",
+                "iam:ListRolePolicies",
+                "iam:GetRole",
+                "iam:GetRolePolicy",
+                "iam:ListUsers",
+                "iam:ListRoles",
+                "cloudwatch:PutMetricData"
             ],
             "Resource": [
                 "*"

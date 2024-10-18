@@ -30,8 +30,10 @@ jobs:
           ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
           echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
           echo "Creating the quicksight file!"
+          
+          # Export Job for IVR
           aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-IVR' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/40ebf7be-50e2-49ed-8136-78aa0117aa65" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
-          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-WBDB' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/08a4b21e-e016-41d7-85d2-b7478d4deb98" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
+          ## aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-WBDB' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/08a4b21e-e016-41d7-85d2-b7478d4deb98" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
 
           awsAccountId="442426866507"
           jobId="sdge-export-job-IVR"
@@ -47,7 +49,7 @@ jobs:
                     downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
                     # Download the file
                     curl -o "./assetbundle-sdge-export-job-IVR.qs" $downloadUrl
-                    ls
+                    
                     echo "File downloaded successfully for IVR"
                     break
                 else
@@ -59,46 +61,51 @@ jobs:
                 exit 1
             fi
           done
-          awsAccountId="442426866507"
-          jobId="sdge-export-job-WBDB"
-          
-          while true; do
-            # Get the job details
-            response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
 
-            # Check if the command was successful
-            if [ $? -eq 0 ]; then
-                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
-                if [ "$jobStatus" == "SUCCESSFUL" ]; then
-                    downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
-                    # Download the file
-                    curl -o "./assetbundle-sdge-export-job-WBDB.qs" $downloadUrl
-                    ls
-                    echo "File downloaded successfully WBDB"
-                    break
-                else
-                    echo "Job status is not successful: $jobStatus"
-                    sleep 10
-                fi
-            else
-                echo "Failed to get the job details"
-                exit 1
-            fi
-          done
+          # awsAccountId="442426866507"
+          # jobId="sdge-export-job-WBDB"
+          
+          # while true; do
+          #   # Get the job details
+          #   response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
+
+          #   # Check if the command was successful
+          #   if [ $? -eq 0 ]; then
+          #       jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+          #       if [ "$jobStatus" == "SUCCESSFUL" ]; then
+          #           downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
+          #           # Download the file
+          #           curl -o "./assetbundle-sdge-export-job-WBDB.qs" $downloadUrl
+          #           ls
+          #           echo "File downloaded successfully WBDB"
+          #           break
+          #       else
+          #           echo "Job status is not successful: $jobStatus"
+          #           sleep 10
+          #       fi
+          #   else
+          #       echo "Failed to get the job details"
+          #       exit 1
+          #   fi
+          # done
         else
             echo "Failed to assume role."
             exit 1
         fi
       displayName: 'Build Code Artifact For Quicksight Deployment'
 
-    - publish: src/pyscripts/create_view.py
-      artifact: athena_pyscript
+    - publish: src/pyscripts/create_view1.py
+      artifact: athena_pyscript1
+      displayName: 'Publish the PyScript to create athena view as an artifact'
+
+    - publish: src/pyscripts/create_view2.py
+      artifact: athena_pyscript2
       displayName: 'Publish the PyScript to create athena view as an artifact'
 
     - publish: assetbundle-sdge-export-job-IVR.qs
       artifact: QS_Bundle_IVR
       displayName: 'Publish the IVR Quicksight artifact to the pipeline'
 
-    - publish: assetbundle-sdge-export-job-WBDB.qs
-      artifact: QS_Bundle_WBDB
-      displayName: 'Publish the WBDB Quicksight artifact to the pipeline'
+    # - publish: assetbundle-sdge-export-job-WBDB.qs
+    #   artifact: QS_Bundle_WBDB
+    #   displayName: 'Publish the WBDB Quicksight artifact to the pipeline'
