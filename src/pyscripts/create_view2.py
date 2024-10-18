@@ -18,7 +18,6 @@ print("Executing the view: ")
 start_query_response = client.start_query_execution(
 QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
             WITH
-            -- Base table
             CTR_TBL AS(
             SELECT
                 contact_id,
