@@ -55,7 +55,7 @@ steps:
         echo "Running Python file from artifacts!"
         python $(Pipeline.Workspace)/athena_pyscript1/create_view1.py "$(Environment)"
         echo "Script1 complete!"
-        python $(Pipeline.Workspace)/athena_pyscript2/create_view1.py "$(Environment)"
+        python $(Pipeline.Workspace)/athena_pyscript2/create_view2.py "$(Environment)"
         echo "Script2 complete!"
       else
         echo "Failed to assume role."
