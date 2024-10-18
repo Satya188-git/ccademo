@@ -17,6 +17,9 @@ tags = {
 
 admins_arn = "arn:aws:iam::442426866507:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f"
 devs_arn = "arn:aws:iam::442426866507:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f"
+qs_arn = "arn:aws:iam::442426866507:role/service-role/aws-quicksight-service-role-v0"
+fondo_arn = "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-qa-terraform-oidc-role"
+
 
 producer_catalog_id = "632182196722"
 source_database_name = "connect_datalake"
