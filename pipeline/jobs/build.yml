@@ -94,8 +94,12 @@ jobs:
         fi
       displayName: 'Build Code Artifact For Quicksight Deployment'
 
-    - publish: src/pyscripts/create_view.py
-      artifact: athena_pyscript
+    - publish: src/pyscripts/create_view1.py
+      artifact: athena_pyscript1
+      displayName: 'Publish the PyScript to create athena view as an artifact'
+
+    - publish: src/pyscripts/create_view2.py
+      artifact: athena_pyscript2
       displayName: 'Publish the PyScript to create athena view as an artifact'
 
     - publish: assetbundle-sdge-export-job-IVR.qs
