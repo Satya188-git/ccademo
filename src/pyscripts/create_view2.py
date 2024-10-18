@@ -16,62 +16,61 @@ print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
-QueryString = f"""CREATE OR REPLACE VIEW \"{view_name}\" AS (
-            WITH
-            CTR_TBL AS(
-            SELECT
-                contact_id,
-                date_format(initiation_timestamp, '%m/%d/%Y %h:%i:%s %p') AS chat_start_date_time,
-                date_format(disconnect_timestamp, '%m/%d/%Y %h:%i:%s %p') AS chat_end_date_time,
-                (to_unixtime(disconnect_timestamp) - to_unixtime(initiation_timestamp)) AS contact_duration_time_sec,
-                disconnect_reason AS chat_end_reason,
-                queue_name,
-                queue_duration_ms * 0.001 AS queue_duration,
-                agent_interaction_duration_ms * 0.001 AS agent_interaction_duration,
-                agent_customer_hold_duration_ms * 0.001 AS agent_customer_hold_duration,
-                agent_after_contact_work_duration_ms * 0.001 AS agent_after_contact_work_duration,
-                attributes['ResponseCode'] AS ResponseCode,
-                attributes['chatbotTriggerEvent'] AS Chatbot,
-                attributes['Chatbot_LastIntent'] AS Chatbot_LastIntent,
-                attributes['BusinessType'] AS BusinessType,
-                attributes['Intent'] AS Intent
-            FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" 
-            WHERE channel = 'CHAT' AND initiation_method = 'API'
-            ),
-
-            CALC_TBL AS(
-            SELECT ctr.*,
-                (agent_interaction_duration + 
-                agent_customer_hold_duration + 
-                agent_after_contact_work_duration) AS agent_chat_aht,
-                contact_duration_time_sec - 
-                (queue_duration +
-                agent_interaction_duration + 
-                agent_customer_hold_duration + 
-                agent_after_contact_work_duration) AS chatbot_duration
-            FROM CTR_TBL AS ctr
-            ),
-
-            STATUS_TBL AS(
-            SELECT c.*,
-                csr.is_connected,
-                csr.is_queued,
-                csr.is_handled,
-                csr.is_abandoned,
-                csr.is_agent_hung_up_first
-            FROM CALC_TBL c
-            INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" AS csr 
-            ON (c.contact_id = csr.contact_id)
-            )
-
+QueryString = f"""CREATE OR REPLACE VIEW \"{view_name}\" AS 
             SELECT s.*,
                 cla.sentiment_overall_score_agent,
                 cla.sentiment_overall_score_customer,
                 cla.sentiment_interaction_score_customer_with_agent
-            FROM STATUS_TBL s
+            FROM (
+                WITH
+                CTR_TBL AS (
+                    SELECT
+                        contact_id,
+                        date_format(initiation_timestamp, '%m/%d/%Y %h:%i:%s %p') AS chat_start_date_time,
+                        date_format(disconnect_timestamp, '%m/%d/%Y %h:%i:%s %p') AS chat_end_date_time,
+                        (to_unixtime(disconnect_timestamp) - to_unixtime(initiation_timestamp)) AS contact_duration_time_sec,
+                        disconnect_reason AS chat_end_reason,
+                        queue_name,
+                        queue_duration_ms * 0.001 AS queue_duration,
+                        agent_interaction_duration_ms * 0.001 AS agent_interaction_duration,
+                        agent_customer_hold_duration_ms * 0.001 AS agent_customer_hold_duration,
+                        agent_after_contact_work_duration_ms * 0.001 AS agent_after_contact_work_duration,
+                        attributes['ResponseCode'] AS ResponseCode,
+                        attributes['chatbotTriggerEvent'] AS Chatbot,
+                        attributes['Chatbot_LastIntent'] AS Chatbot_LastIntent,
+                        attributes['BusinessType'] AS BusinessType,
+                        attributes['Intent'] AS Intent
+                    FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" 
+                    WHERE channel = 'CHAT' AND initiation_method = 'API'
+                ),
+
+                CALC_TBL AS (
+                    SELECT ctr.*,
+                        (agent_interaction_duration + 
+                        agent_customer_hold_duration + 
+                        agent_after_contact_work_duration) AS agent_chat_aht,
+                        contact_duration_time_sec - 
+                        (queue_duration +
+                        agent_interaction_duration + 
+                        agent_customer_hold_duration + 
+                        agent_after_contact_work_duration) AS chatbot_duration
+                    FROM CTR_TBL AS ctr
+                ),
+
+                STATUS_TBL AS (
+                    SELECT c.*,
+                        csr.is_connected,
+                        csr.is_queued,
+                        csr.is_handled,
+                        csr.is_abandoned,
+                        csr.is_agent_hung_up_first
+                    FROM CALC_TBL c
+                    INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" AS csr 
+                    ON (c.contact_id = csr.contact_id)
+                )
+            ) AS s
             INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_lens_conversational_analytics\" AS cla 
-            ON (s.contact_id = cla.contact_id)
-        ));""",
+            ON (s.contact_id = cla.contact_id);""",
 QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
