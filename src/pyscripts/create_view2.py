@@ -35,11 +35,10 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
                 attributes['Chatbot_LastIntent'] Chatbot_LastIntent,
                 attributes['BusinessType'] BusinessType,
                 attributes['Intent'] Intent
-			FROM \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_record\" 
+			FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" 
 			WHERE channel = 'CHAT' AND initiation_method = 'API'
             ),
 
-            -- Get agent chat AHT and chatbot duration
             CALC_TBL AS(
             SELECT ctr.*,
                 (agent_interaction_duration + 
@@ -53,7 +52,6 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
             FROM CTR_TBL AS ctr
             ),
 
-            -- Get CSR data for each contact record
             STATUS_TBL AS(
             SELECT c.*,
                 csr.is_connected,
@@ -62,7 +60,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
                 csr.is_abandoned,
                 csr.is_agent_hung_up_first
             FROM CALC_TBL c
-            INNER JOIN \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" AS csr ON (c.contact_id = csr.contact_id)
+            INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" AS csr ON (c.contact_id = csr.contact_id)
             )
 
             SELECT s.*,
@@ -70,7 +68,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
                 cla.sentiment_overall_score_customer,
                 cla.sentiment_interaction_score_customer_with_agent
             FROM STATUS_TBL s
-            INNER JOIN \"sdge-dcctr-{env}-wus2-gdc-ccc-analytics-connect-datalake-link\".\"contact_lens_conversational_analytics\" AS cla ON (s.contact_id = cla.contact_id)
+            INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_lens_conversational_analytics\" AS cla ON (s.contact_id = cla.contact_id)
         ));""",
 QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
