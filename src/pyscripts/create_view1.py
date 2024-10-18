@@ -16,7 +16,7 @@ print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
-QueryString = f"""CREATE OR REPLACE VIEW \"{view_name}\" AS (
+QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
    select *,
     CASE
         WHEN l3_tag IN (
@@ -54,7 +54,7 @@ FROM (
         SELECT ctr.contact_id,
             csr.is_queued,
             date_format(ctr.initiation_timestamp, '%m/%d/%Y %h:%i:%s %p') AS call_start_date_time,
-            date_format(ctr.initiation_timestamp, '%Y-%m-%d') AS call_start_date_time_hours,
+            date_format(ctr.initiation_timestamp, '%m/%d/%Y %H:%i:%s') AS call_start_date_time_hours,
             'ssb_pl' as self_service_block,
             lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes['module_journey'])), '|', 1)),'>',1))) AS module_where_call_ended,
             'ssc_pl' as self_service_count,
@@ -77,7 +77,8 @@ FROM (
             END AS weekday_check,
             DATE(ctr.initiation_timestamp) as date,
                 
-            -- Abandoned and Transfer logic here...
+            --Abandoned - Self Service Attempt
+            
             CASE
                 WHEN lower(ctr.attributes [ 'self_service_attempt' ]) = 'true'
                 and (
@@ -86,7 +87,58 @@ FROM (
                 )
                 and lower(ctr.attributes [ 'self_service_success' ]) = 'false'
                 THEN 'Abandoned - Self Service Attempt'
-                -- Continue case logic for l3_tag...
+                
+                -- Abandoned - Self Service No Attempt
+                
+                WHEN lower(ctr.attributes [ 'self_service_attempt' ]) = 'false'
+                and (
+                    csr.is_queued IS NULL
+                    OR csr.is_queued = 0
+                )
+                and (lower(ctr.attributes [ 'external_transfer_destination' ])='none' OR
+                lower(ctr.attributes [ 'external_transfer_destination' ]) IS NULL)
+                THEN 'Abandoned - Self Service No Attempt' 
+                
+                --Contained - Self Served - IVR
+                
+                WHEN lower(ctr.attributes [ 'self_service_success' ]) = 'true'
+                and (
+                    csr.is_queued IS NULL
+                    OR csr.is_queued = 0
+                ) 
+                THEN 'Contained - Self Served - IVR' 
+                
+                --Contained - System - External Transfer
+                
+                WHEN lower(ctr.attributes ['external_transfer_destination']) IN ('billmatrix','legacy') 
+                THEN 'Contained - System - External Transfer' 
+                
+                --Transfer - System - Agent
+                
+                WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'system_agent_transfer'
+                and csr.is_queued = 1 THEN 'Transfer - System - Agent' 
+                
+                --Transfer - System - Exception
+                
+                WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'exception'
+                and csr.is_queued = 1 
+                THEN 'Transfer - System - Exception' 
+                
+                --Transfer - User - Self Service Attempt - Success
+                
+                WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
+                and lower(ctr.attributes [ 'self_service_success' ]) = 'true' 
+                THEN 'Transfer - User - Self Service Attempt - Success'
+                
+                --Transfer - User - Self Service Attempt - wo Success
+                
+                WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
+                and lower(ctr.attributes [ 'self_service_attempt' ]) = 'true'
+                and lower(ctr.attributes [ 'self_service_success' ]) = 'false' 
+                THEN 'Transfer - User - Self Service Attempt w/o Success' 
+                
+                ELSE 'Uncategorised'
+                
             END AS l3_tag,
             ctr.attributes
    FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
