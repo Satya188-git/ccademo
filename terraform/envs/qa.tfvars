@@ -36,7 +36,7 @@ source_table_names = [
  ]
 
 quicksight_user_arns = [
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/RKadari@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/RKadari@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SNayak1@sdgecontractor.com"
 ]
