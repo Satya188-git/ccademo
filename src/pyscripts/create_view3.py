@@ -17,7 +17,12 @@ print("View to be created :", view_name)
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
 QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS 
-            WITH
+            SELECT s.*,
+                cla.sentiment_overall_score_agent,
+                cla.sentiment_overall_score_customer,
+                cla.sentiment_interaction_score_customer_with_agent
+            FROM (
+                WITH
                 CTR_TBL AS (
                     SELECT
                         contact_id,
@@ -38,6 +43,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
                     FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" 
                     WHERE channel = 'CHAT' AND initiation_method = 'API'
                 ),
+
                 CALC_TBL AS (
                     SELECT ctr.*,
                         (agent_interaction_duration + 
@@ -50,6 +56,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
                         agent_after_contact_work_duration) AS chatbot_duration
                     FROM CTR_TBL AS ctr
                 ),
+
                 STATUS_TBL AS (
                     SELECT c.*,
                         csr.is_connected,
@@ -59,15 +66,11 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
                         csr.is_agent_hung_up_first
                     FROM CALC_TBL c
                     INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" AS csr 
-                    ON c.contact_id = csr.contact_id
+                    ON (c.contact_id = csr.contact_id)
                 )
-            SELECT s.*,
-                cla.sentiment_overall_score_agent,
-                cla.sentiment_overall_score_customer,
-                cla.sentiment_interaction_score_customer_with_agent
-            FROM STATUS_TBL AS s
+            ) AS s
             INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_lens_conversational_analytics\" AS cla 
-            ON s.contact_id = cla.contact_id;""",
+            ON (s.contact_id = cla.contact_id);""",
 QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
