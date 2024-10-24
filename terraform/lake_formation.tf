@@ -38,6 +38,7 @@ module "lake_formation" {
 
 # Adding DESCRIBE Permission on databases
   data_permission_map             = {
+    # Connect Data Lake RL permissions
     permission1     = {
       type          = "database"
       principal     = var.admins_arn
@@ -45,49 +46,104 @@ module "lake_formation" {
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission2     = {
-      type          = "database"
-      principal     = var.admins_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    },
-    permission3     = {
-      type          = "database"
-      principal     = var.admins_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
-      database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
-    },
-    permission4     = {
       type          = "table"
       principal     = var.admins_arn
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
       wildcard      = true
     },
-    permission5     = {
+    permission3     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    },
+    permission4     = {
       type          = "table"
       principal     = var.devs_arn
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
       wildcard      = true
     },
-    permission6     = {
+    permission5     = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
-    permission7     = {
+    permission6     = {
       type          = "table"
       principal     = var.qs_arn
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
       wildcard      = true
     },
-    permission8     = {
+    # Connect DL Views RL permissions
+    permission7     = {
       type          = "database"
-      principal     = var.qs_arn
+      principal     = var.admins_arn
       permissions   = ["DESCRIBE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    },
+    permission8     = {
+      type          = "table"
+      principal     = var.admins_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      wildcard      = true
+    },
+    permission9     = {
+      type          = "database"
+      principal     = var.devs_arn
+      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    },
+    permission10     = {
+      type          = "table"
+      principal     = var.devs_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      wildcard      = true
+    },
+    permission11     = {
+      type          = "database"
+      principal     = var.qs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    },
+    permission12     = {
+      type          = "table"
+      principal     = var.qs_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      wildcard      = true
+    },
+    # QS User level permissions
+    permission13     = {
+      type          = "database"
+      principal     = var.quicksight_user_arns[4]
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    },
+    permission14     = {
+      type          = "table"
+      principal     = var.quicksight_user_arns[4]
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+      wildcard      = true
+    },
+    permission15     = {
+      type          = "database"
+      principal     = var.quicksight_user_arns[4]
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    },
+    permission16     = {
+      type          = "table"
+      principal     = var.quicksight_user_arns[4]
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      wildcard      = true
     }
     # ,
     # permission9     = {

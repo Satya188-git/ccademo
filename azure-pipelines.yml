@@ -53,7 +53,7 @@ parameters:
     displayName: Environments
     type: object
     default:
-    # - env: dev
+    - env: dev
     # - env: qa
     
 #Base portion of service connection name, generally pipeline name
