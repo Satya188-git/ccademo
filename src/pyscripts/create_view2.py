@@ -16,7 +16,7 @@ print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
-QueryString = f"""CREATE OR REPLACE VIEW \"{view_name}\" AS 
+QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS 
             SELECT s.*,
                 cla.sentiment_overall_score_agent,
                 cla.sentiment_overall_score_customer,

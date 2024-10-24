@@ -48,7 +48,7 @@ module "lake_formation" {
     permission2     = {
       type          = "table"
       principal     = var.admins_arn
-      permissions   = ["SELECT"]
+      permissions   = ["SELECT","ALTER"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
       wildcard      = true
     },
@@ -61,7 +61,7 @@ module "lake_formation" {
     permission4     = {
       type          = "table"
       principal     = var.devs_arn
-      permissions   = ["SELECT"]
+      permissions   = ["SELECT","ALTER"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
       wildcard      = true
     },
@@ -88,7 +88,7 @@ module "lake_formation" {
     permission8     = {
       type          = "table"
       principal     = var.admins_arn
-      permissions   = ["SELECT"]
+      permissions   = ["SELECT","ALTER"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
       wildcard      = true
     },
@@ -101,7 +101,7 @@ module "lake_formation" {
     permission10     = {
       type          = "table"
       principal     = var.devs_arn
-      permissions   = ["SELECT"]
+      permissions   = ["SELECT","ALTER"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
       wildcard      = true
     },
