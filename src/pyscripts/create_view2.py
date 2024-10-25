@@ -9,65 +9,43 @@ args = sys.argv[1:]
 env = args[0]
  
 # The view name that needs to be created
-view_name = "sdge-chatbot-view"
+view_name = "ivr_call_events"
  
 print("env : ", env)
 print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
-QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS 
-            WITH
-                CTR_TBL AS (
-                    SELECT
-                        contact_id,
-                        date_format(initiation_timestamp, '%m/%d/%Y %h:%i:%s %p') AS chat_start_date_time,
-                        date_format(disconnect_timestamp, '%m/%d/%Y %h:%i:%s %p') AS chat_end_date_time,
-                        (to_unixtime(disconnect_timestamp) - to_unixtime(initiation_timestamp)) AS contact_duration_time_sec,
-                        disconnect_reason AS chat_end_reason,
-                        queue_name,
-                        queue_duration_ms * 0.001 AS queue_duration,
-                        agent_interaction_duration_ms * 0.001 AS agent_interaction_duration,
-                        agent_customer_hold_duration_ms * 0.001 AS agent_customer_hold_duration,
-                        agent_after_contact_work_duration_ms * 0.001 AS agent_after_contact_work_duration,
-                        attributes['ResponseCode'] AS ResponseCode,
-                        attributes['chatbotTriggerEvent'] AS Chatbot,
-                        attributes['Chatbot_LastIntent'] AS Chatbot_LastIntent,
-                        attributes['BusinessType'] AS BusinessType,
-                        attributes['Intent'] AS Intent
-                    FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" 
-                    WHERE channel = 'CHAT' AND initiation_method = 'API'
-                ),
-                CALC_TBL AS (
-                    SELECT ctr.*,
-                        (agent_interaction_duration + 
-                        agent_customer_hold_duration + 
-                        agent_after_contact_work_duration) AS agent_chat_aht,
-                        contact_duration_time_sec - 
-                        (queue_duration +
-                        agent_interaction_duration + 
-                        agent_customer_hold_duration + 
-                        agent_after_contact_work_duration) AS chatbot_duration
-                    FROM CTR_TBL AS ctr
-                ),
-                STATUS_TBL AS (
-                    SELECT c.*,
-                        csr.is_connected,
-                        csr.is_queued,
-                        csr.is_handled,
-                        csr.is_abandoned,
-                        csr.is_agent_hung_up_first
-                    FROM CALC_TBL c
-                    INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_statistic_record\" AS csr 
-                    ON c.contact_id = csr.contact_id
-                )
-            SELECT s.*,
-                cla.sentiment_overall_score_agent,
-                cla.sentiment_overall_score_customer,
-                cla.sentiment_interaction_score_customer_with_agent
-            FROM STATUS_TBL AS s
-            INNER JOIN \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_lens_conversational_analytics\" AS cla 
-            ON s.contact_id = cla.contact_id;""",
+QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
+    SELECT 
+        contact_id,
+        initiation_timestamp,
+        cj as cutomer_journey,
+        ROW_NUMBER() OVER (PARTITION BY contact_id) AS event_sequence_cj,
+        TRIM(journey_step) AS event,
+        split_part(TRIM(journey_step), '>', 1) AS event_name,
+        split_part(TRIM(journey_step), '>', 2) AS raw_answer,
+        CASE 
+            WHEN length(TRIM(journey_step)) - length(regexp_replace(TRIM(journey_step), '>', '')) >= 2
+                THEN regexp_replace(TRIM(journey_step), '^[^>]*>[^>]*>', '')  -- Handles cases with two or more '>'
+            ELSE NULL  -- Handles cases with less than two '>'
+        END AS event_result,
+        ROW_NUMBER() OVER () AS t2_rn
+    FROM (
+        SELECT 
+            contact_id,
+            initiation_timestamp,
+            cj,
+            split(cj, '|') AS journey_steps
+        FROM 
+        (SELECT contact_id, initiation_timestamp, attributes['customer_journey'] as cj  
+    	FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
+        where upper(ctr.channel) = 'VOICE'
+        and upper(ctr.initiation_method) = 'INBOUND'
+        and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25')
+    ) CROSS JOIN UNNEST(journey_steps) AS t (journey_step)
+    WHERE date(initiation_timestamp) >= date_add('month', -2, current_date)   
+       );""",
 QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
@@ -82,16 +60,16 @@ print(f"The status of the execution using API call is : {start_query_response['R
 print(f"The execution id is : {start_query_response['QueryExecutionId']}")
  
 if start_query_response['QueryExecutionId'] !='':
-	query_status = client.get_query_execution(
-			QueryExecutionId = start_query_response['QueryExecutionId']
-		)
-	print(f"The api response code for query execution is : {query_status['ResponseMetadata']['HTTPStatusCode']}")
-	print(f"The status of query execution is : {query_status['QueryExecution']['Status']['State']}")
-	while ((query_status['QueryExecution']['Status']['State'] == 'QUEUED') or (query_status['QueryExecution']['Status']['State'] == 'RUNNING')):
-		time.sleep(5)
-		query_status = client.get_query_execution(
-					QueryExecutionId = start_query_response['QueryExecutionId']
-				)
-		print(f"The latest status of query execution is : {query_status['QueryExecution']['Status']['State']}")
+ query_status = client.get_query_execution(
+   QueryExecutionId = start_query_response['QueryExecutionId']
+  )
+ print(f"The api response code for query execution is : {query_status['ResponseMetadata']['HTTPStatusCode']}")
+ print(f"The status of query execution is : {query_status['QueryExecution']['Status']['State']}")
+ while ((query_status['QueryExecution']['Status']['State'] == 'QUEUED') or (query_status['QueryExecution']['Status']['State'] == 'RUNNING')):
+  time.sleep(5)
+  query_status = client.get_query_execution(
+     QueryExecutionId = start_query_response['QueryExecutionId']
+    )
+  print(f"The latest status of query execution is : {query_status['QueryExecution']['Status']['State']}")
 else:
-	print("The query is not submitted!. Please check the issue")
+ print("The query is not submitted!. Please check the issue")
