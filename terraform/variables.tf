@@ -62,31 +62,31 @@ variable "fondo_arn" {
   description = "This variable is for adding qs arn into lake formation policies"
   type        = string
 }
-variable "producer_catalog_id"{
+variable "producer_catalog_id" {
   description = "This is the producer data catalog id or AWS Account ID"
-  type = string
+  type        = string
 }
 
-variable "source_database_name"{
+variable "source_database_name" {
   description = "This is the database name in the producer account"
-  type = string
+  type        = string
 }
 
 variable "source_table_names" {
   description = "List of source table names that needs to be fetched from producer"
   type        = list(string)
 }
-variable "quicksight_user_arns"{
+variable "quicksight_user_arns" {
   description = "List of QS user arns to whome table permissions needs to be assigned"
   type        = list(string)
 }
 
-variable "connect_api_catalog_id"{
+variable "connect_api_catalog_id" {
   description = "This is the producer data catalog id or AWS Account ID for Connect API Data"
-  type = string
+  type        = string
 }
 
-variable "connect_api_db_name"{
+variable "connect_api_db_name" {
   description = "This is the database name in the producer account for connect api data"
-  type = string
+  type        = string
 }

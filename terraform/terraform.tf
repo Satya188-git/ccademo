@@ -3,7 +3,7 @@ terraform {
     hostname     = "app.terraform.io"
     organization = "SempraUtilities"
 
-      workspaces {
+    workspaces {
       name = "#{ workspace-name }#"
     }
   }
