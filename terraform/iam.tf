@@ -21,31 +21,33 @@ resource "aws_iam_role_policy" "lf_policy" {
   )
 }
 
-module "qs_admin" {
-  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.2"
-  company_code      = var.company_code
-  application_code  = var.application_code
-  environment_code  = var.environment_code
-  region_code       = var.region_code
-  application_use   = "${var.application_use}-qs-admin"
-  description       = "QuickSight-Admin-Role"
-  service_resources = ["arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"]
-  tags              = var.tags
-  additional_policy_statements = [
-    {
-      "Effect" : "Allow",
-      "Principal" : {
-        "Federated" : "arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"
-      },
-      "Action" : "sts:AssumeRoleWithSAML",
-      "Condition" : {
-        "StringEquals" : {
-          "SAML:aud" : "https://signin.aws.amazon.com/saml"
+resource "aws_iam_role" "qs_admin" {
+  name        = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-iam-role-${var.application_use}-qs-admin"
+  description = "QuickSight-Admin-Role"
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithSAML"
+        Effect = "Allow"
+        Sid    = "TrustCondition"
+        Condition = {
+          StringEquals = {
+            "SAML:aud" = "https://signin.aws.amazon.com/saml"
+          }
         }
-      }
-    }
-  ]
+        Principal = {
+          Federated = [
+            "arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"
+          ]
+        }
+      },
+    ]
+  })
+
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "qs_admin_policy" {
@@ -64,35 +66,38 @@ resource "aws_iam_policy" "qs_admin_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "qs_admin_policy_attachment" {
-  role       = module.qs_admin.name
+  role       = aws_iam_role.qs_admin.name
   policy_arn = aws_iam_policy.qs_admin_policy.arn
 }
 
-module "qs_reader" {
-  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.2"
-  company_code      = var.company_code
-  application_code  = var.application_code
-  environment_code  = var.environment_code
-  region_code       = var.region_code
-  application_use   = "${var.application_use}-qs-reader"
-  description       = "QuickSight-Reader-Role"
-  service_resources = ["arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"]
-  tags              = var.tags
-  additional_policy_statements = [
-    {
-      "Effect" : "Allow",
-      "Principal" : {
-        "Federated" : "arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"
-      },
-      "Action" : "sts:AssumeRoleWithSAML",
-      "Condition" : {
-        "StringEquals" : {
-          "SAML:aud" : "https://signin.aws.amazon.com/saml"
+
+resource "aws_iam_role" "qs_reader" {
+  name        = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-iam-role-${var.application_use}-qs-reader"
+  description = "QuickSight-Reader-Role"
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithSAML"
+        Effect = "Allow"
+        Sid    = "TrustCondition"
+        Condition = {
+          StringEquals = {
+            "SAML:aud" = "https://signin.aws.amazon.com/saml"
+          }
         }
-      }
-    }
-  ]
+        Principal = {
+          Federated = [
+            "arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"
+          ]
+        }
+      },
+    ]
+  })
+
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "qs_reader_policy" {
@@ -111,36 +116,37 @@ resource "aws_iam_policy" "qs_reader_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "qs_reader_policy_attachment" {
-  role       = module.qs_reader.name
+  role       = aws_iam_role.qs_reader.name
   policy_arn = aws_iam_policy.qs_reader_policy.arn
 }
 
-
-module "qs_author" {
-  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.2"
-  company_code      = var.company_code
-  application_code  = var.application_code
-  environment_code  = var.environment_code
-  region_code       = var.region_code
-  application_use   = "${var.application_use}-qs-author"
-  description       = "QuickSight-Admin-Role"
-  service_resources = ["arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"]
-  tags              = var.tags
-  additional_policy_statements = [
-    {
-      "Effect" : "Allow",
-      "Principal" : {
-        "Federated" : "arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"
-      },
-      "Action" : "sts:AssumeRoleWithSAML",
-      "Condition" : {
-        "StringEquals" : {
-          "SAML:aud" : "https://signin.aws.amazon.com/saml"
+resource "aws_iam_role" "qs_author" {
+  name        = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-iam-role-${var.application_use}-qs-author"
+  description = "QuickSight-Author-Role"
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithSAML"
+        Effect = "Allow"
+        Sid    = "TrustCondition"
+        Condition = {
+          StringEquals = {
+            "SAML:aud" = "https://signin.aws.amazon.com/saml"
+          }
         }
-      }
-    }
-  ]
+        Principal = {
+          Federated = [
+            "arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"
+          ]
+        }
+      },
+    ]
+  })
+
+  tags = var.tags
 }
 
 resource "aws_iam_policy" "qs_author_policy" {
@@ -159,6 +165,6 @@ resource "aws_iam_policy" "qs_author_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "qs_author_policy_attachment" {
-  role       = module.qs_author.name
+  role       = aws_iam_role.qs_author.name
   policy_arn = aws_iam_policy.qs_author_policy.arn
 }
