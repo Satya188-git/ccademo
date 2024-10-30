@@ -30,6 +30,7 @@ module "qs_admin" {
   region_code       = var.region_code
   application_use   = "${var.application_use}-qs-admin"
   description       = "QuickSight-Admin-Role"
+  service_resources = ["arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"]
   tags              = var.tags
   additional_policy_statements = [
     {
@@ -76,6 +77,7 @@ module "qs_reader" {
   region_code       = var.region_code
   application_use   = "${var.application_use}-qs-reader"
   description       = "QuickSight-Reader-Role"
+  service_resources = ["arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"]
   tags              = var.tags
   additional_policy_statements = [
     {
@@ -123,6 +125,7 @@ module "qs_author" {
   region_code       = var.region_code
   application_use   = "${var.application_use}-qs-author"
   description       = "QuickSight-Admin-Role"
+  service_resources = ["arn:aws:iam::${var.awsAccount}:saml-provider/AzureActiveDirectory"]
   tags              = var.tags
   additional_policy_statements = [
     {
