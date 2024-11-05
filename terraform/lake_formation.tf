@@ -163,15 +163,15 @@ module "lake_formation" {
   }
 }
 
-# resource "aws_lakeformation_permissions" "gdc_views_permissions" {
-#   depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
-#   principal                     = "IAM_ALLOWED_PRINCIPALS"
-#   permissions                   = ["SELECT"]
-#   permissions_with_grant_option = ["SELECT"]
-#   table {
-#     database_name = module.glue_database_connect_datalake_views.glue_catalog_database_name
-#     catalog_id = var.awsAccount
-#     wildcard = true
-#   }
-# }
+resource "aws_lakeformation_permissions" "gdc_views_permissions" {
+  depends_on = [module.lakeformation_admin, module.glue_database_connect_datalake_views]
+  principal                     = "IAM_ALLOWED_PRINCIPALS"
+  permissions                   = ["SELECT", "ALTER"]
+  permissions_with_grant_option = ["SELECT"]
+  table {
+    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    catalog_id = var.awsAccount
+    wildcard = true
+  }
+}
 
