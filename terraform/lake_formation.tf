@@ -151,14 +151,15 @@ module "lake_formation" {
       principal     = "IAM_ALLOWED_PRINCIPALS"
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    },
-    permission18     = {
-      type          = "table"
-      principal     = "IAM_ALLOWED_PRINCIPALS"
-      permissions   = ["SELECT", "ALTER"]
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-      wildcard      = true
     }
+    # ,
+    # permission18     = {
+    #   type          = "table"
+    #   principal     = "IAM_ALLOWED_PRINCIPALS"
+    #   permissions   = ["SELECT", "ALTER"]
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   wildcard      = true
+    # }
   }
 }
 
