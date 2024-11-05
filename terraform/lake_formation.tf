@@ -169,8 +169,8 @@ resource "aws_lakeformation_permissions" "gdc_views_permissions" {
   permissions                   = ["SELECT", "ALTER"]
   table {
     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    catalog_id = var.awsAccount
-    wildcard = true
+    catalog_id    = var.awsAccount
+    name          = var.source_table_names[0]
   }
   lifecycle {
     ignore_changes = all
