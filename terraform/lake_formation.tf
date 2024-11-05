@@ -144,16 +144,21 @@ module "lake_formation" {
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
       wildcard      = true
+    },
+    # IAMAllowedPrincipal
+    permission17     = {
+      type          = "database"
+      principal     = "IAM_ALLOWED_PRINCIPALS"
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    },
+    permission18     = {
+      type          = "table"
+      principal     = "IAM_ALLOWED_PRINCIPALS"
+      permissions   = ["SELECT", "ALTER"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      wildcard      = true
     }
-    # ,
-    # permission9     = {
-    #   type          = "table"
-    #   principal     = var.qs_arn
-    #   permissions   = ["SELECT"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    #   table_name  = "ivr_combined_2509data_ext_table"
-    # }
-
   }
 }
 
