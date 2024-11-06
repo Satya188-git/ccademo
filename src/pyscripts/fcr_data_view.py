@@ -35,7 +35,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
     		actual_call_type
     	FROM
     		(
-                SELECT initial_contact_id contact_id queue_name actual_call_type,
+                SELECT initial_contact_id, contact_id, queue_name, actual_call_type,
     				RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) rank
                 FROM
                     \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
