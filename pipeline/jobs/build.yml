@@ -62,32 +62,33 @@ jobs:
             fi
           done
 
-          # awsAccountId="442426866507"
-          # jobId="sdge-export-job-WBDB"
           
-          # while true; do
-          #   # Get the job details
-          #   response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
+          awsAccountId="442426866507"
+          jobId="sdge-export-job-FCR"
+          
+          while true; do
+            # Get the job details
+            response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
 
-          #   # Check if the command was successful
-          #   if [ $? -eq 0 ]; then
-          #       jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
-          #       if [ "$jobStatus" == "SUCCESSFUL" ]; then
-          #           downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
-          #           # Download the file
-          #           curl -o "./assetbundle-sdge-export-job-WBDB.qs" $downloadUrl
-          #           ls
-          #           echo "File downloaded successfully WBDB"
-          #           break
-          #       else
-          #           echo "Job status is not successful: $jobStatus"
-          #           sleep 10
-          #       fi
-          #   else
-          #       echo "Failed to get the job details"
-          #       exit 1
-          #   fi
-          # done
+            # Check if the command was successful
+            if [ $? -eq 0 ]; then
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+                    downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
+                    # Download the file
+                    curl -o "./assetbundle-sdge-export-job-FCR.qs" $downloadUrl
+                    ls
+                    echo "File downloaded successfully FCR"
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+          done
         else
             echo "Failed to assume role."
             exit 1
@@ -110,6 +111,6 @@ jobs:
       artifact: QS_Bundle_IVR
       displayName: 'Publish the IVR Quicksight artifact to the pipeline'
 
-    # - publish: assetbundle-sdge-export-job-WBDB.qs
-    #   artifact: QS_Bundle_WBDB
-    #   displayName: 'Publish the WBDB Quicksight artifact to the pipeline'
+    - publish: assetbundle-sdge-export-job-FCR.qs
+      artifact: QS_Bundle_FCR
+      displayName: 'Publish the FCR Quicksight artifact to the pipeline'
