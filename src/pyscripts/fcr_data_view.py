@@ -17,50 +17,61 @@ print("View to be created :", view_name)
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
     QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
-        SELECT
+        SELECT 
             customer_endpoint_address,
             a.contact_id,
             queue_enqueue_timestamp,
             agent_username,
             queue_name AS requested_call_type,
             CASE 
-                WHEN (actual_call_type IS NULL) THEN queue_name 
+                WHEN actual_call_type IS NULL THEN queue_name 
                 ELSE actual_call_type 
             END AS actual_call_type,
-            date_parse(substr(CAST(initiation_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp_original,
-            date_parse(substr(CAST(date_add('second', (-(agent_interaction_duration_ms) / 1000), disconnect_timestamp) AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp,
-            date_parse(substr(CAST(disconnect_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s') AS disconnect_timestamp,
+            -- Original initiation timestamp in 'YYYY-MM-DD HH:MM:SS' format
+            DATE_PARSE(SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp_original,
+            -- Use agent_connected_to_agent_timestamp as initiation timestamp
+            DATE_PARSE(SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp,
+            -- Formatted disconnect timestamp
+            DATE_PARSE(SUBSTR(CAST(disconnect_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS disconnect_timestamp,
+            -- Time difference in seconds between current and next interaction
             CASE 
-                WHEN (
-                    LEAD(date_add('second', (-(agent_interaction_duration_ms) / 1000), disconnect_timestamp)) OVER (
-                        PARTITION BY customer_endpoint_address, queue_name 
-                        ORDER BY date_add('second', (-(agent_interaction_duration_ms) / 1000), disconnect_timestamp) ASC
-                    ) IS NULL
-                ) THEN 9999999999 
-                ELSE date_diff('second', disconnect_timestamp, LEAD(date_add('second', (-(agent_interaction_duration_ms) / 1000), disconnect_timestamp)) OVER (
-                    PARTITION BY customer_endpoint_address, queue_name 
-                    ORDER BY date_add('second', (-(agent_interaction_duration_ms) / 1000), disconnect_timestamp) ASC
-                )) 
+                WHEN LEAD(agent_connected_to_agent_timestamp) 
+                     OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp) IS NULL
+                THEN 9999999999
+                ELSE DATE_DIFF(
+                    'second', 
+                    agent_connected_to_agent_timestamp, 
+                    LEAD(agent_connected_to_agent_timestamp) 
+                    OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp)
+                ) 
             END AS time_difference_seconds,
-            substr(CAST(initiation_timestamp AS varchar), 1, 4) AS year
+            -- Extract year from initiation timestamp
+            SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 4) AS year
         FROM 
-            \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" a
-        LEFT JOIN (
-            SELECT contact_id, actual_call_type
-            FROM (
-                SELECT initial_contact_id as contact_id, queue_name as actual_call_type,
-                    RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) AS rank
-                FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
-                WHERE initial_contact_id IS NOT NULL
-            ) 
-            WHERE rank = 1
-        ) b 
-        ON a.contact_id = b.contact_id
+            \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" AS a
+        LEFT JOIN
+            (
+                SELECT 
+                    contact_id, 
+                    actual_call_type 
+                FROM (
+                    SELECT 
+                        initial_contact_id AS contact_id,
+                        queue_name AS actual_call_type,
+                        RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) AS rank
+                    FROM 
+                        \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
+                    WHERE 
+                        initial_contact_id IS NOT NULL
+                ) 
+                WHERE rank = 1
+            ) AS b
+        ON 
+            a.contact_id = b.contact_id
         WHERE 
-            queue_name IS NOT NULL 
-            AND date(initiation_timestamp) >= date('2024-01-01') 
-            AND agent_interaction_duration_ms > 0
-    );""",
+            queue_name IS NOT NULL
+            AND DATE(agent_connected_to_agent_timestamp) >= DATE('2024-01-01')
+            AND agent_interaction_duration_ms > 0;""",
     QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
