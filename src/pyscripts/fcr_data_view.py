@@ -48,7 +48,7 @@ start_query_response = client.start_query_execution(
         LEFT JOIN (
             SELECT contact_id, actual_call_type
             FROM (
-                SELECT initial_contact_id, contact_id, queue_name, actual_call_type,
+                SELECT initial_contact_id as contact_id, queue_name as actual_call_type,
                     RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) AS rank
                 FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
                 WHERE initial_contact_id IS NOT NULL
