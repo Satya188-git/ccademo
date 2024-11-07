@@ -54,7 +54,7 @@ parameters:
     type: object
     default:
     - env: dev
-    # - env: qa
+    - env: qa
     
 #Base portion of service connection name, generally pipeline name
   - name: SCName
