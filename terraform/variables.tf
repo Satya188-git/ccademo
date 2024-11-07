@@ -100,3 +100,7 @@ variable "pandas_layer_arn" {
   description = "This is the AWS provided ARN for pandas module, it can be imported in lambda"
   type        = string
 }
+variable "code_artifact_bucket_name" {
+  description = "This is the AWS S3 bucket to store lambda artifacts"
+  type        = string
+}

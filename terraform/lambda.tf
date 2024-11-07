@@ -26,7 +26,8 @@ module "containment_alerts_lambda" {
   create_package = true
   
   s3_existing_package = {
-    bucket = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-s3-artifacts"
+    bucket = var.code_artifact_bucket_name
     key    = "lambda/packages/alerts_lambda/containment_alerts.zip"
   }
 }
+
