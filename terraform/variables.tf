@@ -95,3 +95,8 @@ variable "chatbot_source_table_names" {
   description = "List of chatbot tables to be consumed from the source database"
   type        = list(string)
 }
+
+variable "pandas_layer_arn" {
+  description = "This is the AWS provided ARN for pandas module, it can be imported in lambda"
+  type        = string
+}

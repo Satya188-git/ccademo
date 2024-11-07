@@ -116,7 +116,7 @@ jobs:
       artifact: QS_Bundle_FCR
       displayName: 'Publish the FCR Quicksight artifact to the pipeline'
 
-  -job:
+  - job:
     displayName: 'Create and publish Lambda artifacts for containment rate alerts'
     steps:
     - script: |
