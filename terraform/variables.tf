@@ -91,7 +91,7 @@ variable "chatbot_source_database_name" {
   type        = string
 }
 
-variable "quicksichatbot_source_table_namesght_user_arns" {
+variable "chatbot_source_table_names" {
   description = "List of chatbot tables to be consumed from the source database"
   type        = list(string)
 }
