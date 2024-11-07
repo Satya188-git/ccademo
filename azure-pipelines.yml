@@ -10,7 +10,7 @@ trigger:
 - main
 - dev
 - develop
-- feature/*
+# - feature/*
 - bundle/*
 - release/*
 
