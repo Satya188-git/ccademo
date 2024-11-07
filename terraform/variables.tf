@@ -90,3 +90,8 @@ variable "chatbot_source_database_name" {
   description = "This is the database name in the producer account for connect chatbot data"
   type        = string
 }
+
+variable "quicksichatbot_source_table_namesght_user_arns" {
+  description = "List of chatbot tables to be consumed from the source database"
+  type        = list(string)
+}
