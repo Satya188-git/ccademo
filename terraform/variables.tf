@@ -62,18 +62,18 @@ variable "fondo_arn" {
   description = "This variable is for adding qs arn into lake formation policies"
   type        = string
 }
-variable "producer_catalog_id" {
-  description = "This is the producer data catalog id or AWS Account ID"
+variable "connect_catalog_id" {
+  description = "This is the connect producer data catalog id or AWS Account ID"
   type        = string
 }
 
-variable "source_database_name" {
-  description = "This is the database name in the producer account"
+variable "connect_source_database_name" {
+  description = "This is the database name in the connect producer account"
   type        = string
 }
 
-variable "source_table_names" {
-  description = "List of source table names that needs to be fetched from producer"
+variable "connect_source_table_names" {
+  description = "List of source table names that needs to be fetched from producer for connect db"
   type        = list(string)
 }
 variable "quicksight_user_arns" {
@@ -81,12 +81,17 @@ variable "quicksight_user_arns" {
   type        = list(string)
 }
 
-variable "connect_api_catalog_id" {
-  description = "This is the producer data catalog id or AWS Account ID for Connect API Data"
+variable "chatbot_catalog_id" {
+  description = "This is the producer data catalog id or AWS Account ID for Chatbot Data"
   type        = string
 }
 
-variable "connect_api_db_name" {
-  description = "This is the database name in the producer account for connect api data"
+variable "chatbot_source_database_name" {
+  description = "This is the database name in the producer account for connect chatbot data"
   type        = string
+}
+
+variable "chatbot_source_table_names" {
+  description = "List of chatbot tables to be consumed from the source database"
+  type        = list(string)
 }
