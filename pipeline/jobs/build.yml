@@ -33,7 +33,7 @@ jobs:
           
           # Export Job for IVR
           aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-IVR' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/40ebf7be-50e2-49ed-8136-78aa0117aa65" --include-all-dependencies --export-format 'QUICKSIGHT_JSON' 
-          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-FCR' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/2c447954-5140-4f86-8f8a-315033ff1952" --include-all-dependencies --export-format 'QUICKSIGHT_JSON'
+          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-FCR' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/24561611-3194-46d5-a19d-42d6350d9c30" --include-all-dependencies --export-format 'QUICKSIGHT_JSON'
 
 
           awsAccountId="442426866507"
