@@ -78,23 +78,23 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
     					csr.is_queued,
     					ctr.initiation_timestamp AS call_start_date_time,
     					date_trunc('second',CAST(ctr.initiation_timestamp AS timestamp)) AS call_start_date_time_hours,
-    					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'module_journey' ])),'|',1)),'>',1))) AS module_where_call_ended,
+    					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes['module_journey'])),'|',1)),'>',1))) AS module_where_call_ended,
     					'ssc_pl' as self_service_count,
     					ROUND((to_unixtime(ctr.disconnect_timestamp) - to_unixtime(ctr.connected_to_system_timestamp)) / 60,1) AS call_duration_minute,
-    					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'customer_journey' ])),'|',1)),'>',1))) as call_end_destination,
-    					ctr.attributes [ 'customer_type' ] as customer_type,
-    					ctr.attributes [ 'contract_account' ] as contract_account,
-    					ctr.attributes [ 'supplied_phone_number' ] as supplied_phone_number,
+    					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes['customer_journey'])),'|',1)),'>',1))) as call_end_destination,
+    					ctr.attributes['customer_type'] as customer_type,
+    					ctr.attributes['contract_account'] as contract_account,
+    					ctr.attributes['supplied_phone_number'] as supplied_phone_number,
     					ctr.disconnect_reason as call_end_reason,
     					ctr.customer_endpoint_address as caller_phone_number,
     					case 
-    					when lower(ctr.attributes ['customer_type']) like '%cca%' 
+    					when lower(ctr.attributes['customer_type']) like '%cca%' 
     					then 'Yes' else 'No'
     					end as CCA,
     					date_format(ctr.initiation_timestamp, '%W') AS day_of_week,
-    					ctr.attributes [ 'customer_journey' ] as customer_journey,
-    					ctr.attributes [ 'module_journey' ] as module_journey,
-    					ctr.attributes [ 'intent_journey' ] as intent_journey,
+    					ctr.attributes['customer_journey'] as customer_journey,
+    					ctr.attributes['module_journey'] as module_journey,
+    					ctr.attributes['intent_journey'] as intent_journey,
     					CASE
     						WHEN EXTRACT(
     							DOW
@@ -106,32 +106,32 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
     					--Abandoned - Self Service Attempt
     
     					CASE
-    						WHEN lower(ctr.attributes [ 'self_service_attempt' ]) = 'true'
+    						WHEN lower(ctr.attributes['self_service_attempt']) = 'true'
     						and (
     							csr.is_queued IS NULL
     							OR csr.is_queued = 0
     						)
-    						and lower(ctr.attributes [ 'self_service_success' ]) = 'false' THEN 'Abandoned - Self Service Attempt' 
+    						and lower(ctr.attributes['self_service_success']) = 'false' THEN 'Abandoned - Self Service Attempt' 
     
     						-- Abandoned - Self Service No Attempt
     
-    						WHEN lower(ctr.attributes [ 'self_service_attempt' ]) = 'false'
+    						WHEN lower(ctr.attributes['self_service_attempt']) = 'false'
     						and (
     							csr.is_queued IS NULL
     							OR csr.is_queued = 0
     						)
     						and (
     							lower(
-    								ctr.attributes [ 'external_transfer_destination' ]
+    								ctr.attributes['external_transfer_destination']
     							) = 'none'
     							OR lower(
-    								ctr.attributes [ 'external_transfer_destination' ]
+    								ctr.attributes['external_transfer_destination']
     							) IS NULL
     						) THEN 'Abandoned - Self Service No Attempt' 
     
     						--Contained - Self Served - IVR
     
-    						WHEN lower(ctr.attributes [ 'self_service_success' ]) = 'true'
+    						WHEN lower(ctr.attributes['self_service_success']) = 'true'
     						and (
     							csr.is_queued IS NULL
     							OR csr.is_queued = 0
@@ -139,34 +139,34 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
     
     						--Contained - System - External Transfer
     
-    						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('billmatrix', 'legacy') 
+    						WHEN lower(ctr.attributes['external_transfer_destination']) IN ('billmatrix', 'legacy') 
     						THEN 'Contained - System - External Transfer' 
     
     						--Transfer - System - Agent
     
-    						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'system_agent_transfer'
+    						WHEN lower(ctr.attributes['transfer_reason']) = 'system_agent_transfer'
     						and csr.is_queued = 1 THEN 'Transfer - System - Agent' 
     
     						--Transfer - System - Exception
     
-    						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'exception'
+    						WHEN lower(ctr.attributes['transfer_reason']) = 'exception'
     						and csr.is_queued = 1 THEN 'Transfer - System - Exception' 
     
     						--Transfer - User - Self Service Attempt - Success
     
-    						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
-    						and lower(ctr.attributes [ 'self_service_success' ]) = 'true' THEN 'Transfer - User - Self Service Attempt - Success' 
+    						WHEN lower(ctr.attributes['transfer_reason']) = 'user_agent_request'
+    						and lower(ctr.attributes['self_service_success']) = 'true' THEN 'Transfer - User - Self Service Attempt - Success' 
     
     						--Transfer - User - Self Service Attempt - wo Success
     
-    						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
-    						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'true'
-    						and lower(ctr.attributes [ 'self_service_success' ]) = 'false' THEN 'Transfer - User - Self Service Attempt w/o Success' 
+    						WHEN lower(ctr.attributes['transfer_reason']) = 'user_agent_request'
+    						and lower(ctr.attributes['self_service_attempt']) = 'true'
+    						and lower(ctr.attributes['self_service_success']) = 'false' THEN 'Transfer - User - Self Service Attempt w/o Success' 
     
     						--Transfer - User - Skipped IVR
     
-    						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
-    						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' ELSE 'Uncategorised'
+    						WHEN lower(ctr.attributes['transfer_reason']) = 'user_agent_request'
+    						and lower(ctr.attributes['self_service_attempt']) = 'false' THEN 'Transfer - User - Skipped IVR' ELSE 'Uncategorised'
     					END AS l3_tag,
     					ctr.attributes
     				FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
@@ -387,7 +387,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
     									LENGTH(mj) - LENGTH(REPLACE(mj, '|', '')) AS total_transactions -- added this on 211024
     								FROM (
     										SELECT contact_id,
-    											attributes [ 'module_journey' ] as mj
+											attributes['module_journey'] as mj
     										FROM \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" as ctr
     										where upper(ctr.channel) = 'VOICE'
     											and upper(ctr.initiation_method) = 'INBOUND'
