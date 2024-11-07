@@ -115,3 +115,22 @@ jobs:
     - publish: assetbundle-sdge-export-job-FCR.qs
       artifact: QS_Bundle_FCR
       displayName: 'Publish the FCR Quicksight artifact to the pipeline'
+
+  -job:
+    displayName: 'Create and publish Lambda artifacts for containment rate alerts'
+    steps:
+    - script: |
+        set -e
+        set -x
+
+        # Zip containment_alerts.py file for Lambda
+        LAMBDA_DIR='src/lambda/alerts_lambda'
+        cd $LAMBDA_DIR
+        zip -r containment_alerts.zip containment_alerts.py
+        echo "Listing contents of the directory '$(pwd)'"
+        ls
+      displayName: 'Build Code Artifact for Containment Alerts Lambda'
+
+    - publish: src/lambda/alerts_lambda/containment_alerts.zip
+      artifact: containment_alerts
+      displayName: 'Publish Containment AlertsLambda zip as an Azure Pipeline Artifact named containment_alerts'
