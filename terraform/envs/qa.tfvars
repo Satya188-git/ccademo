@@ -19,13 +19,9 @@ devs_arn   = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-w
 qs_arn     = "arn:aws:iam::619071332326:role/service-role/aws-quicksight-service-role-v0"
 fondo_arn  = "arn:aws:iam::619071332326:role/fondo/sdge-dcctr-qa-terraform-oidc-role"
 
-producer_catalog_id  = "632182196722"
-source_database_name = "connect_datalake"
-
-connect_api_catalog_id = "685757275861"
-connect_api_db_name    = "sdge_dev_wus2_customer_connectchatbot"
-
-source_table_names = [
+connect_catalog_id  = "632182196722"
+connect_source_database_name = "connect_datalake"
+connect_source_table_names = [
   "agent_statistic_record",
   "agent_queue_statistic_record",
   "contact_evaluation_record",
@@ -34,6 +30,15 @@ source_table_names = [
   "contact_record",
   "contact_statistic_record"
 ]
+
+chatbot_catalog_id = "685757275861"
+chatbot_source_database_name    = "sdge_dev_wus2_customer_connectchatbot"
+chatbot_source_table_names = [
+  "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq_async",
+  "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq",
+  "sdge_connect_aws_connect_sdge_dhepk_sbx_wus2_einstein_connect"
+]
+
 
 quicksight_user_arns = [
   "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SRacharl@sdgecontractor.com",
