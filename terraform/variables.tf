@@ -105,10 +105,10 @@ variable "code_artifact_bucket_name" {
   type        = string
 }
 
-variable "sns_topic_key_id" {
-  type        = string
-  description = "sns_topic_key_id for encryption"
-}
+# variable "sns_topic_key_id" {
+#   type        = string
+#   description = "sns_topic_key_id for encryption"
+# }
 
 variable "email_value_map" {
     description = "Map of environment values"
