@@ -53,6 +53,9 @@ resource "aws_iam_role" "qs_admin" {
 resource "aws_iam_policy" "qs_admin_policy" {
   name        = "QuickSight-Federated-Admin"
   description = "A policy for QuickSight-Admin-Role"
+  lifecycle {
+    ignore_changes = all
+  }
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -103,6 +106,9 @@ resource "aws_iam_role" "qs_reader" {
 resource "aws_iam_policy" "qs_reader_policy" {
   name        = "QuickSight-Federated-Reader"
   description = "A policy for QuickSight-Reader-Role"
+  lifecycle {
+    ignore_changes = all
+  }
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -152,6 +158,9 @@ resource "aws_iam_role" "qs_author" {
 resource "aws_iam_policy" "qs_author_policy" {
   name        = "QuickSight-Federated-Author"
   description = "A policy for QuickSight-Author-Role"
+  lifecycle {
+    ignore_changes = all
+  }
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
