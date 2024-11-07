@@ -190,7 +190,7 @@ resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
     ignore_changes = all
   }
 }
-resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
+resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
   depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
   principal                     = "IAM_ALLOWED_PRINCIPALS"
   permissions                   = ["SELECT", "ALTER"]
