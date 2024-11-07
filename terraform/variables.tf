@@ -104,3 +104,18 @@ variable "code_artifact_bucket_name" {
   description = "This is the AWS S3 bucket to store lambda artifacts"
   type        = string
 }
+
+variable "email_value_map" {
+    description = "Map of environment values"
+    type        = map(list(string))
+    default = {
+        dev = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+        qa  = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+        prd = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+    }
+}
+
+variable "sns_email" {
+  type        = string
+  description = "sns_email for alerts"
+}
