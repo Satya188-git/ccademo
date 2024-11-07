@@ -190,4 +190,17 @@ resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
     ignore_changes = all
   }
 }
+resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
+  depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+  principal                     = "IAM_ALLOWED_PRINCIPALS"
+  permissions                   = ["SELECT", "ALTER"]
+  table {
+    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    catalog_id    = var.awsAccount
+    name          = "fcr_data_view"
+  }
+  lifecycle {
+    ignore_changes = all
+  }
+}
 
