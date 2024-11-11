@@ -124,3 +124,8 @@ variable "sns_email" {
   type        = string
   description = "sns_email for alerts"
 }
+
+variable "ado_role_name" {
+  type        = string
+  description = "ADO role name to assume"
+}

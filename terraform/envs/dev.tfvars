@@ -60,3 +60,5 @@ quicksight_user_arns = [
 pandas_layer_arn = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
 sns_email = "AKumar45@sdgecontractor.com"
+
+ado_role_name = "sdge-dcctr-dev-iam-role-ado"

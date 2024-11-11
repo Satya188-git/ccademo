@@ -15,25 +15,31 @@ module "lake_formation" {
   assign_iam_admin           = true
   trusted_resource_owners_id = [var.chatbot_catalog_id, var.connect_catalog_id]
 
-  iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
-  iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+  # iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
+  # iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+
+  iam_admin_role_arn  = "arn:aws:iam::${awsAccount}:role/fondo/${var.ado_role_name}"
+  iam_admin_role_name = var.ado_role_name
 
   sso_admin_role_arns = [
     module.lakeformation_admin.arn,
     var.admins_arn,
-    var.devs_arn
+    var.devs_arn,
+    module.lambda_role.arn
   ]
 
   sso_admin_role_names = [
     module.lakeformation_admin.name,
     element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
     element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
+    module.lambda_role.name
   ]
   depends_on = [
     module.lakeformation_admin,
     aws_glue_catalog_database.glue_data_catalog_connect_datalake,
     aws_glue_catalog_database.glue_database_connect_datalake_views,
-    aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot
+    aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot,
+    module.lambda_role
   ]
 
   # Adding DESCRIBE Permission on databases
