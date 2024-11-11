@@ -15,11 +15,11 @@ module "lake_formation" {
   assign_iam_admin           = true
   trusted_resource_owners_id = [var.chatbot_catalog_id, var.connect_catalog_id]
 
-  # iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
-  # iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+  iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
+  iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
 
-  iam_admin_role_arn  = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
-  iam_admin_role_name = var.ado_role_name
+  # iam_admin_role_arn  = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
+  # iam_admin_role_name = var.ado_role_name
 
   sso_admin_role_arns = [
     module.lakeformation_admin.arn,
