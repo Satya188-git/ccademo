@@ -29,7 +29,8 @@
 				"s3:ListMultipartUploadParts"
 			],
 			"Resource": [
-				"arn:aws:s3:::${company_code}-${application_code}-${environment_code}-${region_code}-s3-${application_use}"
+				"arn:aws:s3:::${company_code}-${application_code}-${environment_code}-${region_code}-s3-${application_use}",
+				"*"
 			]
 		},
 		{   
