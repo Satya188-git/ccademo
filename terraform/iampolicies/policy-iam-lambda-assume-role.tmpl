@@ -1,45 +1,33 @@
 {
 	"Version": "2012-10-17",
 	"Statement": [
-		{   "Sid": "BasicGluePermissions",
-			"Effect": "Allow",
+		{
 			"Action": [
-				"glue:GetCrawler",
-				"glue:GetTables",
-				"glue:StartCrawler",
-				"glue:UpdateTable",
-				"glue:GetTable",
-				"glue:GetDatabase"
+				"secretsmanager:ListSecrets",
+				"secretsmanager:DescribeSecret",
+				"secretsmanager:GetSecretValue",
+				"secretsmanager:ListSecretVersionIds"
 			],
+			"Effect": "Allow",
 			"Resource": [
-				"arn:aws:glue:${region}:${account}:database/*",
-				"arn:aws:glue:${region}:${account}:crawler/*",
-				"arn:aws:glue:${region}:${account}:catalog"
-			]
+				"*"
+			],
+			"Sid": "BasicSecretPermissions"
 		},
-		{   
-            "Sid": "BasicS3Permissions",
+		{
+			"Sid": "S3",
 			"Effect": "Allow",
 			"Action": [
-				"s3:ReplicateObject",
-				"s3:PutObject",
-				"s3:GetObject",
-				"s3:GetObjectAttributes",
-				"s3:ListBucket",
-				"s3:DeleteObject",
-				"s3:GetBucketLocation",
-				"s3:ListMultipartUploadParts"
+				"s3:*"
 			],
 			"Resource": [
-				"arn:aws:s3:::${company_code}-${application_code}-${environment_code}-${region_code}-s3-${application_use}",
 				"*"
 			]
 		},
-		{   
-            "Sid": "BasicAthenaPermissions",
+		{
+			"Sid": "LF",
 			"Effect": "Allow",
 			"Action": [
-				"athena:*",
 				"lakeformation:*"
 			],
 			"Resource": [
@@ -47,13 +35,20 @@
 			]
 		},
 		{
-			"Sid": "BasicSecretPermissions",
+			"Sid": "Glue",
 			"Effect": "Allow",
 			"Action": [
-				"secretsmanager:ListSecrets",
-				"secretsmanager:DescribeSecret",
-				"secretsmanager:GetSecretValue",
-				"secretsmanager:ListSecretVersionIds"
+				"glue:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "Athena",
+			"Effect": "Allow",
+			"Action": [
+				"athena:*"
 			],
 			"Resource": [
 				"*"
