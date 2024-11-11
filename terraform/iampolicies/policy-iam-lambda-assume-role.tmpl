@@ -8,11 +8,13 @@
 				"glue:GetTables",
 				"glue:StartCrawler",
 				"glue:UpdateTable",
-				"glue:GetTable"
+				"glue:GetTable",
+				"glue:GetDatabase"
 			],
 			"Resource": [
 				"arn:aws:glue:${region}:${account}:database/*",
-				"arn:aws:glue:${region}:${account}:crawler/*"
+				"arn:aws:glue:${region}:${account}:crawler/*",
+				"arn:aws:glue:${region}:${account}:catalog"
 			]
 		},
 		{   

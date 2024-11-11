@@ -167,26 +167,26 @@ module "lake_formation" {
     # Containment Alerts role permissions
     permission19 = {
       type          = "database"
-      principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
+      principal     = module.lambda_role.arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission20 = {
       type          = "table"
-      principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
+      principal     = module.lambda_role.arn
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
       wildcard      = true
     },
     permission21 = {
       type          = "database"
-      principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
+      principal     = module.lambda_role.arn
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission22 = {
       type          = "table"
-      principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
+      principal     = module.lambda_role.arn
       permissions   = ["SELECT"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
       wildcard      = true
