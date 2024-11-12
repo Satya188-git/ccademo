@@ -16,7 +16,8 @@ print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
-QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS
+QueryString = f"""
+CREATE OR REPLACE VIEW {view_name} AS
 SELECT t1.*,
 	t2.event_sequence,
 	t2.module_journey_part,
@@ -27,7 +28,7 @@ SELECT t1.*,
 	t2.ss_transaction,
 	split_part
 	(
-	(max(CASE WHEN t2.ss_transaction = 'y' THEN concat(CAST(t2.event_sequence AS VARCHAR),'_',	t2.transaction_reason) END)
+	(max(CASE WHEN t2.ss_transaction = 'y' THEN concat(LPAD(CAST(t2.event_sequence AS VARCHAR), 4, '0'),'_',t2.transaction_reason) END)
 	OVER 
 	(
 	PARTITION BY t1.contact_id
@@ -52,26 +53,26 @@ FROM (
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR'
-				) THEN 'TRANSFER' ELSE 'Uncategorised'
+				) THEN 'TRANSFER' ELSE 'Uncategorized'
 			END AS l1_tag,
 			CASE
 				WHEN l3_tag IN (
 					'Contained - Self Served - IVR',
 					'Contained - System - External Transfer'
-				) THEN 'Contained- Self Served'
+				) THEN 'Contained - Self Served'
 				WHEN l3_tag IN (
 					'Abandoned - Self Service Attempt',
 					'Abandoned - Self Service No Attempt'
-				) THEN 'Contained- Abandoned'
+				) THEN 'Contained - Abandoned'
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception'
-				) THEN 'Transfer- System'
+				) THEN 'Transfer - System'
 				WHEN l3_tag IN (
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR'
-				) THEN 'Transfer- User' ELSE 'Uncategorised'
+				) THEN 'Transfer - User' ELSE 'Uncategorized'
 			END AS l2_tag
 		FROM (
 				SELECT ctr.contact_id,
@@ -79,7 +80,23 @@ FROM (
 					ctr.initiation_timestamp AS call_start_date_time,
 					date_trunc('second',CAST(ctr.initiation_timestamp AS timestamp)) AS call_start_date_time_hours,
 					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'module_journey' ])),'|',1)),'>',1))) AS module_where_call_ended,
-					'ssc_pl' as self_service_count,
+					cardinality(FILTER(
+					ARRAY[
+					-- solar/ev
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playtypeofevprompt >> success') THEN 'PlayTypeofEVPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playevincentivesprompt >> success') THEN 'PlayEVIncentivesPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playbestevplanprompt >> success') THEN 'PlayBestEVPlanPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playevchargingstationprompt >> success') THEN 'PlayEVChargingStationPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsolarbillprompt >> success') THEN 'PlaySolarBillPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playnembillprompt >> success') THEN 'PlayNEMBillPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpnonccaresidentialprompt >> success') THEN 'PlaySBPNonCCAResidentialPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpnonccabusinessprompt >> success') THEN 'PlaySBPNonCCABusinessPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpccaresidentialprompt >> success') THEN 'PlaySBPCCAResidentialPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpccabusinessprompt >> success') THEN 'PlaySBPCCABusinessPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playbestsolarpricingplanprompt >> success') THEN 'PlayBestSolarPricingPlanPrompt' END
+					],
+					x -> x IS NOT NULL
+					)) AS self_service_count,
 					ROUND((to_unixtime(ctr.disconnect_timestamp) - to_unixtime(ctr.connected_to_system_timestamp)) / 60,1) AS call_duration_minute,
 					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'customer_journey' ])),'|',1)),'>',1))) as call_end_destination,
 					ctr.attributes [ 'customer_type' ] as customer_type,
@@ -87,8 +104,7 @@ FROM (
 					ctr.attributes [ 'supplied_phone_number' ] as supplied_phone_number,
 					ctr.disconnect_reason as call_end_reason,
 					ctr.customer_endpoint_address as caller_phone_number,
-					case 
-					when lower(ctr.attributes ['customer_type']) like '%cca%' 
+					case when lower(ctr.attributes ['customer_journey']) like '%cca >> yes%' 
 					then 'Yes' else 'No'
 					end as CCA,
 					date_format(ctr.initiation_timestamp, '%W') AS day_of_week,
@@ -166,7 +182,7 @@ FROM (
 						--Transfer - User - Skipped IVR
 						
 						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
-						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' ELSE 'Uncategorised'
+						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' ELSE 'Uncategorized'
 					END AS l3_tag,
 					ctr.attributes
 				FROM "sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"."contact_record" as ctr
@@ -309,7 +325,7 @@ THEN 'n'
 
 WHEN TRIM(module_name) = 'predictive'
 and TRIM(transaction_reason) 
-in ('fetchcustomerinfopredictiveapi','customerheardoutageinformation') --fetchcustomerinfopredictiveapi this was for test
+in ('customerheardoutageinformation')
 and TRIM(transaction_result) in ('success') 
 THEN 'y' 
 
