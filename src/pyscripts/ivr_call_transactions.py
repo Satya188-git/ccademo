@@ -80,7 +80,7 @@ FROM (
 					ctr.initiation_timestamp AS call_start_date_time,
 					date_trunc('second',CAST(ctr.initiation_timestamp AS timestamp)) AS call_start_date_time_hours,
 					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'module_journey' ])),'|',1)),'>',1))) AS module_where_call_ended,
-					cardinality(FILTER(
+					CAST(cardinality(FILTER(
 					ARRAY[
 					-- solar/ev
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playtypeofevprompt >> success') THEN 'PlayTypeofEVPrompt' END,
@@ -96,7 +96,7 @@ FROM (
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playbestsolarpricingplanprompt >> success') THEN 'PlayBestSolarPricingPlanPrompt' END
 					],
 					x -> x IS NOT NULL
-					)) AS self_service_count,
+					)) AS VARCHAR) AS self_service_count,
 					ROUND((to_unixtime(ctr.disconnect_timestamp) - to_unixtime(ctr.connected_to_system_timestamp)) / 60,1) AS call_duration_minute,
 					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'customer_journey' ])),'|',1)),'>',1))) as call_end_destination,
 					ctr.attributes [ 'customer_type' ] as customer_type,
