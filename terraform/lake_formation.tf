@@ -224,19 +224,19 @@ resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
   }
 }
 
-resource "aws_lakeformation_permissions" "ivr_call_transactions_lambda_permissions" {
-  depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal                     = module.lambda_role.arn
-  permissions                   = ["SELECT", "ALTER"]
-  table {
-    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    catalog_id    = var.awsAccount
-    name          = "ivr_call_transactions"
-  }
-  lifecycle {
-    ignore_changes = all
-  }
-}
+# resource "aws_lakeformation_permissions" "ivr_call_transactions_lambda_permissions" {
+#   depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+#   principal                     = module.lambda_role.arn
+#   permissions                   = ["SELECT", "ALTER"]
+#   table {
+#     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+#     catalog_id    = var.awsAccount
+#     name          = "ivr_call_transactions"
+#   }
+#   lifecycle {
+#     ignore_changes = all
+#   }
+# }
 
 resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
   depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
