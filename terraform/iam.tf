@@ -199,3 +199,12 @@ resource "aws_iam_role_policy_attachment" "qs_author_policy_attachment" {
   role       = aws_iam_role.qs_author.name
   policy_arn = aws_iam_policy.qs_author_policy.arn
 }
+
+resource "aws_iam_role_policy" "ado_lf_policy" {
+  name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-ado-lf-policy"
+  role = var.ado_role_name
+  policy = templatefile(
+    "${path.module}/iampolicies/policy-iam-ado-lf-assume-role.tmpl",
+    {}
+  )
+}

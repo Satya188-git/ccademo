@@ -15,24 +15,26 @@ module "lake_formation" {
   assign_iam_admin           = true
   trusted_resource_owners_id = [var.chatbot_catalog_id, var.connect_catalog_id]
 
-  # iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
-  # iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
+  iam_admin_role_arn  = data.aws_iam_session_context.current.issuer_arn
+  iam_admin_role_name = data.aws_iam_session_context.current.issuer_name
 
-  iam_admin_role_arn  = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
-  iam_admin_role_name = var.ado_role_name
+  # iam_admin_role_arn  = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
+  # iam_admin_role_name = var.ado_role_name
 
   sso_admin_role_arns = [
     module.lakeformation_admin.arn,
     var.admins_arn,
     var.devs_arn,
-    module.lambda_role.arn
+    module.lambda_role.arn,
+    "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
   ]
 
   sso_admin_role_names = [
     module.lakeformation_admin.name,
     element(split("/", var.admins_arn), length(split("/", var.admins_arn)) - 1),
     element(split("/", var.devs_arn), length(split("/", var.devs_arn)) - 1),
-    module.lambda_role.name
+    module.lambda_role.name,
+    var.ado_role_name
   ]
   depends_on = [
     module.lakeformation_admin,
@@ -165,32 +167,32 @@ module "lake_formation" {
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     # Containment Alerts role permissions
-    permission19 = {
-      type          = "database"
-      principal     = module.lambda_role.arn
-      permissions   = ["DESCRIBE"]
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    },
-    permission20 = {
-      type          = "table"
-      principal     = module.lambda_role.arn
-      permissions   = ["SELECT"]
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-      wildcard      = true
-    },
-    permission21 = {
-      type          = "database"
-      principal     = module.lambda_role.arn
-      permissions   = ["DESCRIBE"]
-      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
-    },
-    permission22 = {
-      type          = "table"
-      principal     = module.lambda_role.arn
-      permissions   = ["SELECT"]
-      database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
-      wildcard      = true
-    },
+    # permission19 = {
+    #   type          = "database"
+    #   principal     = module.lambda_role.arn
+    #   permissions   = ["DESCRIBE"]
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    # },
+    # permission20 = {
+    #   type          = "table"
+    #   principal     = module.lambda_role.arn
+    #   permissions   = ["SELECT"]
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   wildcard      = true
+    # },
+    # permission21 = {
+    #   type          = "database"
+    #   principal     = module.lambda_role.arn
+    #   permissions   = ["DESCRIBE"]
+    #   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    # },
+    # permission22 = {
+    #   type          = "table"
+    #   principal     = module.lambda_role.arn
+    #   permissions   = ["SELECT"]
+    #   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    #   wildcard      = true
+    # },
   }
 }
 
@@ -249,4 +251,3 @@ resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
     ignore_changes = all
   }
 }
-
