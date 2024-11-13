@@ -36,7 +36,7 @@ steps:
       echo "Assuming role..."
       # echo "arn:aws:iam::$(awsAccount):role/fondo/sdge-dcctr-$(Environment)-terraform-oidc-role"
       
-      ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-iam-role-ado" --role-session-name "$OUTPUT_PROFILE" --output json)
+      ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "arn:aws:iam::$(awsAccount):role/fondo/sdge-dcctr-$(Environment)-iam-role-ado" --role-session-name "$OUTPUT_PROFILE" --output json)
       
       # Check if the assume-role command was successful
 
@@ -54,17 +54,17 @@ steps:
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
         echo "Running Python file from artifacts!"
         python $(Pipeline.Workspace)/ivr_call_transactions/ivr_call_transactions.py "$(Environment)"
-        echo "ivr_call_transactions view creation script complete!"
+        echo "ivr_call_transactions view script run complete!"
         python $(Pipeline.Workspace)/ivr_call_events/ivr_call_events.py "$(Environment)"
-        echo "ivr_call_events view creation script complete!"
+        echo "ivr_call_events view script run complete!"
         python $(Pipeline.Workspace)/fcr_data_view/fcr_data_view.py "$(Environment)"
-        echo "fcr_data_view creation script complete!"
+        echo "fcr_data_view script run complete!"
       else
         echo "Failed to assume role."
         exit 1
       fi
       
-    displayName: 'Assume OIDC Role and run the PY Script'
+    displayName: 'Assume ADO Role to run PY Scripts'
 
 # Deactivate Virtual Environment and Clean-up
   - script: |
