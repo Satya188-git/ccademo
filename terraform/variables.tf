@@ -135,7 +135,7 @@ variable "sdge_domain_identity_verification_record" {
   description = "sdge_domain_identity_verification_record"
 }
 
-variable "r53_zone_name" {
-  type        = string
-  description = "r53_zone_name"
-}
+#variable "r53_zone_name" {
+#  type        = string
+#  description = "r53_zone_name"
+#}
