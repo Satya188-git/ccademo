@@ -62,3 +62,4 @@ code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
 sns_email = "AKumar45@sdgecontractor.com"
 
 ado_role_name = "sdge-dcctr-dev-iam-role-ado"
+# r53_zone_name= "dev.sdge-it-einstein.aws.sempra.com"
