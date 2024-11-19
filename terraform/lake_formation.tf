@@ -40,7 +40,7 @@ module "lake_formation" {
     module.lakeformation_admin,
     aws_glue_catalog_database.glue_data_catalog_connect_datalake,
     aws_glue_catalog_database.glue_database_connect_datalake_views,
-    # aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot,
+    aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot,
     module.lambda_role
   ]
 
