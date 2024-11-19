@@ -196,6 +196,31 @@ module "lake_formation" {
   }
 }
 
+data "aws_glue_catalog_tables" "all_tables" {
+  database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
+  catalog_id    = var.awsAccount
+}
+
+resource "aws_lakeformation_permissions" "connect_chatbot_permissions" {
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["SELECT", "ALTER"]
+
+  dynamic "table" {
+    for_each = data.aws_glue_catalog_tables.all_tables.tables
+    content {
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      catalog_id    = var.awsAccount
+      name          = table.name
+    }
+  }
+
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
+
 resource "aws_lakeformation_permissions" "ivr_call_events_permissions" {
   depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
   principal   = "IAM_ALLOWED_PRINCIPALS"
