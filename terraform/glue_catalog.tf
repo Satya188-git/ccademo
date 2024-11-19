@@ -38,7 +38,7 @@ resource "aws_glue_catalog_table" "shared_connect_cont_static_link" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[6] # The original table name in the shared Glue database
   }
@@ -52,7 +52,7 @@ resource "aws_glue_catalog_table" "shared_connect_cont_record_link" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[5] # The original table name in the shared Glue database
   }
@@ -66,7 +66,7 @@ resource "aws_glue_catalog_table" "shared_connect_lens_conversational_analytics"
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[4] # The original table name in the shared Glue database
   }
@@ -80,7 +80,7 @@ resource "aws_glue_catalog_table" "shared_connect_contact_flow_events" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[3] # The original table name in the shared Glue database
   }
@@ -94,7 +94,7 @@ resource "aws_glue_catalog_table" "shared_connect_contact_evaluation_record" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[2] # The original table name in the shared Glue database
   }
@@ -108,7 +108,7 @@ resource "aws_glue_catalog_table" "shared_connect_agent_queue_statistic_record" 
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[1] # The original table name in the shared Glue database
   }
@@ -122,7 +122,7 @@ resource "aws_glue_catalog_table" "shared_connect_agent_statistic_record" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.connect_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.connect_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.connect_source_database_name  # The original Glue database name in the other account
     name          = var.connect_source_table_names[0] # The original table name in the shared Glue database
   }
@@ -137,7 +137,7 @@ resource "aws_glue_catalog_table" "shared_einstein_lex_bot_faq_async" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.chatbot_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.chatbot_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.chatbot_source_database_name  # The original Glue database name in the other account
     name          = var.chatbot_source_table_names[0] # The original table name in the shared Glue database
   }
@@ -150,7 +150,7 @@ resource "aws_glue_catalog_table" "shared_einstein_lex_bot_faq" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.chatbot_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.chatbot_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.chatbot_source_database_name  # The original Glue database name in the other account
     name          = var.chatbot_source_table_names[1] # The original table name in the shared Glue database
   }
@@ -163,7 +163,7 @@ resource "aws_glue_catalog_table" "shared_einstein_connect" {
   }
   table_type = "LINK"
   target_table {
-    catalog_id    = var.chatbot_catalog_id   # Replace with the AWS account ID where the original table resides
+    catalog_id    = var.chatbot_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.chatbot_source_database_name  # The original Glue database name in the other account
     name          = var.chatbot_source_table_names[2] # The original table name in the shared Glue database
   }

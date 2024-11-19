@@ -12,7 +12,7 @@ module "sns_alarms_email_topic" {
   region_code      = var.region_code
   tags             = var.tags
 
-  name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-containment-alerts-alarms"
+  name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-containment-alerts-alarms"
   # kms_master_key_id     = var.sns_topic_key_id
   create_email_topic    = true # Must be set to true to enable email subscriptions
   email_subscriber_list = local.email_selected_value

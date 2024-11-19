@@ -111,13 +111,13 @@ variable "code_artifact_bucket_name" {
 # }
 
 variable "email_value_map" {
-    description = "Map of environment values"
-    type        = map(list(string))
-    default = {
-        dev = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
-        qa  = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
-        prd = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
-    }
+  description = "Map of environment values"
+  type        = map(list(string))
+  default = {
+    dev = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+    qa  = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+    prd = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+  }
 }
 
 variable "sns_email" {

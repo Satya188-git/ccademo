@@ -154,13 +154,13 @@ module "lake_formation" {
       wildcard      = true
     },
     # IAMAllowedPrincipal
-    permission17     = {
+    permission17 = {
       type          = "database"
       principal     = "IAM_ALLOWED_PRINCIPALS"
       permissions   = ["DESCRIBE"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
-    permission18     = {
+    permission18 = {
       type          = "database"
       principal     = "IAM_ALLOWED_PRINCIPALS"
       permissions   = ["DESCRIBE"]
@@ -197,9 +197,9 @@ module "lake_formation" {
 }
 
 resource "aws_lakeformation_permissions" "ivr_call_events_permissions" {
-  depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal                     = "IAM_ALLOWED_PRINCIPALS"
-  permissions                   = ["SELECT", "ALTER"]
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["SELECT", "ALTER"]
   table {
     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     catalog_id    = var.awsAccount
@@ -211,9 +211,9 @@ resource "aws_lakeformation_permissions" "ivr_call_events_permissions" {
 }
 
 resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
-  depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal                     = "IAM_ALLOWED_PRINCIPALS"
-  permissions                   = ["SELECT", "ALTER"]
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["SELECT", "ALTER"]
   table {
     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     catalog_id    = var.awsAccount
@@ -239,9 +239,9 @@ resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
 # }
 
 resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
-  depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal                     = "IAM_ALLOWED_PRINCIPALS"
-  permissions                   = ["SELECT", "ALTER"]
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["SELECT", "ALTER"]
   table {
     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     catalog_id    = var.awsAccount

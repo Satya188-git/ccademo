@@ -21,7 +21,7 @@ qs_arn     = "arn:aws:iam::442426866507:role/Quicksight"
 fondo_arn  = "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-qa-terraform-oidc-role"
 
 
-connect_catalog_id  = "632182196722"
+connect_catalog_id           = "632182196722"
 connect_source_database_name = "connect_datalake"
 connect_source_table_names = [
   "agent_statistic_record",
@@ -33,8 +33,8 @@ connect_source_table_names = [
   "contact_statistic_record"
 ]
 
-chatbot_catalog_id = "685757275861"
-chatbot_source_database_name    = "sdge_dev_wus2_customer_connectchatbot"
+chatbot_catalog_id           = "685757275861"
+chatbot_source_database_name = "sdge_dev_wus2_customer_connectchatbot"
 chatbot_source_table_names = [
   "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq_async",
   "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq",
@@ -57,9 +57,9 @@ quicksight_user_arns = [
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SMothuku@sdgecontractor.com"
 ]
 
-pandas_layer_arn = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
+pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
-sns_email = "AKumar45@sdgecontractor.com"
+sns_email                 = "AKumar45@sdgecontractor.com"
 
 ado_role_name = "sdge-dcctr-dev-iam-role-ado"
 # r53_zone_name= "dev.sdge-it-einstein.aws.sempra.com"
