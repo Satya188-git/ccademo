@@ -193,12 +193,22 @@ module "lake_formation" {
     #   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     #   wildcard      = true
     # },
+    permission23 = {
+      type          = "database"
+      principal     = "IAM_ALLOWED_PRINCIPALS"
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
+    },
   }
 }
 
-data "aws_glue_catalog_tables" "all_tables" {
-  database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
-  catalog_id    = var.awsAccount
+# List of table names (Manually specify the table names here)
+locals {
+  table_names = [
+    "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq",
+    "sdge_connect_aws_connect_sdge_dhepk_sbx_wus2_einstein_connect",
+    "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq_async"
+  ]
 }
 
 resource "aws_lakeformation_permissions" "connect_chatbot_permissions" {
@@ -206,19 +216,19 @@ resource "aws_lakeformation_permissions" "connect_chatbot_permissions" {
   principal   = "IAM_ALLOWED_PRINCIPALS"
   permissions = ["SELECT", "ALTER"]
 
-  dynamic "table" {
-    for_each = data.aws_glue_catalog_tables.all_tables.tables
-    content {
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-      catalog_id    = var.awsAccount
-      name          = table.name
-    }
+  for_each = toset(local.table_names) # Iterate over the table names
+
+  table {
+    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    catalog_id    = var.awsAccount
+    name          = each.value # Use the current table name from the loop
   }
 
   lifecycle {
     ignore_changes = all
   }
 }
+
 
 
 resource "aws_lakeformation_permissions" "ivr_call_events_permissions" {
