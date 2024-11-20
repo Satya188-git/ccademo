@@ -2,6 +2,11 @@ steps:
 - script: |
     echo "Use Pipeline Artifact and deploy to env"
 
+    if [ "$(Environment)" == "dev" ]; then
+      echo "DEV deployment is not required"
+      exit 0
+    fi
+
     ##################################################
     # Export AWS credentials from pipeline variables #
     ##################################################
@@ -20,17 +25,26 @@ steps:
     ### Assume the role and capture the credentials ###
     ###################################################
 
-    echo "Assuming role..."
+    echo "Assuming the ADO role..."
     ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "arn:aws:iam::$(awsAccount):role/fondo/sdge-dcctr-$(Environment)-iam-role-ado" --role-session-name "$OUTPUT_PROFILE" --output json)
     
-    ## Check if the assume-role command was successful
+    #####################################################
+    ## Check if the assume-role command was successful ##
+    #####################################################
+
     if [ $? -eq 0 ]; then
-        # Extract credentials
+
+        #########################
+        ## Extract credentials ##
+        #########################
+
         ACCESS_KEY=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.AccessKeyId')
         SECRET_KEY=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SecretAccessKey')
         SESSION_TOKEN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials.SessionToken')
 
-        # Export the new session credentials for subsequent AWS CLI commands
+        ########################################################################
+        ## Export the new session credentials for subsequent AWS CLI commands ##
+        ########################################################################
 
         export AWS_ACCESS_KEY_ID=$ACCESS_KEY
         export AWS_SECRET_ACCESS_KEY=$SECRET_KEY
@@ -39,29 +53,40 @@ steps:
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
         echo "Creating the quicksight file!"
         ls
+
         echo $(Pipeline.Workspace)
 
         jobId="sdge-export-job-IVR"
         
-        # Asset bundle import job for IVR
+        #####################################
+        ## Asset bundle import job for IVR ##
+        #####################################
 
         aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-IVR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_IVR/assetbundle-sdge-export-job-IVR.qs --override-parameters "{\"DataSources\":[{\"DataSourceId\":\"867d6f11-6f0a-4f40-b865-6a0cc5baf78f\",\"Name\":\"$(qstargetenv)_connectdatalake\",\"DataSourceParameters\":{\"AthenaParameters\":{\"WorkGroup\":\"primary\"}},\"SslProperties\":{\"DisableSsl\":false}}],\"DataSets\":[{\"DataSetId\":\"2637d8cd-26a2-4075-943d-9ed0a7e94946\",\"Name\":\"ivr_combined_2509data_ext_table\"}]}" --failure-action ROLLBACK
 
         echo "started the asset bundle import job"
 
         while true; do
-            # Get the job details
+
+            #########################
+            ## Get the job details ##
+            #########################
 
             response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
-
-            # Check if the command was successful
+            
+            #########################################
+            ## Check if the command was successful ##
+            #########################################
 
             if [ $? -eq 0 ]; then
                 jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
                 if [ "$jobStatus" == "SUCCESSFUL" ]; then
                     echo "Quicksight Package deployed"
                     echo "Updating the dataset!"
-                    # Updating the dataset after dashboard is deployed
+
+                    ######################################################
+                    ## Updating the dataset after dashboard is deployed ##
+                    ######################################################
 
                     # aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "2637d8cd-26a2-4075-943d-9ed0a7e94946" --name "ivr_combined_2509data_ext_table" --physical-table-map "{\"c2576ff2-6a9a-4315-832b-4038396a5248\":{\"RelationalTable\":{\"DataSourceArn\":\"arn:aws:quicksight:us-west-2:"$(awsAccount)":datasource/867d6f11-6f0a-4f40-b865-6a0cc5baf78f\",\"Catalog\":\"AwsDataCatalog\",\"Schema\":\"$(qstargetenv)_connectdatalake\",\"Name\":\"ivr_combined_2509data_ext_table\",\"InputColumns\":[{\"Name\":\"contact_id\",\"Type\":\"STRING\"},{\"Name\":\"channel\",\"Type\":\"STRING\"},{\"Name\":\"initiation_method\",\"Type\":\"STRING\"},{\"Name\":\"is_queued\",\"Type\":\"INTEGER\"},{\"Name\":\"attributes\",\"Type\":\"STRING\"},{\"Name\":\"call_start_date_time\",\"Type\":\"STRING\"},{\"Name\":\"call_end_reason\",\"Type\":\"STRING\"},{\"Name\":\"caller_phone_number\",\"Type\":\"STRING\"},{\"Name\":\"day_of_week\",\"Type\":\"STRING\"},{\"Name\":\"weekday_check\",\"Type\":\"STRING\"},{\"Name\":\"date\",\"Type\":\"DATETIME\"},{\"Name\":\"curtailmentflag\",\"Type\":\"STRING\"},{\"Name\":\"l3_tag\",\"Type\":\"STRING\"},{\"Name\":\"l1_tag\",\"Type\":\"STRING\"},{\"Name\":\"l2_tag\",\"Type\":\"STRING\"},{\"Name\":\"l3_tag\",\"Type\":\"STRING\"}]}}}" --import-mode SPICE --logical-table-map "{\"5cb33d9a-78b1-4cc3-91e2-e40ee2fa12a7\":{\"Alias\":\"ivr_combined_2509data_ext_table\",\"DataTransforms\":[{\"ProjectOperation\":{\"ProjectedColumns\":[\"contact_id\",\"channel\",\"initiation_method\",\"is_queued\",\"attributes\",\"call_start_date_time\",\"call_end_reason\",\"caller_phone_number\",\"day_of_week\",\"weekday_check\",\"date\",\"curtailmentflag\",\"l3_tag\",\"l1_tag\",\"l2_tag\"]}}],\"Source\":{\"PhysicalTableId\":\"c2576ff2-6a9a-4315-832b-4038396a5248\"}}}" --field-folders '{}'
                     # aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "2637d8cd-26a2-4075-943d-9ed0a7e94946" --name "ivr_combined_2509data_ext_table" --physical-table-map "{\"c2576ff2-6a9a-4315-832b-4038396a5248\":{\"RelationalTable\":{\"DataSourceArn\":\"arn:aws:quicksight:us-west-2:"$(awsAccount)":datasource/867d6f11-6f0a-4f40-b865-6a0cc5baf78f\",\"Catalog\":\"AwsDataCatalog\",\"Schema\":\"$(qstargetenv)_connectdatalake\",\"Name\":\"ivr_combined_2509data_ext_table\",\"InputColumns\":[{\"Name\": \"contact_id\",   \"Type\": \"STRING\" }, {   \"Name\": \"is_queued\",   \"Type\": \"INTEGER\" }, {   \"Name\": \"call_start_date_time\",   \"Type\": \"STRING\" }, {   \"Name\": \"call_start_date_time_hours\",   \"Type\": \"STRING\" }, {   \"Name\": \"self_service_block\",   \"Type\": \"STRING\" }, {   \"Name\": \"module_where_call_ended\",   \"Type\": \"STRING\" }, {   \"Name\": \"self_service_count\",   \"Type\": \"STRING\" }, {   \"Name\": \"call_duration_minute\",   \"SubType\": \"FLOAT\",   \"Type\": \"DECIMAL\" }, {   \"Name\": \"call_end_destination\",   \"Type\": \"STRING\" }, {   \"Name\": \"customer_type\",   \"Type\": \"STRING\" }, {   \"Name\": \"contract_account\",   \"Type\": \"STRING\" }, {   \"Name\": \"supplied_phone_number\",   \"Type\": \"STRING\" }, {   \"Name\": \"call_end_reason\",   \"Type\": \"STRING\" }, {   \"Name\": \"caller_phone_number\",   \"Type\": \"STRING\" }, {   \"Name\": \"day_of_week\",   \"Type\": \"STRING\" }, {   \"Name\": \"customer_journey\",   \"Type\": \"STRING\" }, {   \"Name\": \"module_journey\",   \"Type\": \"STRING\" }, {   \"Name\": \"intent_journey\",   \"Type\": \"STRING\" }, {   \"Name\": \"weekday_check\",   \"Type\": \"STRING\" }, {   \"Name\": \"date\",   \"Type\": \"DATETIME\" }, {   \"Name\": \"l3_tag\",   \"Type\": \"STRING\" }, {   \"Name\": \"attributes\",   \"Type\": \"STRING\" }, {   \"Name\": \"l1_tag\",   \"Type\": \"STRING\" }, {   \"Name\": \"l2_tag\",   \"Type\": \"STRING\" }]}}}" --import-mode SPICE --logical-table-map "{\"5cb33d9a-78b1-4cc3-91e2-e40ee2fa12a7\":{\"Alias\":\"ivr_combined_2509data_ext_table\",\"DataTransforms\":[{\"ProjectOperation\":{\"ProjectedColumns\":[\"contact_id\",\"channel\",\"initiation_method\",\"is_queued\",\"attributes\",\"call_start_date_time\",\"call_end_reason\",\"caller_phone_number\",\"day_of_week\",\"weekday_check\",\"date\",\"curtailmentflag\",\"l3_tag\",\"l1_tag\",\"l2_tag\"]}}],\"Source\":{\"PhysicalTableId\":\"c2576ff2-6a9a-4315-832b-4038396a5248\"}}}" --field-folders '{}'
