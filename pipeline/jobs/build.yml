@@ -96,7 +96,7 @@ jobs:
                     # Download the file
                     curl -o "./assetbundle-sdge-export-job-FCR.qs" $downloadUrl
                     ls
-                    ll
+                    ls -sd --block-size=1 --format=single-column *
                     
                     echo "File downloaded successfully FCR"
                     break
