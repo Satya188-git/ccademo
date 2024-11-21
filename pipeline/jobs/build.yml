@@ -38,8 +38,11 @@ jobs:
           echo "After downloading the dataset in raw format IVR"
 
           head -n 1 current-dataset_ivr_data.json
-          cat current-dataset_ivr_data.json | tr -cd '\11\12\15\40-\176' > current-dataset_ivr_data.json
+          echo "first head check"
+          pwd
+          #cat current-dataset_ivr_data.json | tr -cd '\11\12\15\40-\176' > current-dataset_ivr_data.json
           head -n 1 current-dataset_ivr_data.json
+          echo "second head check"
           jq '.DataSet' current-dataset_ivr_data.json > current-dataset_ivr_data.json
           jq 'del(.Arn, .CreatedTime, .LastUpdatedTime, .OutputColumns, .ConsumedSpiceCapacityInBytes)' current-dataset_ivr_data.json > current-dataset_ivr_data.json
           
@@ -54,6 +57,7 @@ jobs:
           echo "After downloading the dataset in raw format FCR"
 
           head -n 1 current-dataset_fcr_data.json
+          pwd
           cat current-dataset_fcr_data.json | tr -cd '\11\12\15\40-\176' > current-dataset_fcr_data.json
           head -n 1 current-dataset_fcr_data.json
           jq '.DataSet' current-dataset_fcr_data.json > current-dataset_fcr_data.json
