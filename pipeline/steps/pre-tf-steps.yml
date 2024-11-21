@@ -113,7 +113,7 @@ steps:
         done
 
       # Import out FCR
-      #aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-FCR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_FCR/assetbundle-sdge-export-job-FCR.qs  --failure-action ROLLBACK
+      aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-FCR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_FCR/assetbundle-sdge-export-job-FCR.qs  --failure-action ROLLBACK
 
       jobId="sdge-export-job-FCR"
       
