@@ -37,17 +37,27 @@ jobs:
           ls -sd --block-size=1 --format=single-column *
           echo "After downloading the dataset in raw format IVR"
 
-          head -n 1 current-dataset_ivr_data.json
+          # head -n 1 current-dataset_ivr_data.json
           echo "first head check"
+          echo "pwd"
           pwd
+          echo "****************************************"
           #cat current-dataset_ivr_data.json | tr -cd '\11\12\15\40-\176' > current-dataset_ivr_data.json
           head -n 1 current-dataset_ivr_data.json
           echo "second head check"
-          jq '.DataSet' current-dataset_ivr_data.json > current-dataset_ivr_data.json
-          jq 'del(.Arn, .CreatedTime, .LastUpdatedTime, .OutputColumns, .ConsumedSpiceCapacityInBytes)' current-dataset_ivr_data.json > current-dataset_ivr_data.json
+          echo "second ls"
+          ls -sd --block-size=1 --format=single-column *
+          echo "****************************************"
+
+          jq '.DataSet' current-dataset_ivr_data.json > dataset_ivr_data.json
+
+          ls -sd --block-size=1 --format=single-column *
+          echo "****************************************"
+          jq 'del(.Arn, .CreatedTime, .LastUpdatedTime, .OutputColumns, .ConsumedSpiceCapacityInBytes)' dataset_ivr_data.json > updated-dataset_ivr_data.json
           
           
           ls -sd --block-size=1 --format=single-column *
+          echo "****************************************"
           echo "After formatting the dataset IVR"
 
           # Export Job for FCR
