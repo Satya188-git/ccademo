@@ -107,7 +107,7 @@ steps:
                     ## Updating the physical dataset map in dataset after dashboard is deployed ##
                     ##############################################################################
 
-                    jq '.PhysicalTableMap."3a4e1cf3-3f68-4a46-8c7e-b8d934240134".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/fd19c252-1725-4e1e-8bff-68a9bbc46cfe" | .PhysicalTableMap."3a4e1cf3-3f68-4a46-8c7e-b8d934240134".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_IVR_Dataset/updated-dataset_ivr_data.json > current-dataset_ivr_data.json
+                    jq '.PhysicalTableMap."3a4e1cf3-3f68-4a46-8c7e-b8d934240134".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/fd19c252-1725-4e1e-8bff-68a9bbc46cfe" | .PhysicalTableMap."3a4e1cf3-3f68-4a46-8c7e-b8d934240134".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' | .PhysicalTableMap."c63258cf-acd2-4d2f-bf5f-8e394b4be2cd".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' |  .PhysicalTableMap."c63258cf-acd2-4d2f-bf5f-8e394b4be2cd".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/3229f118-efa4-4f41-b018-194a244e2c6b" $(Pipeline.Workspace)/QS_Bundle_IVR_Dataset/updated-dataset_ivr_data.json > current-dataset_ivr_data.json
                     aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "ce88acbd-2b70-42a4-af08-4d5ebd0b6181" --cli-input-json fileb://current-dataset_ivr_data.json
                     
                     break
