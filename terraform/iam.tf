@@ -61,7 +61,10 @@ resource "aws_iam_role" "qs_admin" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRoleWithSAML"
+        Action = [
+          "sts:AssumeRoleWithSAML",
+          "sts:TagSession"
+        ]
         Effect = "Allow"
         Sid    = "TrustCondition"
         Condition = {
@@ -111,7 +114,10 @@ resource "aws_iam_role" "qs_reader" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRoleWithSAML"
+        Action = [
+          "sts:AssumeRoleWithSAML",
+          "sts:TagSession"
+        ]
         Effect = "Allow"
         Sid    = "TrustCondition"
         Condition = {
@@ -160,7 +166,10 @@ resource "aws_iam_role" "qs_author" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRoleWithSAML"
+        Action = [
+          "sts:AssumeRoleWithSAML",
+          "sts:TagSession"
+        ]
         Effect = "Allow"
         Sid    = "TrustCondition"
         Condition = {
