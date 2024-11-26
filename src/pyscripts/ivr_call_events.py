@@ -30,7 +30,7 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
         CASE 
             WHEN length(TRIM(journey_step)) - length(regexp_replace(TRIM(journey_step), '>', '')) >= 2
                 THEN regexp_replace(TRIM(journey_step), '^[^>]*>[^>]*>', '')  -- Handles cases with two or more '>'
-            ELSE NULL  -- Handles cases with less than two '>'
+            ELSE ''  -- Handles cases with less than two '>'
         END AS event_result,
         ROW_NUMBER() OVER () AS t2_rn
     FROM (
