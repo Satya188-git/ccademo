@@ -45,7 +45,8 @@ FROM (
 					'Abandoned - Self Service Attempt',
 					'Abandoned - Self Service No Attempt',
 					'Contained - Self Served - IVR',
-					'Contained - System - External Transfer'
+					'Contained - System - External Transfer',
+					'Contained - System - Legacy Transfer'
 				) THEN 'Contained'
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
@@ -58,7 +59,8 @@ FROM (
 			CASE
 				WHEN l3_tag IN (
 					'Contained - Self Served - IVR',
-					'Contained - System - External Transfer'
+					'Contained - System - External Transfer',
+					'Contained - System - Legacy Transfer'
 				) THEN 'Contained - Self Served'
 				WHEN l3_tag IN (
 					'Abandoned - Self Service Attempt',
@@ -155,9 +157,14 @@ FROM (
 						
 						--Contained - System - External Transfer
 						
-						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('billmatrix', 'legacy') 
+						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('billmatrix') 
 						THEN 'Contained - System - External Transfer' 
 						
+						--Contained - System - Legacy Transfer
+						
+						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('legacy') 
+						THEN 'Contained - System - Legacy Transfer' 
+
 						--Transfer - System - Agent
 						
 						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'system_agent_transfer'

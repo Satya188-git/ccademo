@@ -24,7 +24,9 @@ QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS (
         ROW_NUMBER() OVER (PARTITION BY contact_id) AS event_sequence_cj,
         TRIM(journey_step) AS event,
         split_part(TRIM(journey_step), '>', 1) AS event_name,
-        split_part(TRIM(journey_step), '>', 2) AS raw_answer,
+        CASE WHEN 
+            split_part(TRIM(journey_step), '>', 2) IS NULL THEN ''
+        ELSE split_part(TRIM(journey_step), '>', 2) END AS raw_answer,
         CASE 
             WHEN length(TRIM(journey_step)) - length(regexp_replace(TRIM(journey_step), '>', '')) >= 2
                 THEN regexp_replace(TRIM(journey_step), '^[^>]*>[^>]*>', '')  -- Handles cases with two or more '>'
