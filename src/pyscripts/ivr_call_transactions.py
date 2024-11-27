@@ -84,7 +84,7 @@ FROM (
 					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'module_journey' ])),'|',1)),'>',1))) AS module_where_call_ended,
 					CAST(cardinality(FILTER(
 					ARRAY[
-					-- solar/ev
+					-------------------------------------------------------------- solar/ev ----------------------------------------------------------------------------
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playtypeofevprompt >> success') THEN 'PlayTypeofEVPrompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playevincentivesprompt >> success') THEN 'PlayEVIncentivesPrompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playbestevplanprompt >> success') THEN 'PlayBestEVPlanPrompt' END,
@@ -95,9 +95,74 @@ FROM (
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpnonccabusinessprompt >> success') THEN 'PlaySBPNonCCABusinessPrompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpccaresidentialprompt >> success') THEN 'PlaySBPCCAResidentialPrompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsbpccabusinessprompt >> success') THEN 'PlaySBPCCABusinessPrompt' END,
-					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playbestsolarpricingplanprompt >> success') THEN 'PlayBestSolarPricingPlanPrompt' END
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playbestsolarpricingplanprompt >> success') THEN 'PlayBestSolarPricingPlanPrompt' END,
+					
+					------------------------------------------------------------ Outage -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playoutagerestoredprompt >> success') THEN 'PlayOutageRestoredPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playcreateserviceorderprompt >> success') THEN 'PlayCreateServiceOrderPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playrestoredprompt >> success') THEN 'PlayRestoredPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playunplugprompt >> success') THEN 'PlayUnplugPrompt' END,
+					-- CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playcircuitidprompt >> success') THEN 'PlayCircuitIDPrompt' END,
+					-- CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playrepeatprompt >> success') THEN 'PlayRepeatPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playsurgeprotectorprompt') THEN 'PlaySurgeProtectorPrompt' END,
+					
+					-- Outage ERT
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playnoertavailableprompt >> success') THEN 'PlayNoERTAvailablePrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playertinformationprompt >> Success') THEN 'PlayERTInformationPrompt' END, 
+					
+					------------------------------------------------------------ -- BillCopyRequest -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playhousenumberprompt >> success') THEN 'PlayHousenumberPrompt' END,
+					
+					------------------------------------------------------------ -- BillMatrix -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'transfertolegacybilltatrix') THEN 'TransfertoLegacyBillMatrix' END,
+					
+					-------------------------------------------------------------- AccountBalance -----------------------------------------------------------
+					-- CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'customercamefrompredictive >> yes') THEN 'CustomercamefromPredictive' END, --check with Sukeshi on new identifiers
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'play_balanceamt_is_zero_prompt >> success') THEN 'Play_BalanceAmt_is_Zero_Prompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'play_balance_non_zero_amount_prompt >> success') THEN 'Play_Balance_Non_Zero_Amount_Prompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'play_balance_credit_prompt >> success') THEN 'Play_Balance_Credit_Prompt' END,
+					
+					---------------------------------------------------------------- Mailing Address -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playstandardmailaddressprompt >> success') THEN 'PlayStandardMailaddressPrompt' END, 
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playexpressovernightprompt >> success') THEN 'PlayExpressOvernightPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playaccountbalanceprompt >> success') THEN 'PlayAccountBalancePrompt' END, 
+					
+					------------------------------------------------------------------ Bill Pay Options -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playaccountbalancecreditprompt >> success') THEN 'PlayAccountBalanceCreditPrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playaccountbalancezeroprompt >> success') THEN 'PlayAccountBalanceZeroPrompt' END,
+					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'zerobalancepaymentrequest >') THEN 'ZeroBalancePaymentRequest' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playaccountbalancenonzeroprompt >> success') THEN 'PlayAccountBalanceNonZeroPrompt' END,
+					
+					-------------------------------------------------------------------- Stop Service -----------------------------------------------------------
+					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playserviceshutoffconfirmationnumberprompt >> success') THEN 'PlayServiceShutoffConfirmationNumberPrompt' END, --check with Sukeshi
+					-- ask this from Sukeshi on the 2 new prompts proposed by Linda -11/21
+					
+					-------------------------------------------------------------------- Predictive ----------------------------------------------------------- update the excel
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playoutagenotimestampavailableprompt >> success') THEN 'PlayOutageNoTimeStampAvailablePrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playoutagetimestampavailableprompt >> success') THEN 'PlayOutageTimeStampAvailablePrompt' END,
+					
+					-------------------------------------------------------------------- PBP Processing -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playconfirmationnumberprompt >> success') THEN 'PlayConfirmationNumberPrompt' END, --value not in analytics sheet
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playnewbalanceprompt >> success') THEN 'PlayNewBalancePrompt' END, --value not in analytics sheet
+					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'repeatbalanceconfirmation >') THEN 'RepeatBalanceConfirmation' END, - this was removed after Linda's request
+					
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playcreditbalanceprompt  >> success') THEN 'PlayCreditBalancePrompt' END,
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playzerobalanceprompt  >> success') THEN 'PlayZeroBalancePrompt' END,
+
+                	-------------------------------------------------------------------- Payment Arrangement -----------------------------------------------------------
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playpaymentarrangementsuccessprompt >> success') THEN 'PlayPaymentArrangementSuccessPrompt' END, -- this flow is not updated in the analytics sheet- connect with Sukeshi on this
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playpaymentarrangementsuccessfulprompt >> success') THEN 'PlayPaymentArrangementSuccessfulPrompt' END
+
 					],
-					x -> x IS NOT NULL
+					
+					x -> x IS NOT NULL AND
+					(
+    					(x NOT IN ('PlayConfirmationNumberPrompt','PlayNewBalancePrompt')) -- Keep all values except 'PlayAccountBalanceZeroPrompt' , 'PlayConfirmationNumberPrompt', 'PlayNewBalancePrompt'
+    					-- OR (x = 'PlayAccountBalanceZeroPrompt' AND ARRAY_POSITION(ARRAY['PlayAccountBalanceZeroPrompt'], x) = 1) -- Keep one 'PlayAccountBalanceZeroPrompt' in case of repeat
+    					OR (x = 'PlayConfirmationNumberPrompt' AND ARRAY_POSITION(ARRAY['PlayConfirmationNumberPrompt'], x) = 1)
+    					OR (x = 'PlayNewBalancePrompt' AND ARRAY_POSITION(ARRAY['PlayNewBalancePrompt'], x) = 1)
+    				) 
+
 					)) AS VARCHAR) AS self_service_count,
 					ROUND((to_unixtime(ctr.disconnect_timestamp) - to_unixtime(ctr.connected_to_system_timestamp)) / 60,1) AS call_duration_minute,
 					lower(trim(split_part(REVERSE(split_part(REVERSE(TRIM(attributes [ 'customer_journey' ])),'|',1)),'>',1))) as call_end_destination,
