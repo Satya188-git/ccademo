@@ -56,6 +56,26 @@ parameters:
     - env: dev
     - env: qa
     
+# Pattern specific parameter
+# Edit parameter values as needed, do not change parameter names
+# bucketSuffix, sourceFolder, awsRegionAbbreviation, and globExpressions can be pipeline variables. 
+# targetFolder, awsRegionCode must be specified here as parameters for each s3 upload as they are used in task display name.
+# for upload to root of bucket, leave targetFolder empty.
+# if multiple buckets, bucketSuffix must be unique pipeline variable per bucket or specified as parameters here.
+# if multiple uploads, sourceFolder, targetFolder, globExpressions must be unique pipeline variable per upload or specified as parameters here.
+# if multiple regions, awsRegionAbbreviation must be unique pipeline variable per region or specified as parameters here.
+# Add more entries to a parameter to add additional steps, second entry left commented as example.
+  - name: 'S3Info'
+    displayName: "S3 Upload Information"
+    type: object
+    default: 
+    - bucketSuffix: $(bucketSuffix)
+      sourceFolder: $(sourceFolder)
+      targetFolder: $(targetFolderName)
+      globExpressions: $(globExpressions)
+      awsRegionCode: us-west-2
+      awsRegionAbbreviation: $(awsRegionAbbreviation)
+      
 #Base portion of service connection name, generally pipeline name
   - name: SCName
     default: sdge-cs-cccanalytics
@@ -217,6 +237,7 @@ parameters:
 extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
+    S3Info: ${{ parameters.S3Info }}
     Environments: ${{ parameters.Environments }}
     SCName: ${{ parameters.SCName }}
     TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}

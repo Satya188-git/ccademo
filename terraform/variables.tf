@@ -53,26 +53,89 @@ variable "devs_arn" {
   type        = string
 }
 
-variable "target_database_name"{
-  description = "This is the database names suffix to hold all the data for Nice and Connect in Lake formation"
-  type = string
+variable "qs_arn" {
+  description = "This variable is for adding qs arn into lake formation policies"
+  type        = string
 }
 
-variable "producer_catalog_id"{
-  description = "This is the producer data catalog id or AWS Account ID"
-  type = string
+variable "fondo_arn" {
+  description = "This variable is for adding qs arn into lake formation policies"
+  type        = string
+}
+variable "connect_catalog_id" {
+  description = "This is the connect producer data catalog id or AWS Account ID"
+  type        = string
 }
 
-variable "source_database_name"{
-  description = "This is the database name in the producer account"
-  type = string
+variable "connect_source_database_name" {
+  description = "This is the database name in the connect producer account"
+  type        = string
 }
 
-variable "source_table_names" {
-  description = "List of source table names that needs to be fetched from producer"
+variable "connect_source_table_names" {
+  description = "List of source table names that needs to be fetched from producer for connect db"
   type        = list(string)
 }
-variable "quicksight_user_arns"{
+variable "quicksight_user_arns" {
   description = "List of QS user arns to whome table permissions needs to be assigned"
   type        = list(string)
 }
+
+variable "chatbot_catalog_id" {
+  description = "This is the producer data catalog id or AWS Account ID for Chatbot Data"
+  type        = string
+}
+
+variable "chatbot_source_database_name" {
+  description = "This is the database name in the producer account for connect chatbot data"
+  type        = string
+}
+
+variable "chatbot_source_table_names" {
+  description = "List of chatbot tables to be consumed from the source database"
+  type        = list(string)
+}
+
+variable "pandas_layer_arn" {
+  description = "This is the AWS provided ARN for pandas module, it can be imported in lambda"
+  type        = string
+}
+variable "code_artifact_bucket_name" {
+  description = "This is the AWS S3 bucket to store lambda artifacts"
+  type        = string
+}
+
+# variable "sns_topic_key_id" {
+#   type        = string
+#   description = "sns_topic_key_id for encryption"
+# }
+
+variable "email_value_map" {
+  description = "Map of environment values"
+  type        = map(list(string))
+  default = {
+    dev = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+    qa  = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+    prd = ["AKumar45@sdgecontractor.com", "SMothuku@sdgecontractor.com"]
+  }
+}
+
+variable "sns_email" {
+  type        = string
+  description = "sns_email for alerts"
+}
+
+variable "ado_role_name" {
+  type        = string
+  description = "ADO role name to assume"
+}
+
+#variable "sdge_domain_identity_verification_record" {
+#  type        = string
+#  description = "sdge_domain_identity_verification_record"
+#}
+
+#variable "r53_zone_name" {
+#  type        = string
+#  description = "r53_zone_name"
+#}

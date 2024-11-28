@@ -1,0 +1,68 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Action": [
+				"secretsmanager:ListSecrets",
+				"secretsmanager:DescribeSecret",
+				"secretsmanager:GetSecretValue",
+				"secretsmanager:ListSecretVersionIds"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"*"
+			],
+			"Sid": "BasicSecretPermissions"
+		},
+		{
+			"Sid": "S3",
+			"Effect": "Allow",
+			"Action": [
+				"s3:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "LF",
+			"Effect": "Allow",
+			"Action": [
+				"lakeformation:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "Glue",
+			"Effect": "Allow",
+			"Action": [
+				"glue:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "Athena",
+			"Effect": "Allow",
+			"Action": [
+				"athena:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "SES",
+			"Effect": "Allow",
+			"Action": [
+				"ses:*"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}
