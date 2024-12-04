@@ -3,11 +3,6 @@ variable "awsAccount" {
   type        = string
 }
 
-variable "assume_role" {
-  description = "This is the role to be assumed by IaC's TF role. It will determine where the resources are built."
-  type        = string
-}
-
 variable "environment_code" {
   type        = string
   description = "The environment code (e.g., DEV, QA, PROD) where the resources will be deployed."
