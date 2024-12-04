@@ -9,7 +9,7 @@ args = sys.argv[1:]
 env = args[0]
  
 # The view name that needs to be created
-view_name = "fcr_data_view_new"
+view_name = "fcr_data_view"
  
 print("env : ", env)
 print("View to be created :", view_name)
