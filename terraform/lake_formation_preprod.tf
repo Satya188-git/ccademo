@@ -189,7 +189,8 @@ module "lake_formation_preprod" {
       permissions   = ["SELECT", "ALTER"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
       wildcard      = true
-    },
+    }
+    # ,
 #     # Containment Alerts role permissions
 #     # permission19 = {
 #     #   type          = "database"
