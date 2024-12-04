@@ -20,7 +20,7 @@ resource "aws_glue_catalog_database" "glue_data_catalog_connect_datalake_preprod
 
 
 # Create the tables for connect datalake data
-resource "aws_glue_catalog_table" "shared_connect_cont_static_link" {
+resource "aws_glue_catalog_table" "shared_connect_cont_static_link_preprod" {
   name          = var.connect_source_table_names[6] # Name for the resource link table
   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake_preprod.name
   lifecycle {
@@ -34,7 +34,7 @@ resource "aws_glue_catalog_table" "shared_connect_cont_static_link" {
   }
 }
 
-resource "aws_glue_catalog_table" "shared_connect_cont_record_link" {
+resource "aws_glue_catalog_table" "shared_connect_cont_record_link_preprod" {
   name          = var.connect_source_table_names[5] # Name for the resource link table
   database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake_preprod.name
   lifecycle {
