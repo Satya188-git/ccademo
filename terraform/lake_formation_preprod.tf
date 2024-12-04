@@ -89,39 +89,39 @@ module "lake_formation_preprod" {
     #   type          = "database"
     #   principal     = var.admins_arn
     #   permissions   = ["DESCRIBE", "ALTER", "DROP"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     # },
     # permission8 = {
     #   type          = "table"
     #   principal     = var.admins_arn
     #   permissions   = ["SELECT", "ALTER"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     #   wildcard      = true
     },
     # permission9 = {
     #   type          = "database"
     #   principal     = var.devs_arn
     #   permissions   = ["DESCRIBE", "ALTER", "DROP"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     # },
     # permission10 = {
     #   type          = "table"
     #   principal     = var.devs_arn
     #   permissions   = ["SELECT", "ALTER"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     #   wildcard      = true
     # },
     # permission11 = {
     #   type          = "database"
     #   principal     = var.qs_arn
     #   permissions   = ["DESCRIBE"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     # },
     # permission12 = {
     #   type          = "table"
     #   principal     = var.qs_arn
     #   permissions   = ["SELECT"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     #   wildcard      = true
     # },
     # QS User level permissions
@@ -142,13 +142,13 @@ module "lake_formation_preprod" {
     #   type          = "database"
     #   principal     = var.quicksight_user_arns[0]
     #   permissions   = ["DESCRIBE"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     # },
     # permission16 = {
     #   type          = "table"
     #   principal     = var.quicksight_user_arns[0]
     #   permissions   = ["SELECT"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     #   wildcard      = true
     # },
     # IAMAllowedPrincipal
@@ -187,7 +187,7 @@ module "lake_formation_preprod" {
       type          = "table"
       principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
       permissions   = ["SELECT", "ALTER"]
-      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
       wildcard      = true
     },
 #     # Containment Alerts role permissions
@@ -195,13 +195,13 @@ module "lake_formation_preprod" {
 #     #   type          = "database"
 #     #   principal     = module.lambda_role.arn
 #     #   permissions   = ["DESCRIBE"]
-#     #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+#     #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
 #     # },
 #     # permission20 = {
 #     #   type          = "table"
 #     #   principal     = module.lambda_role.arn
 #     #   permissions   = ["SELECT"]
-#     #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+#     #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
 #     #   wildcard      = true
 #     # },
 #     # permission21 = {
