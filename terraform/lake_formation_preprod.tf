@@ -42,7 +42,7 @@ module "lake_formation_preprod" {
 
   ]
 
-  Adding DESCRIBE Permission on databases
+  # Adding DESCRIBE Permission on databases
   data_permission_map = {
     # Connect Data Lake RL permissions
     permission1 = {
