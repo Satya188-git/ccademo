@@ -224,6 +224,10 @@ jobs:
       artifact: ivr_call_events
       displayName: 'Publish the PyScript to create athena ivr_call_events view as an artifact'
     
+    - publish: src/pyscripts/ivr_call_events_new.py
+      artifact: ivr_call_events_new
+      displayName: 'Publish the PyScript to create athena ivr_call_events_new view as an artifact'
+
     - publish: src/pyscripts/fcr_data_view.py
       artifact: fcr_data_view
       displayName: 'Publish the PyScript to create athena fcr_data_view view as an artifact'

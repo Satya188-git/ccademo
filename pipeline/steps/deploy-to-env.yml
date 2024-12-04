@@ -76,6 +76,9 @@ steps:
         echo "ivr_call_events view script run complete!"
         python $(Pipeline.Workspace)/fcr_data_view/fcr_data_view.py "$(Environment)"
         echo "fcr_data_view script run complete!"
+
+        python $(Pipeline.Workspace)/ivr_call_events_new/ivr_call_events_new.py "$(Environment)"
+
       else
         echo "Failed to assume role."
         exit 1
