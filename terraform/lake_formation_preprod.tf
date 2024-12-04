@@ -226,3 +226,29 @@ module "lake_formation_preprod" {
 #     # },
   }
 }
+
+
+data "aws_glue_catalog_table" "ivr_call_transactions" {
+  database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
+  name          = "ivr_call_events"
+  catalog_id    = var.awsAccount
+}
+
+resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
+  count = length(data.aws_glue_catalog_table.ivr_call_transactions) > 0 ? 1 : 0
+
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views_preprod]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["SELECT", "ALTER"]
+
+  table {
+    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
+    catalog_id    = var.awsAccount
+    name          = "ivr_call_events"
+  }
+
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
