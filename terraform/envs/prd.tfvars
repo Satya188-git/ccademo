@@ -1,5 +1,4 @@
 awsAccount       = "977099013355"
-assume_role      = "arn:aws:iam::977099013355:role/fondo/sdge-dcctr-dev-iam-role-tfc"
 environment_code = "prd"
 company_code     = "sdge"
 application_code = "dcctr"
@@ -14,10 +13,10 @@ tags = {
   "data-classification"    = "Data privacy classification ex: public sensitive confidential"
 }
 
-admins_arn = "arn:aws:iam::977099013355:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053"
-devs_arn   = "arn:aws:iam::977099013355:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-qa-developer_946c306c9d5c3025"
+admins_arn = "arn:aws:iam::977099013355:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-prd-admin_7d5e22bb2ed0da3c"
+devs_arn   = "arn:aws:iam::977099013355:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dcctr-prd-developer_7d2487b10d0b3a9b"
 qs_arn     = "arn:aws:iam::977099013355:role/service-role/aws-quicksight-service-role-v0"
-fondo_arn  = "arn:aws:iam::977099013355:role/fondo/sdge-dcctr-qa-terraform-oidc-role"
+fondo_arn  = "arn:aws:iam::977099013355:role/fondo/sdge-dcctr-prd-terraform-oidc-role"
 
 connect_catalog_id           = "632182196722"
 connect_source_database_name = "connect_datalake"
@@ -41,13 +40,13 @@ chatbot_source_table_names = [
 
 
 quicksight_user_arns = [
-  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SRacharl@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/RKadari@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SNayak1@sdgecontractor.com"
+  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-prd-admin_7d5e22bb2ed0da3c/ATaylor2@sdge.com",
+  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-prd-admin_7d5e22bb2ed0da3c/SNayak1@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-prd-admin_7d5e22bb2ed0da3c/RKadari@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-prd-admin_7d5e22bb2ed0da3c/SRacharl@sdgecontractor.com"
 ]
 
 pandas_layer_arn          = "arn:aws:lambda:us-west-2:977099013355:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-prd-wus2-s3-artifacts"
-sns_email                 = "AKumar45@sdgecontractor.com"
 
 ado_role_name = "sdge-dcctr-prd-iam-role-ado"

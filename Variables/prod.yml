@@ -15,4 +15,4 @@ variables:
     value: '$(Pipeline.Workspace)/terraform'
   - group: 'sdge-cs-cccanalytics-prod'
   - name: qstargetenv
-    value:  'prd'
+    value:  'prod'

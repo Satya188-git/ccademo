@@ -50,7 +50,7 @@ module "lake_formation" {
     permission1 = {
       type          = "database"
       principal     = var.admins_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission2 = {
@@ -63,7 +63,7 @@ module "lake_formation" {
     permission3 = {
       type          = "database"
       principal     = var.devs_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission4 = {
@@ -76,7 +76,7 @@ module "lake_formation" {
     permission5 = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission6 = {
@@ -90,7 +90,7 @@ module "lake_formation" {
     permission7 = {
       type          = "database"
       principal     = var.admins_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission8 = {
@@ -103,7 +103,7 @@ module "lake_formation" {
     permission9 = {
       type          = "database"
       principal     = var.devs_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission10 = {
@@ -116,7 +116,7 @@ module "lake_formation" {
     permission11 = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission12 = {
@@ -143,7 +143,7 @@ module "lake_formation" {
     permission15 = {
       type          = "database"
       principal     = var.quicksight_user_arns[0]
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE", "ALTER"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission16 = {
@@ -157,25 +157,25 @@ module "lake_formation" {
     permission17 = {
       type          = "database"
       principal     = "IAM_ALLOWED_PRINCIPALS"
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission18 = {
       type          = "database"
       principal     = "IAM_ALLOWED_PRINCIPALS"
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission19 = {
       type          = "database"
       principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE", "CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
     },
     permission20 = {
       type          = "database"
       principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
     },
     permission21 = {
@@ -229,38 +229,24 @@ module "lake_formation" {
 }
 
 
-resource "aws_lakeformation_permissions" "ivr_call_events_permissions" {
-  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal   = "IAM_ALLOWED_PRINCIPALS"
-  permissions = ["SELECT", "ALTER"]
-  table {
-    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    catalog_id    = var.awsAccount
-    name          = "ivr_call_events"
-  }
-  lifecycle {
-    ignore_changes = all
-  }
-}
+# resource "aws_lakeformation_permissions" "ivr_call_events_permissions" {
+#   depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+#   principal   = "IAM_ALLOWED_PRINCIPALS"
+#   permissions = ["SELECT", "ALTER"]
+#   table {
+#     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+#     catalog_id    = var.awsAccount
+#     name          = "ivr_call_events"
+#   }
+#   lifecycle {
+#     ignore_changes = all
+#   }
+# }
 
-resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
-  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal   = "IAM_ALLOWED_PRINCIPALS"
-  permissions = ["SELECT", "ALTER"]
-  table {
-    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    catalog_id    = var.awsAccount
-    name          = "ivr_call_transactions"
-  }
-  lifecycle {
-    ignore_changes = all
-  }
-}
-
-# resource "aws_lakeformation_permissions" "ivr_call_transactions_lambda_permissions" {
-#   depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-#   principal                     = module.lambda_role.arn
-#   permissions                   = ["SELECT", "ALTER"]
+# resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
+#   depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+#   principal   = "IAM_ALLOWED_PRINCIPALS"
+#   permissions = ["SELECT", "ALTER"]
 #   table {
 #     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
 #     catalog_id    = var.awsAccount
@@ -271,16 +257,30 @@ resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
 #   }
 # }
 
-resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
-  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
-  principal   = "IAM_ALLOWED_PRINCIPALS"
-  permissions = ["SELECT", "ALTER"]
-  table {
-    database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
-    catalog_id    = var.awsAccount
-    name          = "fcr_data_view"
-  }
-  lifecycle {
-    ignore_changes = all
-  }
-}
+# # resource "aws_lakeformation_permissions" "ivr_call_transactions_lambda_permissions" {
+# #   depends_on = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+# #   principal                     = module.lambda_role.arn
+# #   permissions                   = ["SELECT", "ALTER"]
+# #   table {
+# #     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+# #     catalog_id    = var.awsAccount
+# #     name          = "ivr_call_transactions"
+# #   }
+# #   lifecycle {
+# #     ignore_changes = all
+# #   }
+# # }
+
+# resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
+#   depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+#   principal   = "IAM_ALLOWED_PRINCIPALS"
+#   permissions = ["SELECT", "ALTER"]
+#   table {
+#     database_name = aws_glue_catalog_database.glue_database_connect_datalake_views.name
+#     catalog_id    = var.awsAccount
+#     name          = "fcr_data_view"
+#   }
+#   lifecycle {
+#     ignore_changes = all
+#   }
+# }

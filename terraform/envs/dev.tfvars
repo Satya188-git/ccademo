@@ -1,5 +1,4 @@
 awsAccount       = "442426866507"
-assume_role      = "arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-iam-role-tfc"
 environment_code = "dev"
 company_code     = "sdge"
 application_code = "dcctr"
@@ -43,7 +42,7 @@ chatbot_source_table_names = [
 
 
 quicksight_user_arns = [
-  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/SNayak1@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-admin_f4611a12900c932f/RKadari@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/AKumar45@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:442426866507:user/default/AWSReservedSSO_sdge-dcctr-dev-developer_e540a5b0e1ae0e8f/SThodima@sdgecontractor.com",
@@ -59,7 +58,6 @@ quicksight_user_arns = [
 
 pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
-sns_email                 = "AKumar45@sdgecontractor.com"
 
 ado_role_name = "sdge-dcctr-dev-iam-role-ado"
 # r53_zone_name= "dev.sdge-it-einstein.aws.sempra.com"

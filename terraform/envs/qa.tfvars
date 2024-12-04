@@ -1,5 +1,4 @@
 awsAccount       = "619071332326"
-assume_role      = "arn:aws:iam::619071332326:role/fondo/sdge-dcctr-dev-iam-role-tfc"
 environment_code = "qa"
 company_code     = "sdge"
 application_code = "dcctr"
@@ -19,7 +18,7 @@ devs_arn   = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-w
 qs_arn     = "arn:aws:iam::619071332326:role/service-role/aws-quicksight-service-role-v0"
 fondo_arn  = "arn:aws:iam::619071332326:role/fondo/sdge-dcctr-qa-terraform-oidc-role"
 
-connect_catalog_id           = "383913501372"
+connect_catalog_id           = "632182196722"
 connect_source_database_name = "connect_datalake"
 connect_source_table_names = [
   "agent_statistic_record",
@@ -41,13 +40,12 @@ chatbot_source_table_names = [
 
 
 quicksight_user_arns = [
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SRacharl@sdgecontractor.com",
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SNayak1@sdgecontractor.com",
   "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/RKadari@sdgecontractor.com",
-  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SNayak1@sdgecontractor.com"
+  "arn:aws:quicksight:us-west-2:619071332326:user/default/AWSReservedSSO_sdge-dcctr-qa-admin_39b96139a7d09053/SRacharl@sdgecontractor.com"
 ]
 
 pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-qa-wus2-s3-artifacts"
-sns_email                 = "AKumar45@sdgecontractor.com"
 
 ado_role_name = "sdge-dcctr-qa-iam-role-ado"

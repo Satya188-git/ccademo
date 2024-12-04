@@ -10,7 +10,7 @@ trigger:
 - main
 - dev
 - develop
-# - feature/*
+- feature/*
 - bundle/*
 - release/*
 
@@ -53,8 +53,8 @@ parameters:
     displayName: Environments
     type: object
     default:
-    # - env: dev
-    # - env: qa
+    - env: dev
+    - env: qa
     
 # Pattern specific parameter
 # Edit parameter values as needed, do not change parameter names
