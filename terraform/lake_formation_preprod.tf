@@ -111,19 +111,19 @@ module "lake_formation_preprod" {
     #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     #   wildcard      = true
     # },
-    # permission11 = {
-    #   type          = "database"
-    #   principal     = var.qs_arn
-    #   permissions   = ["DESCRIBE"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
-    # },
-    # permission12 = {
-    #   type          = "table"
-    #   principal     = var.qs_arn
-    #   permissions   = ["SELECT"]
-    #   database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
-    #   wildcard      = true
-    # },
+    permission11 = {
+      type          = "database"
+      principal     = var.qs_arn
+      permissions   = ["DESCRIBE"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
+    },
+    permission12 = {
+      type          = "table"
+      principal     = var.qs_arn
+      permissions   = ["SELECT"]
+      database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
+      wildcard      = true
+    },
     # QS User level permissions
     permission13 = {
       type          = "database"
@@ -141,7 +141,7 @@ module "lake_formation_preprod" {
     permission15 = {
       type          = "database"
       principal     = var.quicksight_user_arns[2]
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE", "ALTER"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     },
     permission16 = {
