@@ -224,5 +224,5 @@ module "lake_formation_preprod" {
 #     #   permissions   = ["DESCRIBE"]
 #     #   database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
 #     # },
-#   }
+  }
 }
