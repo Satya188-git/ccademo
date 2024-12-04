@@ -234,7 +234,7 @@ data "aws_glue_catalog_table" "ivr_call_transactions" {
   catalog_id    = var.awsAccount
 }
 
-resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions" {
+resource "aws_lakeformation_permissions" "ivr_call_transactions_permissions_preprod" {
   count = length(data.aws_glue_catalog_table.ivr_call_transactions) > 0 ? 1 : 0
 
   depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views_preprod]
