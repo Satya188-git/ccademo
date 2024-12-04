@@ -54,7 +54,7 @@ parameters:
     type: object
     default:
     # - env: dev
-    # - env: qa
+    - env: qa
     - env: prd
     
 # Pattern specific parameter
