@@ -48,7 +48,7 @@ module "lake_formation_preprod" {
     permission1 = {
       type          = "database"
       principal     = var.admins_arn
-      permissions   = ["DESCRIBE", "ALTER", "DROP"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake_preprod.name
     },
     permission2 = {
@@ -74,7 +74,7 @@ module "lake_formation_preprod" {
     permission5 = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake_preprod.name
     },
     permission6 = {
@@ -114,7 +114,7 @@ module "lake_formation_preprod" {
     permission11 = {
       type          = "database"
       principal     = var.qs_arn
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE",]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     },
     permission12 = {
@@ -155,25 +155,25 @@ module "lake_formation_preprod" {
     permission17 = {
       type          = "database"
       principal     = "IAM_ALLOWED_PRINCIPALS"
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     },
     permission18 = {
       type          = "database"
       principal     = "IAM_ALLOWED_PRINCIPALS"
-      permissions   = ["DESCRIBE"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake_preprod.name
     },
     permission19 = {
       type          = "database"
       principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
-      permissions   = ["DESCRIBE", "ALTER"]
+      permissions   = ["DESCRIBE", "CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_database_connect_datalake_views_preprod.name
     },
     permission20 = {
       type          = "database"
       principal     = "arn:aws:iam::${var.awsAccount}:role/fondo/${var.ado_role_name}"
-      permissions   = ["DESCRIBE", "ALTER"]
+      permissions   = ["DESCRIBE","CREATE_TABLE", "ALTER", "DROP"]
       database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake_preprod.name
     },
     permission21 = {
