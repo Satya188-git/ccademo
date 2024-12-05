@@ -16,8 +16,9 @@ module "s3_bucket_athena_results" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.s3_kms.key_arn
-        sse_algorithm     = "aws:kms"
+        # kms_master_key_id = module.s3_kms.key_arn
+        # sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
