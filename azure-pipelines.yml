@@ -53,7 +53,7 @@ parameters:
     displayName: Environments
     type: object
     default:
-    # - env: dev
+    - env: dev
     - env: qa
     - env: prd
     
@@ -145,7 +145,7 @@ parameters:
   
   - name: UseOIDC
     displayName: Use OIDC
-    default: false
+    default: true
     type: boolean
 
 #Use below flag to enable your post deployment validations 
