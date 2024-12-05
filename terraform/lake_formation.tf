@@ -284,3 +284,31 @@ resource "aws_lakeformation_permissions" "fcr_data_view_permissions" {
     ignore_changes = all
   }
 }
+
+resource "aws_lakeformation_permissions" "contact_record_iam_permissions" {
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["DESCRIBE"]
+  table {
+    database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    catalog_id    = var.awsAccount
+    name          = "contact_record"
+  }
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
+resource "aws_lakeformation_permissions" "ccontact_statistic_record_iam_permissions" {
+  depends_on  = [module.lakeformation_admin, aws_glue_catalog_database.glue_database_connect_datalake_views]
+  principal   = "IAM_ALLOWED_PRINCIPALS"
+  permissions = ["DESCRIBE"]
+  table {
+    database_name = aws_glue_catalog_database.glue_data_catalog_connect_datalake.name
+    catalog_id    = var.awsAccount
+    name          = "contact_statistic_record"
+  }
+  lifecycle {
+    ignore_changes = all
+  }
+}
