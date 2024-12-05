@@ -12,9 +12,9 @@ variables:
   - name: workspace-name
     value: '$(terraformOrg)_$(adoRepoName)'
   - name: awsAccount
-    value: '619071332326'
+    value: '977099013355'
   - name: Environment
-    value: 'prod'  
+    value: 'prd'  
   - name: terraformWorkingDirectory
     value: './terraform'
   - name: terraformDeployDirectory
