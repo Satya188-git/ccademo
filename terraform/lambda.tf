@@ -18,7 +18,7 @@ module "containment_alerts_lambda" {
   architectures                 = ["x86_64"]
   lambda_role                   = module.lambda_role.name
   tags                          = var.tags
-  layers                        = [var.pandas_layer_arn]
+  # layers                        = [var.pandas_layer_arn]
   publish                       = false
   attach_cloudwatch_logs_policy = false
   create                        = true
