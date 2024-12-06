@@ -163,6 +163,65 @@ steps:
             exit 1
         fi
       done
+
+      jobId="sdge-export-job-CB"
+        
+        #####################################
+        ## Asset bundle import job for CB ##
+        #####################################
+        
+        echo "Started the asset bundle import job for CB"
+        echo "The response of import job is :"
+        aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-CB' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_CB/assetbundle-sdge-export-job-CB.qs --failure-action ROLLBACK
+
+
+        while true; do
+
+            #########################
+            ## Get the job details ##
+            #########################
+
+            response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
+            
+            #########################################
+            ## Check if the command was successful ##
+            #########################################
+
+            if [ $? -eq 0 ]; then
+
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+
+                    echo "CB Quicksight Package deployed"
+                    echo "Updating the CB Dataset!"
+
+                    ######################################################
+                    ## Updating the dataset after dashboard is deployed ##
+                    ######################################################
+
+                    ##############################################################################
+                    ## Updating the physical dataset map in dataset after dashboard is deployed ##
+                    ##############################################################################
+
+                    jq '.PhysicalTableMap."1ca2f1a3-c103-4722-865b-90a8296dc84e".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/1426d8fa-5420-4b29-88b3-6ca15dbf6472" | .PhysicalTableMap."1ca2f1a3-c103-4722-865b-90a8296dc84e".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_CB_Dataset/updated-dataset_cb_data.json > current-dataset_cb_data.json
+                    aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "ce88acbd-2b70-42a4-af08-4d5ebd0b6181" --cli-input-json fileb://current-dataset_cb_data.json
+                    
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+        done
+
+
+
+
+
     else
         echo "Failed to assume role"
         exit 1

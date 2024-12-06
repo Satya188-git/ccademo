@@ -121,6 +121,42 @@ jobs:
           echo "****************************************"
           ls -sd --block-size=1 --format=single-column *
           echo "****************************************"
+
+
+
+          ############################################################################################################################
+          ########################################## Start the Export Job for CallBack Dashboard ##########################################
+          ############################################################################################################################
+          
+          aws quicksight start-asset-bundle-export-job --aws-account-id 442426866507 --asset-bundle-export-job-id 'sdge-export-job-CB' --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/fe3c066d-a7cd-484a-86cd-f14a51b2c11a" --include-all-dependencies --export-format 'QUICKSIGHT_JSON'
+          
+          ###################################
+          ## Extract the dataset json file ##
+          ###################################
+
+          aws quicksight describe-data-set --aws-account-id 442426866507 --data-set-id "481bbd62-7e7e-4062-9240-c8ba256e726f" > current-dataset_cb_data.json
+          
+          echo "Present Working directory :  $pwd"
+
+          # Code to remove any special chars from the start of json
+          # cat current-dataset_cb_data.json | tr -cd '\11\12\15\40-\176' > current-dataset_cb_data.json
+          
+          ############################################################################
+          ###             Extract the dataset part from the entire json          #####
+          ############################################################################
+
+          jq '.DataSet' current-dataset_cb_data.json > dataset_cb_data.json
+
+          ############################################################################
+          ###        Delete the unnecessary parts from the entire json           #####
+          ############################################################################
+
+          jq 'del(.Arn, .CreatedTime, .LastUpdatedTime, .OutputColumns, .ConsumedSpiceCapacityInBytes)' dataset_cb_data.json > updated-dataset_cb_data.json
+          
+          echo "After formatting the dataset CB, the contents of dir are :"
+          echo "****************************************"
+          ls -sd --block-size=1 --format=single-column *
+          echo "****************************************"
           
           awsAccountId="442426866507"
           jobId="sdge-export-job-IVR"
@@ -210,6 +246,50 @@ jobs:
                 exit 1
             fi
           done
+
+          awsAccountId="442426866507"
+          jobId="sdge-export-job-CB"
+          
+          ############################################################################################################################
+          ########################################## Download the bundle for CB Dashboard  ##########################################
+          ############################################################################################################################
+
+          while true; do
+
+            #########################
+            ## Get the job details ##
+            #########################
+
+            response=$(aws quicksight describe-asset-bundle-export-job --aws-account-id $awsAccountId --asset-bundle-export-job-id $jobId)
+            
+            ##################################################
+            ##     Check if the command was successful      ##
+            ##################################################
+
+            if [ $? -eq 0 ]; then
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+                    downloadUrl=$(echo $response | grep -o '"DownloadUrl": "[^"]*' | grep -o '[^"]*$')
+
+                    ##################################################
+                    ###         Download the qs json file          ###
+                    ##################################################
+
+                    curl -o "./assetbundle-sdge-export-job-CB.qs" $downloadUrl
+                    
+                    echo "File downloaded successfully for CB"
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+          done
+
+
         else
             echo "Failed to assume role."
             exit 1
@@ -235,6 +315,10 @@ jobs:
     - publish: assetbundle-sdge-export-job-FCR.qs
       artifact: QS_Bundle_FCR
       displayName: 'Publish the FCR Quicksight artifact to the pipeline'
+
+    - publish: assetbundle-sdge-export-job-CB.qs
+      artifact: QS_Bundle_CB
+      displayName: 'Publish the CB Quicksight artifact to the pipeline'
 
     - publish: updated-dataset_fcr_data.json
       artifact: QS_Bundle_FCR_Dataset
