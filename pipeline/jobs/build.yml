@@ -328,6 +328,10 @@ jobs:
       artifact: QS_Bundle_IVR_Dataset
       displayName: 'Publish the FCR QS Dataset artifact to the pipeline'
 
+    - publish: updated-dataset_cb_data.json
+      artifact: QS_Bundle_CB_Dataset
+      displayName: 'Publish the FCR QS Dataset artifact to the pipeline'
+
   - job:
     displayName: 'Create and publish Lambda artifacts for containment rate alerts'
     steps:
