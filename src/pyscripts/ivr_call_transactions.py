@@ -261,7 +261,10 @@ FROM (
 					inner join "sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"."contact_statistic_record" as csr on ctr.contact_id = csr.contact_id
 				where upper(ctr.channel) = 'VOICE'
 					and upper(ctr.initiation_method) = 'INBOUND'
-					and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'
+					-- and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'
+					and date(initiation_timestamp) >= date_add('month', -13, current_date)
+					and ctr.system_endpoint_address not in ('+18329249477','+18329249485', '+18338449703','+18588684822',
+			'+14708813551', '+18664433579','+13132812513','+18886731183','+12135965264')
 			)
 	) t1
 LEFT JOIN 
@@ -479,7 +482,10 @@ FROM (
 										FROM "sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"."contact_record" as ctr
 										where upper(ctr.channel) = 'VOICE'
 											and upper(ctr.initiation_method) = 'INBOUND'
-											and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'
+											-- and date_format(initiation_timestamp, '%Y-%m-%d') >= '2024-09-25'
+											and date(initiation_timestamp) >= date_add('month', -13, current_date)
+											and ctr.system_endpoint_address not in ('+18329249477','+18329249485', '+18338449703','+18588684822',
+											'+14708813551', '+18664433579','+13132812513','+18886731183','+12135965264')
 									)
 							)
 							CROSS JOIN UNNEST(journey_steps) AS t (journey_step)

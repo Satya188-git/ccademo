@@ -18,7 +18,7 @@ devs_arn   = "arn:aws:iam::619071332326:role/aws-reserved/sso.amazonaws.com/us-w
 qs_arn     = "arn:aws:iam::619071332326:role/service-role/aws-quicksight-service-role-v0"
 fondo_arn  = "arn:aws:iam::619071332326:role/fondo/sdge-dcctr-qa-terraform-oidc-role"
 
-connect_catalog_id           = "383913501372"
+connect_catalog_id           = "632182196722"
 connect_source_database_name = "connect_datalake"
 connect_source_table_names = [
   "agent_statistic_record",
