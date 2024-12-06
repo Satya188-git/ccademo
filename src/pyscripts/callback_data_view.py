@@ -41,7 +41,7 @@ start_query_response = client.start_query_execution(
    , attributes['CallbackPhoneNo'] CallbackPhoneNo
    , initiation_method
    FROM
-     contact_record
+     \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
    WHERE ((channel = 'VOICE') AND (date_format(CAST(replace(CAST(at_timezone(initiation_timestamp, 'America/Los_Angeles') AS varchar), 'America/Los_Angeles', '') AS timestamp), '%Y-%m-%d') >= '2024-11-22'))
 ) 
 , CallbackMatches AS (
