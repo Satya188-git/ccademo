@@ -11,42 +11,40 @@ env = args[0]
 # The view name that needs to be created
 view_name = "fcr_data_view"
  
-print("env : ", env)
-print("View to be created :", view_name)
+# print("env : ", env)
+# print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
     QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS 
         SELECT 
-            customer_endpoint_address,
-            a.contact_id,
-            queue_enqueue_timestamp,
-            agent_username,
-            queue_name AS requested_call_type,
-            CASE 
-                WHEN actual_call_type IS NULL THEN queue_name 
-                ELSE actual_call_type 
-            END AS actual_call_type,
-            -- Original initiation timestamp in 'YYYY-MM-DD HH:MM:SS' format
-            DATE_PARSE(SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp_original,
-            -- Use agent_connected_to_agent_timestamp as initiation timestamp
-            DATE_PARSE(SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp,
-            -- Formatted disconnect timestamp
-            DATE_PARSE(SUBSTR(CAST(disconnect_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS disconnect_timestamp,
-            -- Time difference in seconds between current and next interaction
-            CASE 
-                WHEN LEAD(agent_connected_to_agent_timestamp) 
-                     OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp) IS NULL
-                THEN 9999999999
-                ELSE DATE_DIFF(
-                    'second', 
-                    agent_connected_to_agent_timestamp, 
-                    LEAD(agent_connected_to_agent_timestamp) 
-                    OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp)
-                ) 
-            END AS time_difference_seconds,
-            -- Extract year from initiation timestamp
-            SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 4) AS year
+    customer_endpoint_address,
+    a.contact_id,
+    queue_enqueue_timestamp,
+    agent_username,
+    queue_name AS requested_call_type,
+    agent_connected_to_agent_timestamp,
+    CASE 
+        WHEN actual_call_type IS NULL THEN queue_name 
+        ELSE actual_call_type 
+    END AS actual_call_type,
+    COALESCE(
+        DATE_PARSE(SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s'),
+        DATE_PARSE(SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s')
+    ) AS initiation_timestamp,
+    DATE_PARSE(SUBSTR(CAST(disconnect_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS disconnect_timestamp,
+    CASE 
+        WHEN LEAD(agent_connected_to_agent_timestamp) 
+             OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp) IS NULL
+        THEN 9999999999
+        ELSE DATE_DIFF(
+            'second', 
+            agent_connected_to_agent_timestamp, 
+            LEAD(agent_connected_to_agent_timestamp) 
+            OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp)
+        ) 
+    END AS time_difference_seconds,
+    SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 4) AS year
         FROM 
             \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" AS a
         LEFT JOIN
@@ -69,9 +67,9 @@ start_query_response = client.start_query_execution(
         ON 
             a.contact_id = b.contact_id
         WHERE 
-            queue_name IS NOT NULL
-            AND DATE(agent_connected_to_agent_timestamp) >= DATE('2024-01-01')
-            AND agent_interaction_duration_ms > 0;""",
+    queue_name IS NOT NULL
+    AND upper(channel) = 'VOICE'
+    AND upper(initiation_method) = 'INBOUND';""",
     QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
