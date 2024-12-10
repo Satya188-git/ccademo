@@ -11,8 +11,8 @@ env = args[0]
 # The view name that needs to be created
 view_name = "fcr_data_view"
  
-# print("env : ", env)
-# print("View to be created :", view_name)
+print("env : ", env)
+print("View to be created :", view_name)
  
 print("Executing the view: ")
 start_query_response = client.start_query_execution(
@@ -49,7 +49,7 @@ start_query_response = client.start_query_execution(
     SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 4) AS year
     
 FROM 
-    \"dev_connectdatalake\".\"dev_contact_record\" AS a
+    \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" AS a
 LEFT JOIN
     (
         SELECT 
@@ -61,7 +61,7 @@ LEFT JOIN
                 queue_name AS actual_call_type,
                 RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) AS rank
             FROM 
-                \"dev_connectdatalake\".\"dev_contact_record\"
+                \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
             WHERE 
                 initial_contact_id IS NOT NULL
         ) 
@@ -75,7 +75,7 @@ WHERE
     AND upper(channel) = 'VOICE'
     AND upper(initiation_method) = 'INBOUND';""",
     QueryExecutionContext={
-        'Database': f"dev_connectdatalake",
+        'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
     },
     ResultConfiguration={
