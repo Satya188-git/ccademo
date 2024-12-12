@@ -105,12 +105,12 @@ variable "ado_role_name" {
   description = "ADO role name to assume"
 }
 
-#variable "sdge_domain_identity_verification_record" {
+# variable "sdge_domain_identity_verification_record" {
 #  type        = string
 #  description = "sdge_domain_identity_verification_record"
-#}
+# }
 
-#variable "r53_zone_name" {
-#  type        = string
-#  description = "r53_zone_name"
-#}
+variable "domain_name" {
+ type        = string
+ description = "domain name for ses"
+}
