@@ -8,6 +8,10 @@ resource "aws_ses_domain_identity" "domain_name" {
   domain = var.domain_name
 }
 
+# DKIM Tokens
+resource "aws_ses_domain_dkim" "dkim_token" {
+  domain = aws_ses_domain_identity.domain_name.domain
+}
 
 # Domain Verification Records (DNS)
 resource "aws_route53_record" "ses_verification" {
@@ -20,7 +24,7 @@ resource "aws_route53_record" "ses_verification" {
 
 # DKIM Records
 resource "aws_route53_record" "ses_dkim" {
-  for_each = toset(aws_ses_domain_identity.domain_name.dkim_tokens)
+  for_each = toset(aws_ses_domain_dkim.dkim_token.dkim_tokens)
   zone_id  = data.aws_route53_zone.public_zone.zone_id # Replace with your Route 53 Hosted Zone ID
   name     = "${each.value}._domainkey.${var.domain_name}"
   type     = "CNAME"
@@ -28,6 +32,25 @@ resource "aws_route53_record" "ses_dkim" {
   records  = ["${each.value}.dkim.amazonses.com"]
 }
 
+
+# # Domain Verification Record (TXT)
+# resource "aws_route53_record" "ses_verification" {
+#   zone_id = "Z123456789" # Replace with your Route 53 Hosted Zone ID
+#   name    = "_amazonses.${aws_ses_domain_identity.example.domain}"
+#   type    = "TXT"
+#   ttl     = 300
+#   records = [aws_ses_domain_identity.example.verification_token]
+# }
+ 
+# # DKIM CNAME Records
+# resource "aws_route53_record" "ses_dkim" {
+#   for_each = toset(aws_ses_domain_dkim.example.dkim_tokens)
+#   zone_id  = "Z123456789" # Replace with your Route 53 Hosted Zone ID
+#   name     = "${each.value}._domainkey.${aws_ses_domain_identity.example.domain}"
+#   type     = "CNAME"
+#   ttl      = 300
+# records = ["${each.value}.dkim.amazonses.com"]
+# }
 
 # resource "aws_ses_domain_dkim" "sdge_reports_dkim" {
 #   domain = aws_ses_domain_identity.reports.domain
