@@ -1,7 +1,7 @@
-data "aws_route53_zone" "public_zone" {
-  name         = var.domain_name
-  private_zone = false
-}
+# data "aws_route53_zone" "public_zone" {
+#   name         = var.domain_name
+#   private_zone = false
+# }
 
 # SES Domain Identity
 resource "aws_ses_domain_identity" "domain_name" {
@@ -15,7 +15,7 @@ resource "aws_ses_domain_dkim" "dkim_token" {
 
 # Domain Verification Records (DNS)
 resource "aws_route53_record" "ses_verification" {
-  zone_id = data.aws_route53_zone.public_zone.zone_id # Replace with your Route 53 Hosted Zone ID
+  zone_id = "Z033821811F9PN8CE1DQE" # Replace with your Route 53 Hosted Zone ID
   name    = aws_ses_domain_identity.domain_name.verification_token
   type    = "TXT"
   ttl     = 600
@@ -25,7 +25,7 @@ resource "aws_route53_record" "ses_verification" {
 # DKIM Records
 resource "aws_route53_record" "ses_dkim" {
   for_each = toset(aws_ses_domain_dkim.dkim_token.dkim_tokens)
-  zone_id  = data.aws_route53_zone.public_zone.zone_id # Replace with your Route 53 Hosted Zone ID
+  zone_id  = "Z033821811F9PN8CE1DQE" # Replace with your Route 53 Hosted Zone ID
   name     = "${each.value}._domainkey.${var.domain_name}"
   type     = "CNAME"
   ttl      = 600
