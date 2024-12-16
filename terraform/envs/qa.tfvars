@@ -50,4 +50,4 @@ code_artifact_bucket_name = "sdge-dcctr-qa-wus2-s3-artifacts"
 
 ado_role_name = "sdge-dcctr-qa-iam-role-ado"
 domain_name= "sdge-dcctr-qa.aws.sempra.com."
-zone_id = 
+zone_id = "Z0334635S1UNUYEONFRH"
