@@ -22,16 +22,26 @@ resource "aws_route53_record" "ses_verification" {
   records = [aws_ses_domain_identity.domain.verification_token]
 }
 
+# # DKIM Records
+# resource "aws_route53_record" "ses_dkim" {
+#   for_each = toset(aws_ses_domain_dkim.dkim_token.dkim_tokens)
+#   zone_id  = var.zone_id # Replace with your Route 53 Hosted Zone ID
+#   name     = "${each.value}._domainkey.${var.domain_name}"
+#   type     = "CNAME"
+#   ttl      = 600
+#   records  = ["${each.value}.dkim.amazonses.com"]
+# }
+
 # DKIM Records
 resource "aws_route53_record" "ses_dkim" {
-  for_each = toset(aws_ses_domain_dkim.dkim_token.dkim_tokens)
-  zone_id  = var.zone_id # Replace with your Route 53 Hosted Zone ID
-  name     = "${each.value}._domainkey.${var.domain_name}"
+  for_each = { for idx, value in aws_ses_domain_dkim.dkim_token.dkim_tokens : value => value }
+
+  zone_id  = var.zone_id
+  name     = "${each.key}._domainkey.${var.domain_name}"
   type     = "CNAME"
   ttl      = 600
-  records  = ["${each.value}.dkim.amazonses.com"]
+  records  = ["${each.key}.dkim.amazonses.com"]
 }
-
 
 # # Domain Verification Record (TXT)
 # resource "aws_route53_record" "ses_verification" {
