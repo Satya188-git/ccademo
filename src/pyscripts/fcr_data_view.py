@@ -7,7 +7,8 @@ client = boto3.client('athena')
 # Skip the first argument as its the script name
 args = sys.argv[1:]
 env = args[0]
- 
+
+
 # The view name that needs to be created
 view_name = "fcr_data_view"
  
@@ -52,7 +53,7 @@ start_query_response = client.start_query_execution(
     SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 4) AS year
     
 FROM 
-    \"f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"\".\"contact_record\" AS a
+    \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" AS a
 LEFT JOIN
     (
         SELECT 
@@ -64,7 +65,7 @@ LEFT JOIN
                 queue_name AS actual_call_type,
                 RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) AS rank
             FROM 
-                \"f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
+                \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
             WHERE 
                 initial_contact_id IS NOT NULL
         ) 
