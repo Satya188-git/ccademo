@@ -10,16 +10,16 @@ resource "aws_ses_domain_identity" "domain" {
 
 # DKIM Tokens
 resource "aws_ses_domain_dkim" "dkim_token" {
-  domain = aws_ses_domain_identity.domain_name.domain
+  domain = aws_ses_domain_identity.domain.domain
 }
 
 # Domain Verification Records (DNS)
 resource "aws_route53_record" "ses_verification" {
   zone_id = var.zone_id # Replace with your Route 53 Hosted Zone ID
-  name    = aws_ses_domain_identity.domain_name.verification_token
+  name    = aws_ses_domain_identity.domain.verification_token
   type    = "TXT"
   ttl     = 600
-  records = [aws_ses_domain_identity.domain_name.verification_token]
+  records = [aws_ses_domain_identity.domain.verification_token]
 }
 
 # DKIM Records
