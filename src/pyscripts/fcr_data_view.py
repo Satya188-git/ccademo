@@ -15,6 +15,7 @@ print("env : ", env)
 print("View to be created :", view_name)
  
 print("Executing the view: ")
+
 start_query_response = client.start_query_execution(
     QueryString = f"""CREATE OR REPLACE VIEW {view_name} AS 
     SELECT 
@@ -34,6 +35,8 @@ start_query_response = client.start_query_execution(
     
     DATE_PARSE(SUBSTR(CAST(disconnect_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS disconnect_timestamp,
     
+    date_diff('second',date_parse(substr(CAST(initiation_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s'),date_parse(substr(CAST(disconnect_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s')) AS duration_of_call,
+    
     CASE 
         WHEN LEAD(agent_connected_to_agent_timestamp) 
              OVER (PARTITION BY customer_endpoint_address, queue_name ORDER BY agent_connected_to_agent_timestamp) IS NULL
@@ -49,7 +52,7 @@ start_query_response = client.start_query_execution(
     SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 4) AS year
     
 FROM 
-    \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" AS a
+    \"f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"\".\"contact_record\" AS a
 LEFT JOIN
     (
         SELECT 
@@ -61,7 +64,7 @@ LEFT JOIN
                 queue_name AS actual_call_type,
                 RANK() OVER (PARTITION BY initial_contact_id ORDER BY disconnect_timestamp DESC) AS rank
             FROM 
-                \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
+                \"f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
             WHERE 
                 initial_contact_id IS NOT NULL
         ) 
