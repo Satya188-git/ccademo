@@ -49,5 +49,5 @@ pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKP
 code_artifact_bucket_name = "sdge-dcctr-qa-wus2-s3-artifacts"
 
 ado_role_name = "sdge-dcctr-qa-iam-role-ado"
-domain_name= "sdge-dcctr-qa.aws.sempra.com"
+domain_name= "sdge.com"
 zone_id = "Z0334635S1UNUYEONFRH"
