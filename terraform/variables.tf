@@ -114,3 +114,8 @@ variable "domain_name" {
  type        = string
  description = "domain name for ses"
 }
+
+variable "zone_id" {
+ type        = string
+ description = "route53 zone id"
+}
