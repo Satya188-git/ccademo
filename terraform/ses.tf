@@ -3,7 +3,6 @@ resource "aws_ses_domain_identity" "main" {
   domain = var.domain_name
 }
 
-
 # DKIM Configuration
 resource "aws_ses_domain_dkim" "main" {
   domain = aws_ses_domain_identity.main.domain
@@ -12,11 +11,6 @@ resource "aws_ses_domain_dkim" "main" {
 # Configuration Set Association
 resource "aws_ses_configuration_set" "default" {
   name = "default"
-}
- 
-resource "aws_ses_domain_identity_configuration_set" "main" {
-  domain           = aws_ses_domain_identity.main.domain
-  configuration_set = aws_ses_configuration_set.default.name
 }
  
 # DKIM DNS Records
