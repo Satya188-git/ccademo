@@ -25,6 +25,7 @@ start_query_response = client.start_query_execution(
     queue_enqueue_timestamp,
     agent_username,
     queue_name AS requested_call_type,
+    agent_connected_to_agent_timestamp,
     CASE 
         WHEN actual_call_type IS NULL THEN queue_name 
         ELSE actual_call_type 
@@ -32,11 +33,18 @@ start_query_response = client.start_query_execution(
     
     DATE_PARSE(SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp_original,
     
-    DATE_PARSE(SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS initiation_timestamp,
+    COALESCE(
+        DATE_PARSE(SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s'),
+        DATE_PARSE(SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s')
+    ) AS initiation_timestamp,
     
     DATE_PARSE(SUBSTR(CAST(disconnect_timestamp AS VARCHAR), 1, 19), '%Y-%m-%d %H:%i:%s') AS disconnect_timestamp,
-    
-    date_diff('second',date_parse(substr(CAST(initiation_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s'),date_parse(substr(CAST(disconnect_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s')) AS duration_of_call,
+	
+    date_diff(
+        'second',
+        date_parse(substr(CAST(initiation_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s'),
+        date_parse(substr(CAST(disconnect_timestamp AS varchar), 1, 19), '%Y-%m-%d %H:%i:%s')
+    ) AS duration_of_call,
     
     CASE 
         WHEN LEAD(agent_connected_to_agent_timestamp) 
@@ -50,7 +58,8 @@ start_query_response = client.start_query_execution(
         ) 
     END AS time_difference_seconds,
     
-    SUBSTR(CAST(agent_connected_to_agent_timestamp AS VARCHAR), 1, 4) AS year
+    -- Extract year from initiation timestamp
+    SUBSTR(CAST(initiation_timestamp AS VARCHAR), 1, 4) AS year
     
 FROM 
     \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\" AS a
