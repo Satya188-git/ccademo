@@ -45,22 +45,21 @@ FROM (
 					'Abandoned - Self Service Attempt',
 					'Abandoned - Self Service No Attempt',
 					'Contained - Self Served - IVR',
-					'Contained - System - External Transfer',
-					'Contained - System - Legacy Transfer'
+					'Contained - System - External Transfer'
 				) THEN 'Contained'
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception',
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
-					'Transfer - User - Skipped IVR'
+					'Transfer - User - Skipped IVR',
+					'Transfer - System - Legacy'
 				) THEN 'TRANSFER' ELSE 'Uncategorized'
 			END AS l1_tag,
 			CASE
 				WHEN l3_tag IN (
 					'Contained - Self Served - IVR',
-					'Contained - System - External Transfer',
-					'Contained - System - Legacy Transfer'
+					'Contained - System - External Transfer'
 				) THEN 'Contained - Self Served'
 				WHEN l3_tag IN (
 					'Abandoned - Self Service Attempt',
@@ -68,7 +67,8 @@ FROM (
 				) THEN 'Contained - Abandoned'
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
-					'Transfer - System - Exception'
+					'Transfer - System - Exception',
+					'Transfer - System - Legacy'
 				) THEN 'Transfer - System'
 				WHEN l3_tag IN (
 					'Transfer - User - Self Service Attempt - Success',
@@ -225,10 +225,10 @@ FROM (
 						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('billmatrix') 
 						THEN 'Contained - System - External Transfer' 
 						
-						--Contained - System - Legacy Transfer
+						--Transfer - System - Legacy
 						
 						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('legacy') 
-						THEN 'Contained - System - Legacy Transfer' 
+						THEN 'Transfer - System - Legacy'
 
 						--Transfer - System - Agent
 						
