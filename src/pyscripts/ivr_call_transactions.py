@@ -53,7 +53,8 @@ FROM (
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR',
-					'Transfer - System - Legacy'
+					'Transfer - System - Legacy',
+					'Transfer - Legacy - CIVRQueue'
 				) THEN 'TRANSFER' ELSE 'Uncategorized'
 			END AS l1_tag,
 			CASE
@@ -68,7 +69,8 @@ FROM (
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception',
-					'Transfer - System - Legacy'
+					'Transfer - System - Legacy',
+					'Transfer - Legacy - CIVRQueue'
 				) THEN 'Transfer - System'
 				WHEN l3_tag IN (
 					'Transfer - User - Self Service Attempt - Success',
@@ -136,6 +138,7 @@ FROM (
 					-------------------------------------------------------------------- Stop Service -----------------------------------------------------------
 					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playserviceshutoffconfirmationnumberprompt >> success') THEN 'PlayServiceShutoffConfirmationNumberPrompt' END, --check with Sukeshi
 					-- ask this from Sukeshi on the 2 new prompts proposed by Linda -11/21
+					-- confirmed with Sukeshi- in new design now there is no prompt in stop service -12/19
 					
 					-------------------------------------------------------------------- Predictive ----------------------------------------------------------- update the excel
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playoutagenotimestampavailableprompt >> success') THEN 'PlayOutageNoTimeStampAvailablePrompt' END,
@@ -254,7 +257,14 @@ FROM (
 						--Transfer - User - Skipped IVR
 						
 						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
-						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' ELSE 'Uncategorized'
+						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' 
+						
+						--Legacy - to - direct - civr queue transfer
+						
+						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'legacy_to_civr_agent_transfer'
+						THEN 'Transfer - Legacy - CIVRQueue'
+						
+						ELSE 'Uncategorized'
 					END AS l3_tag,
 					ctr.attributes
 				FROM "sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"."contact_record" as ctr
@@ -373,7 +383,7 @@ WHEN TRIM(module_name) = 'paymentarrangement'
 and TRIM(transaction_reason) in ('createpaymentarrangement',
 							'customerheardbalance'
 						)
-and TRIM(transaction_result) in ('success') THEN 'y' 
+and TRIM(transaction_result) in ('success') THEN 'y' -- look for the condition in yellow strip
 
 -- payoverphone
 
@@ -388,7 +398,7 @@ and TRIM(transaction_reason) in (
 							'paymentprocessrequest',
 							'fetchpbpenrolledstatus'
 						)
-and TRIM(transaction_result) in ('success', 'failed') -- look for the condition in yellow strip
+and TRIM(transaction_result) in ('success', 'failed') 
 THEN 'n' 
 
 -- predictive
