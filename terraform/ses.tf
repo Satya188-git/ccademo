@@ -11,6 +11,9 @@ resource "aws_ses_domain_dkim" "main" {
 # Configuration Set Association
 resource "aws_ses_configuration_set" "default" {
   name = "default"
+  lifecycle {
+    ignore_changes = all
+  }
 }
  
 # DKIM DNS Records
