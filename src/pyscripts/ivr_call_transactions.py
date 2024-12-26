@@ -47,15 +47,23 @@ FROM (
 					'Contained - Self Served - IVR',
 					'Contained - System - External Transfer'
 				) THEN 'Contained'
+				
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception',
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR',
-					'Transfer - System - Legacy',
-					'Transfer - Legacy - CIVRQueue'
-				) THEN 'TRANSFER' ELSE 'Uncategorized'
+					'Transfer - ESS1 - ESS2',
+					'Transfer - System - Legacy'
+				) THEN 'TRANSFER' 
+				
+				-- WHEN l3_tag IN (
+				-- 	'Transfer - ESS1 - ESS2',
+				-- 	'Transfer - System - Legacy'
+				-- ) THEN 'Others'
+								
+				ELSE 'Uncategorized'
 			END AS l1_tag,
 			CASE
 				WHEN l3_tag IN (
@@ -69,14 +77,23 @@ FROM (
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception',
-					'Transfer - System - Legacy',
-					'Transfer - Legacy - CIVRQueue'
+					'Transfer - ESS1 - ESS2',
+					'Transfer - System - Legacy'
 				) THEN 'Transfer - System'
+				
 				WHEN l3_tag IN (
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR'
-				) THEN 'Transfer - User' ELSE 'Uncategorized'
+				) THEN 'Transfer - User' 
+				
+				-- WHEN l3_tag IN (
+				-- 	'Transfer - ESS1 - ESS2',
+				-- 	'Transfer - System - Legacy'
+				-- ) 
+				-- THEN 'Others'
+				
+				ELSE 'Uncategorized'
 			END AS l2_tag
 		FROM (
 				SELECT ctr.contact_id,
@@ -262,7 +279,7 @@ FROM (
 						--Legacy - to - direct - civr queue transfer
 						
 						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'legacy_to_civr_agent_transfer'
-						THEN 'Transfer - Legacy - CIVRQueue'
+						THEN 'Transfer - ESS1 - ESS2'
 						
 						ELSE 'Uncategorized'
 					END AS l3_tag,
