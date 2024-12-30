@@ -30,7 +30,7 @@ connect_source_table_names = [
   "contact_statistic_record"
 ]
 
-chatbot_catalog_id           = "318760633605"
+chatbot_catalog_id           = "685757275861"
 chatbot_source_database_name = "sdge_qa_wus2_customer_connectcloudwatchlogs"
 chatbot_source_table_names = [
   "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq_async",
