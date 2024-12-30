@@ -227,6 +227,10 @@ jobs:
     - publish: src/pyscripts/fcr_data_view.py
       artifact: fcr_data_view
       displayName: 'Publish the PyScript to create athena fcr_data_view view as an artifact'
+    
+    - publish: src/pyscripts/fcr_boxplot_view.py
+      artifact: fcr_boxplot_view
+      displayName: 'Publish the PyScript to create athena fcr_data_view view as an artifact'
 
     - publish: assetbundle-sdge-export-job-IVR.qs
       artifact: QS_Bundle_IVR
