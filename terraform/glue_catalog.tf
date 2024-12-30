@@ -1,7 +1,7 @@
 # Module to create connect data resource link in Lake formation
 # Create the resource link for connect chatbot data
 resource "aws_glue_catalog_database" "glue_data_catalog_customer_connectchatbot" {
-  name       = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-connectchatbot-link"
+  name       = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-customer-connectcloudwatchlogs-link"
   catalog_id = var.awsAccount
   tags       = var.tags
   lifecycle {
@@ -166,5 +166,18 @@ resource "aws_glue_catalog_table" "shared_einstein_connect" {
     catalog_id    = var.chatbot_catalog_id            # Replace with the AWS account ID where the original table resides
     database_name = var.chatbot_source_database_name  # The original Glue database name in the other account
     name          = var.chatbot_source_table_names[2] # The original table name in the shared Glue database
+  }
+}
+resource "aws_glue_catalog_table" "shared_einstein_civr_fulfillment" {
+  name          = var.chatbot_source_table_names[3] # Name for the resource link table
+  database_name = aws_glue_catalog_database.glue_data_catalog_customer_connectchatbot.name
+  lifecycle {
+    ignore_changes = all
+  }
+  table_type = "LINK"
+  target_table {
+    catalog_id    = var.chatbot_catalog_id            # Replace with the AWS account ID where the original table resides
+    database_name = var.chatbot_source_database_name  # The original Glue database name in the other account
+    name          = var.chatbot_source_table_names[3] # The original table name in the shared Glue database
   }
 }
