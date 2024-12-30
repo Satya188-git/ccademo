@@ -239,6 +239,11 @@ jobs:
     - publish: assetbundle-sdge-export-job-FCR.qs
       artifact: QS_Bundle_FCR
       displayName: 'Publish the FCR Quicksight artifact to the pipeline'
+    
+    - publish: updated-dataset_fcr_boxplot_view.json
+      artifact: QS_Bundle_FCR_Dataset_Boxplot
+      displayName: 'Publish the FCR QS Dataset artifact to the pipeline'
+
 
     - publish: updated-dataset_fcr_data.json
       artifact: QS_Bundle_FCR_Dataset
