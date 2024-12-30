@@ -99,6 +99,7 @@ jobs:
           ###################################
 
           aws quicksight describe-data-set --aws-account-id 442426866507 --data-set-id "3aae9ae4-d55d-4e35-9345-4b657a077079" > current-dataset_fcr_data.json
+          aws quicksight describe-data-set --aws-account-id 442426866507 --data-set-id "2a3f7d86-207d-4e64-843c-b212ba5276a5" > current-dataset_fcr_boxplot_view.json
           
           echo "Present Working directory :  $pwd"
 
@@ -110,12 +111,15 @@ jobs:
           ############################################################################
 
           jq '.DataSet' current-dataset_fcr_data.json > dataset_fcr_data.json
+          jq '.DataSet' current-dataset_fcr_boxplot_view.json > dataset_fcr_boxplot_view.json
+          
 
           ############################################################################
           ###        Delete the unnecessary parts from the entire json           #####
           ############################################################################
 
           jq 'del(.Arn, .CreatedTime, .LastUpdatedTime, .OutputColumns, .ConsumedSpiceCapacityInBytes)' dataset_fcr_data.json > updated-dataset_fcr_data.json
+          jq 'del(.Arn, .CreatedTime, .LastUpdatedTime, .OutputColumns, .ConsumedSpiceCapacityInBytes)' dataset_fcr_boxplot_view.json > updated-dataset_fcr_boxplot_view.json
           
           echo "After formatting the dataset FCR, the contents of dir are :"
           echo "****************************************"
