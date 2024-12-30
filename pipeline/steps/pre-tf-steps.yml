@@ -153,7 +153,7 @@ steps:
                 
                 jq '.PhysicalTableMap."3179445e-3df4-469d-a4be-c78eabe0a896".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/0bef68f3-8471-49dd-b704-f5904c10f1a9" | .PhysicalTableMap."3179445e-3df4-469d-a4be-c78eabe0a896".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_FCR_Dataset/updated-dataset_fcr_data.json > current-dataset_fcr_data.json
                 aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "3aae9ae4-d55d-4e35-9345-4b657a077079" --cli-input-json fileb://current-dataset_fcr_data.json
-                break
+                
 
                 jq '.PhysicalTableMap."fb9b0834-b17d-43b5-b992-341e00b4e6be".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/0bef68f3-8471-49dd-b704-f5904c10f1a9" | .PhysicalTableMap."fb9b0834-b17d-43b5-b992-341e00b4e6be".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_FCR_Dataset_Boxplot/updated-dataset_fcr_boxplot_view.json > current-dataset_fcr_boxplot_view.json
                 aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "2a3f7d86-207d-4e64-843c-b212ba5276a5" --cli-input-json fileb://current-dataset_fcr_boxplot_view.json
