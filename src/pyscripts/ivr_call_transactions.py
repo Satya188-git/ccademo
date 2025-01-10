@@ -127,7 +127,7 @@ FROM (
 					
 					-- Outage ERT
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playnoertavailableprompt >> success') THEN 'PlayNoERTAvailablePrompt' END,
-					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playertinformationprompt >> Success') THEN 'PlayERTInformationPrompt' END, 
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playertinformationprompt >> success') THEN 'PlayERTInformationPrompt' END, 
 					
 					------------------------------------------------------------ -- BillCopyRequest -----------------------------------------------------------
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playhousenumberprompt >> success') THEN 'PlayHousenumberPrompt' END,
@@ -191,9 +191,7 @@ FROM (
 					ctr.attributes [ 'supplied_phone_number' ] as supplied_phone_number,
 					ctr.disconnect_reason as call_end_reason,
 					ctr.customer_endpoint_address as caller_phone_number,
-					case when lower(ctr.attributes ['customer_journey']) like '%cca >> yes%' 
-					then 'Yes' else 'No'
-					end as CCA,
+					ctr.attributes['Ccaindicator'] as CCA,
 					date_format(ctr.initiation_timestamp, '%W') AS day_of_week,
 					ctr.attributes [ 'customer_journey' ] as customer_journey,
 					ctr.attributes [ 'module_journey' ] as module_journey,
@@ -316,9 +314,9 @@ CASE
 WHEN TRIM(module_name) = 'accountbalance'
 and TRIM(transaction_reason) = 'fetchbalanceamt'
 and TRIM(transaction_result) in ('success', 'failed') THEN 'n'
-WHEN module_name = 'accountbalance'
-and transaction_reason = 'customerheardbalance'
-and transaction_result in ('success') THEN 'y' 
+WHEN TRIM(module_name) = 'accountbalance'
+and TRIM(transaction_reason) = 'customerheardbalance'
+and TRIM(transaction_result) in ('success') THEN 'y' 
 
 -- authentication
 WHEN TRIM(module_name) = 'authentication' THEN 'n' 
