@@ -53,15 +53,14 @@ FROM (
 					'Transfer - System - Exception',
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
-					'Transfer - User - Skipped IVR',
-					'Transfer - ESS1 - ESS2',
-					'Transfer - System - Legacy'
+					'Transfer - User - Skipped IVR'
 				) THEN 'TRANSFER' 
 				
-				-- WHEN l3_tag IN (
-				-- 	'Transfer - ESS1 - ESS2',
-				-- 	'Transfer - System - Legacy'
-				-- ) THEN 'Others'
+				WHEN l3_tag IN (
+					'Transfer - ESS1 - ESS2',
+					'Transfer - System - Legacy'
+				) 
+				THEN 'External Legacy'
 								
 				ELSE 'Uncategorized'
 			END AS l1_tag,
@@ -74,11 +73,10 @@ FROM (
 					'Abandoned - Self Service Attempt',
 					'Abandoned - Self Service No Attempt'
 				) THEN 'Contained - Abandoned'
+				
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
-					'Transfer - System - Exception',
-					'Transfer - ESS1 - ESS2',
-					'Transfer - System - Legacy'
+					'Transfer - System - Exception'
 				) THEN 'Transfer - System'
 				
 				WHEN l3_tag IN (
@@ -87,11 +85,11 @@ FROM (
 					'Transfer - User - Skipped IVR'
 				) THEN 'Transfer - User' 
 				
-				-- WHEN l3_tag IN (
-				-- 	'Transfer - ESS1 - ESS2',
-				-- 	'Transfer - System - Legacy'
-				-- ) 
-				-- THEN 'Others'
+				WHEN l3_tag IN (
+					'Transfer - ESS1 - ESS2',
+					'Transfer - System - Legacy'
+				) 
+				THEN 'Legacy'
 				
 				ELSE 'Uncategorized'
 			END AS l2_tag
