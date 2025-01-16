@@ -70,6 +70,8 @@ steps:
 
         while true; do
 
+            break
+
             #########################
             ## Get the job details ##
             #########################
@@ -83,6 +85,7 @@ steps:
             if [ $? -eq 0 ]; then
 
                 jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+                #"$jobStatus" == "SUCCESSFUL"
 
                 if [ "$jobStatus" == "SUCCESSFUL" ]; then
 
