@@ -65,7 +65,7 @@ steps:
         
         echo "Started the asset bundle import job for IVR"
         echo "The response of import job is :"
-        aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-import-job-IVR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_IVR/assetbundle-sdge-import-job-IVR.qs --override-parameters "{\"DataSources\":[{\"DataSourceId\":\"867d6f11-6f0a-4f40-b865-6a0cc5baf78f\",\"Name\":\"$(qstargetenv)_connectdatalake\",\"DataSourceParameters\":{\"AthenaParameters\":{\"WorkGroup\":\"primary\"}},\"SslProperties\":{\"DisableSsl\":false}}],\"DataSets\":[{\"DataSetId\":\"2637d8cd-26a2-4075-943d-9ed0a7e94946\",\"Name\":\"ivr_combined_2509data_ext_table\"}]}" --failure-action ROLLBACK
+        aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-import-job-IVR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_IVR/assetbundle-sdge-export-job-IVR.qs --failure-action ROLLBACK
 
 
         while true; do
