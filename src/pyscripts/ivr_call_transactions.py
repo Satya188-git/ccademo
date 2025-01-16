@@ -194,7 +194,6 @@ FROM (
 					ctr.attributes [ 'customer_journey' ] as customer_journey,
 					ctr.attributes [ 'module_journey' ] as module_journey,
 					ctr.attributes [ 'intent_journey' ] as intent_journey,
-                    ctr.attributes [ 'transfer_reason' ] as transfer_reason,
 					CASE
 						WHEN EXTRACT(
 							DOW
