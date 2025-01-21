@@ -1,14 +1,10 @@
+import os
 import json
 import boto3
 import time
 from io import StringIO
 import pandas as pd
 import numpy as np
-import os
-
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
  
 # Initialize AWS clients
 athena = boto3.client('athena')
