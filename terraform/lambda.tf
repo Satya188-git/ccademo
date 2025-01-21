@@ -18,13 +18,15 @@ module "containment_alerts_lambda" {
   architectures                 = ["x86_64"]
   lambda_role                   = module.lambda_role.name
   tags                          = var.tags
-  # layers                        = [var.pandas_layer_arn]
+  layers                        = [var.pandas_layer_arn]
   publish                       = false
   attach_cloudwatch_logs_policy = false
   create                        = true
   create_function               = true
   create_package                = true
-
+  environment_variables = {
+    env = "${var.environment_code}"
+  }
   s3_existing_package = {
     bucket = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-s3-artifacts"
     key    = "lambda/packages/containment_alerts/containment_alerts.zip"
