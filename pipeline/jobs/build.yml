@@ -265,13 +265,13 @@ jobs:
         set -x
 
         # Zip containment_alerts.py file for Lambda
-        LAMBDA_DIR='src/lambda/alerts_lambda'
+        LAMBDA_DIR='src/lambda/containment_alerts'
         cd $LAMBDA_DIR
         zip -r containment_alerts.zip containment_alerts.py
         echo "Listing contents of the directory '$(pwd)'"
         ls
       displayName: 'Build Code Artifact for Containment Alerts Lambda'
 
-    - publish: src/lambda/alerts_lambda/containment_alerts.zip
+    - publish: src/lambda/containment_alerts/containment_alerts.zip
       artifact: containment_alerts
       displayName: 'Publish Containment AlertsLambda zip as an Azure Pipeline Artifact named containment_alerts'
