@@ -19,11 +19,11 @@ module "containment_alerts_lambda" {
   lambda_role                   = module.lambda_role.name
   tags                          = var.tags
   layers                        = [var.pandas_layer_arn]
-  publish                       = false
+  publish                       = true  # Set this to true for versioned Lambda
   attach_cloudwatch_logs_policy = false
   create                        = true
   create_function               = true
-  create_package                = true
+  create_package                = false  # Don't package it; use the existing zip in S3
   environment_variables = {
     env = "${var.environment_code}"
   }

@@ -52,6 +52,30 @@ resource "aws_iam_role_policy" "lambda_policy" {
   )
 }
 
+module "eventbridge_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "10.0.2"
+
+  company_code      = var.company_code
+  application_code  = var.application_code
+  environment_code  = var.environment_code
+  region_code       = var.region_code
+  application_use   = "${var.application_use}-eventbridge"
+  description       = "This is a event bridge scheduler role to schedule the CRA Lambda"
+  service_resources = ["scheduler.amazonaws.com"]
+  tags              = var.tags
+}
+
+resource "aws_iam_role_policy" "eventbridge_policy" {
+  name   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-eventbridge-policy"
+  role   = module.eventbridge_role.name
+  policy = templatefile(
+    "${path.module}/iampolicies/policy-iam-eventbrdige-assume-role.tmpl",{
+      cra_lambda_name = module.containment_alerts_lambda.lambda_function_name,
+      region = "us-west-2",
+      account = var.awsAccount
+    })
+}
 resource "aws_iam_role" "qs_admin" {
   name        = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-iam-role-${var.application_use}-qs-admin"
   description = "QuickSight-Admin-Role"
