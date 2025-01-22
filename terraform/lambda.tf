@@ -19,7 +19,7 @@ module "containment_alerts_lambda" {
   lambda_role                   = module.lambda_role.name
   tags                          = var.tags
   layers                        = [var.pandas_layer_arn]
-  publish                       = true  # Set this to true for versioned Lambda
+  publish                       = false  # Set this to true for versioned Lambda
   attach_cloudwatch_logs_policy = false
   create                        = true
   create_function               = true

@@ -6,7 +6,7 @@ resource "aws_scheduler_schedule" "cra_eventbridge_scheduler" {
     mode = "OFF"
   }
 
-  schedule_expression = "cron(0 6 * * ? *)"
+  schedule_expression = "cron(0 6 * * ? *) America/Los_Angeles"
   
   target {
     arn      = module.containment_alerts_lambda.lambda_function_arn
