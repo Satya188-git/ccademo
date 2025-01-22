@@ -21,7 +21,7 @@ variables:
   - name: sourceFolder
     value: "$(Pipeline.Workspace)/"
   - name: targetFolderName
-    value: "lambda/packages/"
+    value: "lambda/"
   - name: globExpressions
     value: "**/*.zip"
   - name: awsRegionAbbreviation

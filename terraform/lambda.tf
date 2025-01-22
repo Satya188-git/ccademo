@@ -12,20 +12,22 @@ module "containment_alerts_lambda" {
   application_use               = "${var.application_use}-containment-alerts"
   description                   = "Lambda function for Containment Rate Alerts"
   handler                       = "run.lambda_handler"
+  publish                       = false
   runtime                       = "python3.11"
   memory_size                   = "1024"
   timeout                       = "300"
   architectures                 = ["x86_64"]
   lambda_role                   = module.lambda_role.name
+  update_role                   = false
   tags                          = var.tags
   layers                        = [var.pandas_layer_arn]
-  publish                       = false  # Set this to true for versioned Lambda
   environment_variables = {
     env = "${var.environment_code}"
   }
   s3_existing_package = {
     bucket = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-s3-artifacts"
-    key    = "lambda/packages/containment_alerts/containment_alerts.zip"
+    key    = "lambda/containment_alerts.zip"
+    
   }
 }
 
