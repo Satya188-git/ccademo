@@ -267,7 +267,7 @@ jobs:
         # Zip containment_alerts.py file for Lambda
         LAMBDA_DIR='src/lambda/containment_alerts'
         cd $LAMBDA_DIR
-        zip -r containment_alerts.zip containment_alerts.py
+        zip -r containment_alerts.zip run.py
         echo "Listing contents of the directory '$(pwd)'"
         ls
       displayName: 'Build Code Artifact for Containment Alerts Lambda'

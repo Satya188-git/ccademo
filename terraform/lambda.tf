@@ -11,7 +11,7 @@ module "containment_alerts_lambda" {
   region_code                   = var.region_code
   application_use               = "${var.application_use}-containment-alerts"
   description                   = "Lambda function for Containment Rate Alerts"
-  handler                       = "containment_alerts.lambda_handler"
+  handler                       = "run.lambda_handler"
   runtime                       = "python3.11"
   memory_size                   = "1024"
   timeout                       = "300"
@@ -20,10 +20,6 @@ module "containment_alerts_lambda" {
   tags                          = var.tags
   layers                        = [var.pandas_layer_arn]
   publish                       = false  # Set this to true for versioned Lambda
-  attach_cloudwatch_logs_policy = false
-  create                        = true
-  create_function               = true
-  create_package                = false  # Don't package it; use the existing zip in S3
   environment_variables = {
     env = "${var.environment_code}"
   }

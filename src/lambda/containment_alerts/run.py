@@ -20,8 +20,11 @@ S3_BUCKET = f'sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results'  # Replace 
  
  
 def lambda_handler(event, context):
- 
+
     def query_execution(column):
+        """
+        Function to run the Athena Query
+        """
         # Step 1: Run the Athena Query
         query = f"""
         SELECT
