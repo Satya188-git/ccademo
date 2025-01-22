@@ -25,24 +25,29 @@ start_query_response = client.start_query_execution(
    , previous_contact_id
    , related_contact_id
    , next_contact_id
+   , attributes
    , attributes['CallbackOriginalContactID'] CallbackOriginalContactID
    , channel
    , initiation_timestamp
    , CAST(replace(CAST(at_timezone(initiation_timestamp, 'America/Los_Angeles') AS varchar), 'America/Los_Angeles', '') AS timestamp) initiation_timestamp_pst
+   , DATE(CAST(replace(CAST(at_timezone(initiation_timestamp, 'America/Los_Angeles') AS varchar), 'America/Los_Angeles', '') AS timestamp)) date_pst
    , last_update_timestamp
    , attributes['CallbackDateTime'] CallbackDateTime
    , lower(attributes['CallbackOffered']) CallbackOffered
    , lower(attributes['CallbackRejected']) CallbackRejected
    , lower(attributes['CallbackConfirmed']) CallbackConfirmed
    , lower(attributes['callbackMade']) callbackMade
+   , lower(attributes['CallbackPlaced']) CallbackPlaced
+   , lower(attributes['CallbackFailed']) CallbackFailed
+   , lower(attributes['CallbackRetryAttempts']) CallbackRetryAttempts
    , attributes['CallbackType'] CallbackType
    , attributes['CallbackQueue'] CallbackQueue
    , attributes['CALLBACKNUMBER'] CALLBACKNUMBER
    , attributes['CallbackPhoneNo'] CallbackPhoneNo
    , initiation_method
    FROM
-     \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
-   WHERE ((channel = 'VOICE') AND (date_format(CAST(replace(CAST(at_timezone(initiation_timestamp, 'America/Los_Angeles') AS varchar), 'America/Los_Angeles', '') AS timestamp), '%Y-%m-%d') >= '2024-11-22'))
+    \"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link\".\"contact_record\"
+   WHERE ((channel = 'VOICE') AND (date_format(CAST(replace(CAST(at_timezone(initiation_timestamp, 'America/Los_Angeles') AS varchar), 'America/Los_Angeles', '') AS timestamp), '%Y-%m-%d') >= '2025-01-14'))
 ) 
 , CallbackMatches AS (
    SELECT
@@ -51,17 +56,28 @@ start_query_response = client.start_query_execution(
    , parent.CallbackOriginalContactID parent_CallbackOriginalContactID
    , parent.initial_contact_id parent_initial_contact_id
    , child.contact_id callbackcallID
+   , child.callbackplaced callbackcallplacedflag
+   , child.initiation_timestamp as callbackcallinitiation_timestamp
    FROM
      (FilteredContacts parent
    LEFT JOIN FilteredContacts child ON (((parent.CallbackType = 'VirtualHold') AND (parent.contact_id = child.initial_contact_id)) OR ((parent.CallbackType = 'Scheduled') AND (parent.contact_id = child.CallbackOriginalContactID))))
    WHERE (child.initiation_method IN ('API', 'CALLBACK'))
 ) 
 SELECT
-  fc.*
+  fc.*,
+  CASE WHEN fc.CallbackConfirmed='true'
+  THEN 'Confirmed'
+  WHEN fc.CallbackRejected='true'
+  THEN 'Rejected'
+  ELSE null
+  END AS Cnf_Rej_Check
 , cm.callbackcallID
+, cm.callbackcallplacedflag
+, CAST(replace(CAST(at_timezone(callbackcallinitiation_timestamp, 'America/Los_Angeles') AS varchar), 'America/Los_Angeles', '') AS timestamp) as callbackcallinitiation_timestamp_pst
 FROM
   (FilteredContacts fc
-LEFT JOIN CallbackMatches cm ON (fc.contact_id = cm.parent_contact_id));""",
+LEFT JOIN CallbackMatches cm ON (fc.contact_id = cm.parent_contact_id))
+ORDER BY date(initiation_timestamp_pst) DESC;""",
     QueryExecutionContext={
         'Database': f"sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views",
         'Catalog': 'awsdatacatalog'
