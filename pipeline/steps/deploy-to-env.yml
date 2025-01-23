@@ -4,17 +4,6 @@ steps:
   - script: |
       echo "Deployment Step after terrafrom!"
 
-  - task: LambdaDeployFunction@1
-      displayName: 'Deploy CIVR CRA lambda'
-      inputs:
-        awsCredentials: '${{ parameters.SCName }}-${{ parameters.environment }}'
-        regionName: '${{ parameters.awsRegionCode }}'
-        deploymentMode: 'codeonly'
-        functionName: '$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-lambda-${{ parameters.appName }}-${{ pair.lambdaName }}'
-        codeLocation: 's3object'
-        s3Bucket: '$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}'
-        s3ObjectKey: '${{ parameters.s3ArtifactBucketFolder }}/${{ pair.lambdaArchive }}.zip'
-
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.11'
