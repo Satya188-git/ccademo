@@ -15,7 +15,9 @@ env = os.environ['env']
 
 # Athena and S3 configurations
 DATABASE = f'sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views'
+# S3 Bucket
 S3_BUCKET = f'sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results'
+# S3 Bucket Folder
 S3_OUTPUT = f's3://sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results/IVR_results/'
  
  
