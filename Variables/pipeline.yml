@@ -21,7 +21,7 @@ variables:
   - name: sourceFolder
     value: "$(Pipeline.Workspace)/containment_alerts/"
   - name: targetFolderName
-    value: "lambda/"
+    value: "lambda/packages/"
   - name: globExpressions
     value: "**/*.zip"
   - name: awsRegionAbbreviation
