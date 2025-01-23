@@ -6,7 +6,7 @@ from io import StringIO
 import pandas as pd
 import numpy as np
  
-# Initialize AWS clients
+# Initialize AWS clients for Athena and S3
 athena = boto3.client('athena')
 s3 = boto3.client('s3')
 
