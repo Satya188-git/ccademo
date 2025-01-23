@@ -118,14 +118,14 @@ def lambda_handler(event, context):
     
     sender = "ivr-containment-rate-alerts@sdge.com"
     recipients = ["smothuku@sdgecontractor.com", "snayak1@sdgecontractor.com", "sracharl@sdgecontractor.com", "sthodima@sdgecontractor.com", "AKumar45@sdgecontractor.com", "sbounds@sdgecontractor.com"] # , "sthodima@sdgecontractor.com", "akumar45@sdgecontractor.com"
-    subject = "Containment rate Alerts"
+    subject = f"{env.upper()} : Containment rate Alerts"
     body_html = f"""
     <html>
     <head></head>
     <body>
       Dear All,
      
-      Please find the KPIs' summary report with respect to thresholds:
+      Please find the {env.upper()} KPIs' summary report with respect to thresholds:
       <div style="margin-top: 20px;">
       {html_table}
     </body>
