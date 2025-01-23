@@ -32,7 +32,7 @@
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "${path.root}/../src/lambda/containment_alerts/run.py"
+  source_file = "src/lambda/containment_alerts/run.py"
   output_path = "containment_alerts.zip"
 }
 
