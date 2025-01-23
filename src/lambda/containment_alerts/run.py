@@ -15,8 +15,8 @@ env = os.environ['env']
 
 # Athena and S3 configurations
 DATABASE = f'sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views'
+S3_BUCKET = f'sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results'
 S3_OUTPUT = f's3://sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results/IVR_results/'
-S3_BUCKET = f'sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results'  # Replace with the name of your S3 bucket
  
  
 def lambda_handler(event, context):
