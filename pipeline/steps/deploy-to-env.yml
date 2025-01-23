@@ -83,10 +83,18 @@ steps:
         
         echo "###########################################################################"
         echo "Updating the CIVR CRA Lambda Code and deploying it"
-
+        echo "Current time: $(date)"
         lambda_update_op = $(aws lambda update-function-code --function-name "sdge-dcctr-$(Environment)-wus2-lambda-ccc-analytics-containment-alerts" --s3-bucket "sdge-dcctr-$(Environment)-wus2-s3-artifacts" --s3-key "lambda/containment_alerts.zip" --region "us-west-2")
-        echo "Lambda function update response:"
-        echo "$lambda_update_op" | jq .
+        echo "Function Name: $(echo "$lambda_update_op" | jq -r '.FunctionName')"
+        echo "State: $(echo "$lambda_update_op" | jq -r '.State')"
+        echo "LastModified: $(echo "$lambda_update_op" | jq -r '.LastModified')"
+        echo "LastUpdateStatus: $(echo "$lambda_update_op" | jq -r '.LastUpdateStatus')"
+        echo "LastUpdateStatusReasonCode: $(echo "$lambda_update_op" | jq -r '.LastUpdateStatusReasonCode')"
+
+        status_output=$(aws lambda get-function --function-name "sdge-dcctr-$(Environment)-wus2-lambda-ccc-analytics-containment-alerts" --region "us-west-2")
+        echo "The lambda is last modified at: $(echo "$status_output" | jq -r '.Configuration.LastModified')"
+        echo "The lambda last update status is: $(echo "$status_output" | jq -r '.Configuration.LastUpdateStatus')"
+
         echo "###########################################################################"
         echo "Running Python scripts to create the views from artifacts!"
         python $(Pipeline.Workspace)/ivr_call_transactions/ivr_call_transactions.py "$(Environment)"

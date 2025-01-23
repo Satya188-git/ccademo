@@ -6,8 +6,10 @@ from io import StringIO
 import pandas as pd
 import numpy as np
  
-# Initialize AWS clients for Athena and S3
+# Initialize AWS clients
+# Athena Client
 athena = boto3.client('athena')
+# S3 Client
 s3 = boto3.client('s3')
 
 # Get env variable from lambda env vars
