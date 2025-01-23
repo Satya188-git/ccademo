@@ -3,7 +3,18 @@
 steps:
   - script: |
       echo "Deployment Step after terrafrom!"
-  
+
+  - task: LambdaDeployFunction@1
+      displayName: 'Deploy CIVR CRA lambda'
+      inputs:
+        awsCredentials: '${{ parameters.SCName }}-${{ parameters.environment }}'
+        regionName: '${{ parameters.awsRegionCode }}'
+        deploymentMode: 'codeonly'
+        functionName: '$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-lambda-${{ parameters.appName }}-${{ pair.lambdaName }}'
+        codeLocation: 's3object'
+        s3Bucket: '$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}'
+        s3ObjectKey: '${{ parameters.s3ArtifactBucketFolder }}/${{ pair.lambdaArchive }}.zip'
+
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.11'
@@ -69,15 +80,27 @@ steps:
         
         ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
-        echo "Running Python file from artifacts!"
+        
+        echo "###########################################################################"
+        echo "Updating the CIVR CRA Lambda Code and deploying it"
+
+        lambda_update_op = $(aws lambda update-function-code --function-name "sdge-dcctr-$(Environment)-wus2-lambda-ccc-analytics-containment-alerts" --s3-bucket "sdge-dcctr-$(Environment)-wus2-s3-artifacts" --s3-key "lambda/containment_alerts.zip" --region "us-west-2")
+        echo "Lambda function update response:"
+        echo "$lambda_update_op" | jq .
+        echo "###########################################################################"
+        echo "Running Python scripts to create the views from artifacts!"
         python $(Pipeline.Workspace)/ivr_call_transactions/ivr_call_transactions.py "$(Environment)"
         echo "ivr_call_transactions view script run complete!"
+        echo "###########################################################################"
         python $(Pipeline.Workspace)/ivr_call_events/ivr_call_events.py "$(Environment)"
         echo "ivr_call_events view script run complete!"
+        echo "###########################################################################"
         python $(Pipeline.Workspace)/fcr_data_view/fcr_data_view.py "$(Environment)"
         echo "fcr_data_view script run complete!"
+        echo "###########################################################################"
         python $(Pipeline.Workspace)/fcr_boxplot_view/fcr_boxplot_view.py "$(Environment)"
         echo "fcr_data_view script run complete!"
+        echo "###########################################################################"
       else
         echo "Failed to assume role."
         exit 1
