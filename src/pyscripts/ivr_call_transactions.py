@@ -45,36 +45,53 @@ FROM (
 					'Abandoned - Self Service Attempt',
 					'Abandoned - Self Service No Attempt',
 					'Contained - Self Served - IVR',
-					'Contained - System - External Transfer',
-					'Contained - System - Legacy Transfer'
+					'Contained - System - External Transfer'
 				) THEN 'Contained'
+				
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception',
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR'
-				) THEN 'TRANSFER' ELSE 'Uncategorized'
+				) THEN 'TRANSFER' 
+				
+				WHEN l3_tag IN (
+					'Transfer - ESS1 - ESS2',
+					'Transfer - System - Legacy'
+				) 
+				THEN 'External Legacy'
+								
+				ELSE 'Uncategorized'
 			END AS l1_tag,
 			CASE
 				WHEN l3_tag IN (
 					'Contained - Self Served - IVR',
-					'Contained - System - External Transfer',
-					'Contained - System - Legacy Transfer'
+					'Contained - System - External Transfer'
 				) THEN 'Contained - Self Served'
 				WHEN l3_tag IN (
 					'Abandoned - Self Service Attempt',
 					'Abandoned - Self Service No Attempt'
 				) THEN 'Contained - Abandoned'
+				
 				WHEN l3_tag IN (
 					'Transfer - System - Agent',
 					'Transfer - System - Exception'
 				) THEN 'Transfer - System'
+				
 				WHEN l3_tag IN (
 					'Transfer - User - Self Service Attempt - Success',
 					'Transfer - User - Self Service Attempt w/o Success',
 					'Transfer - User - Skipped IVR'
-				) THEN 'Transfer - User' ELSE 'Uncategorized'
+				) THEN 'Transfer - User' 
+				
+				WHEN l3_tag IN (
+					'Transfer - ESS1 - ESS2',
+					'Transfer - System - Legacy'
+				) 
+				THEN 'Legacy'
+				
+				ELSE 'Uncategorized'
 			END AS l2_tag
 		FROM (
 				SELECT ctr.contact_id,
@@ -108,7 +125,7 @@ FROM (
 					
 					-- Outage ERT
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playnoertavailableprompt >> success') THEN 'PlayNoERTAvailablePrompt' END,
-					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playertinformationprompt >> Success') THEN 'PlayERTInformationPrompt' END, 
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playertinformationprompt >> success') THEN 'PlayERTInformationPrompt' END, 
 					
 					------------------------------------------------------------ -- BillCopyRequest -----------------------------------------------------------
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'playhousenumberprompt >> success') THEN 'PlayHousenumberPrompt' END,
@@ -136,6 +153,7 @@ FROM (
 					-------------------------------------------------------------------- Stop Service -----------------------------------------------------------
 					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playserviceshutoffconfirmationnumberprompt >> success') THEN 'PlayServiceShutoffConfirmationNumberPrompt' END, --check with Sukeshi
 					-- ask this from Sukeshi on the 2 new prompts proposed by Linda -11/21
+					-- confirmed with Sukeshi- in new design now there is no prompt in stop service -12/19
 					
 					-------------------------------------------------------------------- Predictive ----------------------------------------------------------- update the excel
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playoutagenotimestampavailableprompt >> success') THEN 'PlayOutageNoTimeStampAvailablePrompt' END,
@@ -171,9 +189,7 @@ FROM (
 					ctr.attributes [ 'supplied_phone_number' ] as supplied_phone_number,
 					ctr.disconnect_reason as call_end_reason,
 					ctr.customer_endpoint_address as caller_phone_number,
-					case when lower(ctr.attributes ['customer_journey']) like '%cca >> yes%' 
-					then 'Yes' else 'No'
-					end as CCA,
+					ctr.attributes['Ccaindicator'] as CCA,
 					date_format(ctr.initiation_timestamp, '%W') AS day_of_week,
 					ctr.attributes [ 'customer_journey' ] as customer_journey,
 					ctr.attributes [ 'module_journey' ] as module_journey,
@@ -225,10 +241,10 @@ FROM (
 						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('billmatrix') 
 						THEN 'Contained - System - External Transfer' 
 						
-						--Contained - System - Legacy Transfer
+						--Transfer - System - Legacy
 						
 						WHEN lower(ctr.attributes [ 'external_transfer_destination' ]) IN ('legacy') 
-						THEN 'Contained - System - Legacy Transfer' 
+						THEN 'Transfer - System - Legacy'
 
 						--Transfer - System - Agent
 						
@@ -254,7 +270,14 @@ FROM (
 						--Transfer - User - Skipped IVR
 						
 						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'user_agent_request'
-						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' ELSE 'Uncategorized'
+						and lower(ctr.attributes [ 'self_service_attempt' ]) = 'false' THEN 'Transfer - User - Skipped IVR' 
+						
+						--Legacy - to - direct - civr queue transfer
+						
+						WHEN lower(ctr.attributes [ 'transfer_reason' ]) = 'legacy_to_civr_agent_transfer'
+						THEN 'Transfer - ESS1 - ESS2'
+						
+						ELSE 'Uncategorized'
 					END AS l3_tag,
 					ctr.attributes
 				FROM "sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-link"."contact_record" as ctr
@@ -289,9 +312,9 @@ CASE
 WHEN TRIM(module_name) = 'accountbalance'
 and TRIM(transaction_reason) = 'fetchbalanceamt'
 and TRIM(transaction_result) in ('success', 'failed') THEN 'n'
-WHEN module_name = 'accountbalance'
-and transaction_reason = 'customerheardbalance'
-and transaction_result in ('success') THEN 'y' 
+WHEN TRIM(module_name) = 'accountbalance'
+and TRIM(transaction_reason) = 'customerheardbalance'
+and TRIM(transaction_result) in ('success') THEN 'y' 
 
 -- authentication
 WHEN TRIM(module_name) = 'authentication' THEN 'n' 
@@ -373,7 +396,7 @@ WHEN TRIM(module_name) = 'paymentarrangement'
 and TRIM(transaction_reason) in ('createpaymentarrangement',
 							'customerheardbalance'
 						)
-and TRIM(transaction_result) in ('success') THEN 'y' 
+and TRIM(transaction_result) in ('success') THEN 'y' -- look for the condition in yellow strip
 
 -- payoverphone
 
@@ -388,7 +411,7 @@ and TRIM(transaction_reason) in (
 							'paymentprocessrequest',
 							'fetchpbpenrolledstatus'
 						)
-and TRIM(transaction_result) in ('success', 'failed') -- look for the condition in yellow strip
+and TRIM(transaction_result) in ('success', 'failed') 
 THEN 'n' 
 
 -- predictive

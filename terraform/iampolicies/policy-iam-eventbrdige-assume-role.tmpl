@@ -1,0 +1,17 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		
+		{	
+			"Sid": "BasicLambdaPermissions",
+			"Effect": "Allow",
+			"Action": [
+				"lambda:InvokeFunction"
+			],
+			"Resource": [
+				"arn:aws:lambda:${region}:${account}:function:${cra_lambda_name}:*",
+                "arn:aws:lambda:${region}:${account}:function:${cra_lambda_name}"
+			]
+		}
+	]
+}

@@ -37,7 +37,8 @@ chatbot_source_database_name = "sdge_dev_wus2_customer_connectchatbot"
 chatbot_source_table_names = [
   "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq_async",
   "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq",
-  "sdge_connect_aws_connect_sdge_dhepk_sbx_wus2_einstein_connect"
+  "sdge_connect_aws_connect_sdge_dhepk_sbx_wus2_einstein_connect",
+  "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_civr_fulfillment"
 ]
 
 
@@ -60,4 +61,5 @@ pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKP
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
 
 ado_role_name = "sdge-dcctr-dev-iam-role-ado"
-# r53_zone_name= "dev.sdge-it-einstein.aws.sempra.com"
+domain_name= "sdge.com"
+zone_id = "Z033821811F9PN8CE1DQE"

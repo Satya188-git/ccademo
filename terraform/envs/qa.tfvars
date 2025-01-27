@@ -31,11 +31,12 @@ connect_source_table_names = [
 ]
 
 chatbot_catalog_id           = "685757275861"
-chatbot_source_database_name = "sdge_dev_wus2_customer_connectchatbot"
+chatbot_source_database_name = "sdge_qa_wus2_customer_connectcloudwatchlogs"
 chatbot_source_table_names = [
-  "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq_async",
-  "sdge_connect_aws_lambda_sdge_dhepk_sbx_wus2_lambda_einstein_lex_bot_faq",
-  "sdge_connect_aws_connect_sdge_dhepk_sbx_wus2_einstein_connect"
+  "sdge_connect_aws_lambda_sdge_dhepk_tst_wus2_lambda_einstein_lex_bot_faq_async",
+  "sdge_connect_aws_lambda_sdge_dhepk_tst_wus2_lambda_einstein_lex_bot_faq",
+  "sdge_connect_aws_connect_sdge_dhepk_tst_wus2_einstein_connect",
+  "sdge_connect_aws_lambda_sdge_dhepk_tst_wus2_lambda_einstein_civr_fulfillment"
 ]
 
 
@@ -49,3 +50,5 @@ pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKP
 code_artifact_bucket_name = "sdge-dcctr-qa-wus2-s3-artifacts"
 
 ado_role_name = "sdge-dcctr-qa-iam-role-ado"
+domain_name= "sdge.com"
+zone_id = "Z0334635S1UNUYEONFRH"
