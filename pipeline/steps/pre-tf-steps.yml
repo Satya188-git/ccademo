@@ -57,6 +57,90 @@ steps:
         echo $(Pipeline.Workspace)
         echo "========================="
 
+
+
+        jobId="sdge-export-job-Chatbot"
+        
+        #####################################
+        ## Asset bundle import job for Chatbot ##
+        #####################################
+        
+        echo "Started the asset bundle import job for Chatbot"
+        echo "The response of import job is :"
+        aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-Chatbot' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_Chatbot/assetbundle-sdge-export-job-Chatbot.qs 
+        while true; do
+
+            #########################
+            ## Get the job details ##
+            #########################
+
+            response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
+            
+            #########################################
+            ## Check if the command was successful ##
+            #########################################
+
+            if [ $? -eq 0 ]; then
+
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+
+                    echo "Chatbot Quicksight Package deployed"
+                    echo "Updating the Chatbot Dataset!"
+
+                    ######################################################
+                    ## Updating the dataset after dashboard is deployed ##
+                    ######################################################
+
+                    ##############################################################################
+                    ## Updating the physical dataset map in dataset after dashboard is deployed ##
+                    ##############################################################################
+
+                    jq '.PhysicalTableMap."3a4e1cf3-3f68-4a46-8c7e-b8d934240134".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/fd19c252-1725-4e1e-8bff-68a9bbc46cfe" | .PhysicalTableMap."3a4e1cf3-3f68-4a46-8c7e-b8d934240134".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views" | .PhysicalTableMap."c63258cf-acd2-4d2f-bf5f-8e394b4be2cd".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views" |  .PhysicalTableMap."c63258cf-acd2-4d2f-bf5f-8e394b4be2cd".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/3229f118-efa4-4f41-b018-194a244e2c6b"' $(Pipeline.Workspace)/QS_Bundle_IVR_Dataset/updated-dataset_ivr_data.json > current-dataset_ivr_data.json
+                    aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "89b32cb0-bcf3-4e1f-a69b-b5d4d26350c4" --cli-input-json fileb://current-dataset_chatbot_data.json
+                    
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+        done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         jobId="sdge-export-job-IVR"
         
         #####################################
