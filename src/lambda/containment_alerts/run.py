@@ -12,8 +12,8 @@ athena = boto3.client('athena')
 # S3 Client
 s3 = boto3.client('s3')
 # SES Client
-
 ses_client = boto3.client('ses', region_name='us-west-2')
+
 # Get env variable from lambda env vars
 env = os.environ['env']
 
@@ -117,7 +117,7 @@ def lambda_handler(event, context):
     # Define email content for SES
     
     sender = "ivr-containment-rate-alerts@sdge.com"
-    recipients = ["smothuku@sdgecontractor.com", "snayak1@sdgecontractor.com", "sracharl@sdgecontractor.com", "sthodima@sdgecontractor.com", "AKumar45@sdgecontractor.com", "sbounds@sdgecontractor.com"] # , "sthodima@sdgecontractor.com", "akumar45@sdgecontractor.com"
+    recipients = ["CIVR-CRA@sempra.onmicrosoft.com"]
     subject = f"{env.upper()} : Containment rate Alerts"
     body_html = f"""
     <html>
