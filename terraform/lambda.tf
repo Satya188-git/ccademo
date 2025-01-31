@@ -22,6 +22,7 @@ module "containment_alerts_lambda" {
   layers                        = [var.pandas_layer_arn]
   environment_variables = {
     env = "${var.environment_code}"
+    recipients = "${var.recipients}"
   }
   s3_existing_package = {
     bucket = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-s3-artifacts"
