@@ -134,7 +134,7 @@ FROM (
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'transfertolegacybilltatrix') THEN 'TransfertoLegacyBillMatrix' END,
 					
 					-------------------------------------------------------------- AccountBalance -----------------------------------------------------------
-					-- CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'customercamefrompredictive >> yes') THEN 'CustomercamefromPredictive' END, --check with Sukeshi on new identifiers
+					-- CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'customercamefrompredictive >> yes') THEN 'CustomercamefromPredictive' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'play_balanceamt_is_zero_prompt >> success') THEN 'Play_BalanceAmt_is_Zero_Prompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'play_balance_non_zero_amount_prompt >> success') THEN 'Play_Balance_Non_Zero_Amount_Prompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes [ 'customer_journey' ]), 'play_balance_credit_prompt >> success') THEN 'Play_Balance_Credit_Prompt' END,
@@ -151,9 +151,7 @@ FROM (
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playaccountbalancenonzeroprompt >> success') THEN 'PlayAccountBalanceNonZeroPrompt' END,
 					
 					-------------------------------------------------------------------- Stop Service -----------------------------------------------------------
-					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playserviceshutoffconfirmationnumberprompt >> success') THEN 'PlayServiceShutoffConfirmationNumberPrompt' END, --check with Sukeshi
-					-- ask this from Sukeshi on the 2 new prompts proposed by Linda -11/21
-					-- confirmed with Sukeshi- in new design now there is no prompt in stop service -12/19
+					-- 	CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playserviceshutoffconfirmationnumberprompt >> success') THEN 'PlayServiceShutoffConfirmationNumberPrompt' END,
 					
 					-------------------------------------------------------------------- Predictive ----------------------------------------------------------- update the excel
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playoutagenotimestampavailableprompt >> success') THEN 'PlayOutageNoTimeStampAvailablePrompt' END,
@@ -168,7 +166,7 @@ FROM (
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playzerobalanceprompt  >> success') THEN 'PlayZeroBalancePrompt' END,
 
                 	-------------------------------------------------------------------- Payment Arrangement -----------------------------------------------------------
-					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playpaymentarrangementsuccessprompt >> success') THEN 'PlayPaymentArrangementSuccessPrompt' END, -- this flow is not updated in the analytics sheet- connect with Sukeshi on this
+					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playpaymentarrangementsuccessprompt >> success') THEN 'PlayPaymentArrangementSuccessPrompt' END,
 					CASE WHEN REGEXP_LIKE(LOWER(ctr.attributes ['customer_journey']), 'playpaymentarrangementsuccessfulprompt >> success') THEN 'PlayPaymentArrangementSuccessfulPrompt' END
 
 					],
@@ -194,6 +192,8 @@ FROM (
 					ctr.attributes [ 'customer_journey' ] as customer_journey,
 					ctr.attributes [ 'module_journey' ] as module_journey,
 					ctr.attributes [ 'intent_journey' ] as intent_journey,
+					ctr.attributes['transfer_reason'] as transfer_reason,
+					queue_name as agent_queue,
 					CASE
 						WHEN EXTRACT(
 							DOW
