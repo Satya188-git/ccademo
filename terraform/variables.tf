@@ -121,6 +121,6 @@ variable "zone_id" {
 }
 
 variable "recipients" {
-  description = "The list of emails that need to receive the CIVR CRA Alerts"
-  type = list(string)
+  description = "The list of emails that need to receive the CIVR CRA Alerts, emails as a comma seperated string"
+  type = string
 }

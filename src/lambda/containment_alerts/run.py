@@ -18,6 +18,7 @@ ses_client = boto3.client('ses', region_name='us-west-2')
 env = os.environ['env']
 recipients = os.environ['recipients']
 
+recipients = [recipients]
 # Athena and S3 configurations
 DATABASE = f'sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views'
 # S3 Bucket

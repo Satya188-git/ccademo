@@ -53,4 +53,4 @@ code_artifact_bucket_name = "sdge-dcctr-prd-wus2-s3-artifacts"
 ado_role_name = "sdge-dcctr-prd-iam-role-ado"
 domain_name= "sdge.com"
 zone_id = "Z10206892IPRKCH93XJKL"
-recipients = ["CIVR-CRA@sempra.onmicrosoft.com"]
+recipients = "CIVR-CRA@sempra.onmicrosoft.com"
