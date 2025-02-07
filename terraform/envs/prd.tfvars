@@ -47,7 +47,7 @@ quicksight_user_arns = [
   "arn:aws:quicksight:us-west-2:977099013355:user/default/AWSReservedSSO_sdge-dcctr-prd-admin_7d5e22bb2ed0da3c/SRacharl@sdgecontractor.com"
 ]
 
-pandas_layer_arn          = "arn:aws:lambda:us-west-2:977099013355:layer:AWSSDKPandas-Python311:17"
+pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python311:17"
 code_artifact_bucket_name = "sdge-dcctr-prd-wus2-s3-artifacts"
 
 ado_role_name = "sdge-dcctr-prd-iam-role-ado"
