@@ -119,3 +119,8 @@ variable "zone_id" {
  type        = string
  description = "route53 zone id"
 }
+
+variable "recipients" {
+  description = "The list of emails that need to receive the CIVR CRA Alerts, emails as a comma seperated string"
+  type = string
+}

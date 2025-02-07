@@ -110,63 +110,118 @@ steps:
                 exit 1
             fi
         done
+        
+        #####################################
+        ## Asset bundle import job for FCR ##
+        #####################################
 
-      #####################################
-      ## Asset bundle import job for FCR ##
-      #####################################
+        echo "Started the asset bundle import job for FCR"
+        echo "The response of import job is :"
 
-      echo "Started the asset bundle import job for FCR"
-      echo "The response of import job is :"
+        aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-FCR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_FCR/assetbundle-sdge-export-job-FCR.qs  --failure-action ROLLBACK
 
-      aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-FCR' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_FCR/assetbundle-sdge-export-job-FCR.qs  --failure-action ROLLBACK
-
-      jobId="sdge-export-job-FCR"
+        jobId="sdge-export-job-FCR"
       
 
-      while true; do
+        while true; do
+        
+            #########################
+            ## Get the job details ##
+            #########################
 
-        #########################
-        ## Get the job details ##
-        #########################
+            response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
 
-        response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
+            #########################################
+            ## Check if the command was successful ##
+            #########################################
 
-        #########################################
-        ## Check if the command was successful ##
-        #########################################
+            if [ $? -eq 0 ]; then
 
-        if [ $? -eq 0 ]; then
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
 
-            jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+                    echo "FCR Quicksight Package deployed"
+                    echo "Updating the FCR Dataset"
 
-            if [ "$jobStatus" == "SUCCESSFUL" ]; then
-                echo "FCR Quicksight Package deployed"
-                echo "Updating the FCR Dataset"
+                    ######################################################
+                    ## Updating the dataset after dashboard is deployed ##
+                    ######################################################
 
-                ######################################################
-                ## Updating the dataset after dashboard is deployed ##
-                ######################################################
+                    ##############################################################################
+                    ## Updating the physical dataset map in dataset after dashboard is deployed ##
+                    ##############################################################################
+                    
+                    jq '.PhysicalTableMap."3179445e-3df4-469d-a4be-c78eabe0a896".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/0bef68f3-8471-49dd-b704-f5904c10f1a9" | .PhysicalTableMap."3179445e-3df4-469d-a4be-c78eabe0a896".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_FCR_Dataset/updated-dataset_fcr_data.json > current-dataset_fcr_data.json
+                    aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "3aae9ae4-d55d-4e35-9345-4b657a077079" --cli-input-json fileb://current-dataset_fcr_data.json
+                    
+                    ######################################################################################
+                    ## Updating the physical dataset map in dataset after dashboard is deployed  for CB ##
+                    ######################################################################################
 
-                ##############################################################################
-                ## Updating the physical dataset map in dataset after dashboard is deployed ##
-                ##############################################################################
-                
-                jq '.PhysicalTableMap."3179445e-3df4-469d-a4be-c78eabe0a896".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/0bef68f3-8471-49dd-b704-f5904c10f1a9" | .PhysicalTableMap."3179445e-3df4-469d-a4be-c78eabe0a896".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_FCR_Dataset/updated-dataset_fcr_data.json > current-dataset_fcr_data.json
-                aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "3aae9ae4-d55d-4e35-9345-4b657a077079" --cli-input-json fileb://current-dataset_fcr_data.json
-                
-
-                jq '.PhysicalTableMap."fb9b0834-b17d-43b5-b992-341e00b4e6be".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/0bef68f3-8471-49dd-b704-f5904c10f1a9" | .PhysicalTableMap."fb9b0834-b17d-43b5-b992-341e00b4e6be".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_FCR_Dataset_Boxplot/updated-dataset_fcr_boxplot_view.json > current-dataset_fcr_boxplot_view.json
-                aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "2a3f7d86-207d-4e64-843c-b212ba5276a5" --cli-input-json fileb://current-dataset_fcr_boxplot_view.json
-                break
+                    jq '.PhysicalTableMap."fb9b0834-b17d-43b5-b992-341e00b4e6be".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/0bef68f3-8471-49dd-b704-f5904c10f1a9" | .PhysicalTableMap."fb9b0834-b17d-43b5-b992-341e00b4e6be".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_FCR_Dataset_Boxplot/updated-dataset_fcr_boxplot_view.json > current-dataset_fcr_boxplot_view.json
+                    aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "2a3f7d86-207d-4e64-843c-b212ba5276a5" --cli-input-json fileb://current-dataset_fcr_boxplot_view.json
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
             else
-                echo "Job status is not successful: $jobStatus"
-                sleep 10
+                echo "Failed to get the job details"
+                exit 1
             fi
-        else
-            echo "Failed to get the job details"
-            exit 1
-        fi
-      done
+        done
+    
+        #####################################
+        ##  Asset bundle import job for CB ##
+        #####################################
+
+        jobId="sdge-export-job-CB"
+        echo "Started the asset bundle import job for CB"
+        echo "The response of import job is :"
+        aws quicksight start-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id 'sdge-export-job-CB' --asset-bundle-import-source-bytes fileb://$(Pipeline.Workspace)/QS_Bundle_CB/assetbundle-sdge-export-job-CB.qs --failure-action ROLLBACK
+
+        while true; do
+
+            #########################
+            ## Get the job details ##
+            #########################
+
+            response=$(aws quicksight describe-asset-bundle-import-job --aws-account-id "$(awsAccount)" --asset-bundle-import-job-id $jobId)
+            
+            #########################################
+            ## Check if the command was successful ##
+            #########################################
+
+            if [ $? -eq 0 ]; then
+
+                jobStatus=$(echo $response | grep -o '"JobStatus": "[^"]*' | grep -o '[^"]*$')
+
+                if [ "$jobStatus" == "SUCCESSFUL" ]; then
+
+                    echo "CB Quicksight Package deployed"
+                    echo "Updating the CB Dataset!"
+
+                    ######################################################
+                    ## Updating the dataset after dashboard is deployed ##
+                    ######################################################
+
+                    ##############################################################################
+                    ## Updating the physical dataset map in dataset after dashboard is deployed ##
+                    ##############################################################################
+
+                    jq '.PhysicalTableMap."1ca2f1a3-c103-4722-865b-90a8296dc84e".RelationalTable.DataSourceArn = "arn:aws:quicksight:us-west-2:$(awsAccount):datasource/1426d8fa-5420-4b29-88b3-6ca15dbf6472" | .PhysicalTableMap."1ca2f1a3-c103-4722-865b-90a8296dc84e".RelationalTable.Schema = "sdge-dcctr-$(qstargetenv)-wus2-ccc-analytics-connect-datalake-views"' $(Pipeline.Workspace)/QS_Bundle_CB_Dataset/updated-dataset_cb_data.json > current-dataset_cb_data.json
+                    aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "481bbd62-7e7e-4062-9240-c8ba256e726f" --cli-input-json fileb://current-dataset_cb_data.json
+                    
+                    break
+                else
+                    echo "Job status is not successful: $jobStatus"
+                    sleep 10
+                fi
+            else
+                echo "Failed to get the job details"
+                exit 1
+            fi
+        done
     else
         echo "Failed to assume role"
         exit 1

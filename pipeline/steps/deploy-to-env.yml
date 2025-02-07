@@ -19,6 +19,7 @@ steps:
       python3 -m pip install --upgrade pip; python3 -m pip install artifacts-keyring; python3 -m pip install boto3
     displayName: 'Create VENV'
 
+# Assume ADO role and create all the required views
   - script: |
       #########################################################
       ###  Export AWS credentials from pipeline variables   ###
@@ -70,6 +71,10 @@ steps:
         ASSUMED_ROLE_ARN=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.AssumedRoleUser.Arn')
         echo "Assumed role ARN: $ASSUMED_ROLE_ARN"
         
+        ########################################################################
+        ################# Update the CIVR CRA Lambda Code ######################
+        ########################################################################
+
         echo "###########################################################################"
         echo "Updating the CIVR CRA Lambda Code and deploying it"
         echo "Current time: $(date)"
@@ -83,6 +88,10 @@ steps:
         status_output=$(aws lambda get-function --function-name "sdge-dcctr-$(Environment)-wus2-lambda-ccc-analytics-containment-alerts" --region "us-west-2")
         echo "The lambda is last modified at: $(echo "$status_output" | jq -r '.Configuration.LastModified')"
         echo "The lambda last update status is: $(echo "$status_output" | jq -r '.Configuration.LastUpdateStatus')"
+
+        ########################################################################
+        ################# Run the Py files to create Views #####################
+        ########################################################################
 
         echo "###########################################################################"
         echo "Running Python scripts to create the views from artifacts!"
@@ -98,12 +107,15 @@ steps:
         python $(Pipeline.Workspace)/fcr_boxplot_view/fcr_boxplot_view.py "$(Environment)"
         echo "fcr_data_view script run complete!"
         echo "###########################################################################"
+        python $(Pipeline.Workspace)/callback_data_view/callback_data_view.py "$(Environment)"
+        echo "callback_data_view script run complete!"
+        echo "###########################################################################"
       else
         echo "Failed to assume role."
         exit 1
       fi
       
-    displayName: 'Assume ADO Role to run PY Scripts'
+    displayName: 'Assume ADO Role and run PY Scripts'
 
 # Deactivate Virtual Environment and Clean-up
   - script: |

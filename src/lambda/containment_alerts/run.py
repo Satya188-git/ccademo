@@ -12,19 +12,23 @@ athena = boto3.client('athena')
 # S3 Client
 s3 = boto3.client('s3')
 # SES Client
-
 ses_client = boto3.client('ses', region_name='us-west-2')
+
 # Get env variable from lambda env vars
 env = os.environ['env']
+recipients = os.environ['recipients']
 
+recipients = [recipients]
 # Athena and S3 configurations
 DATABASE = f'sdge-dcctr-{env}-wus2-ccc-analytics-connect-datalake-views'
 # S3 Bucket
 S3_BUCKET = f'sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results'
 # S3 Bucket Folder
 S3_OUTPUT = f's3://sdge-dcctr-{env}-wus2-s3-ccc-analytics-athena-results/IVR_results/'
- 
- 
+
+# Sender and receiver for email alerts
+sender = "ivr-containment-rate-alerts@sdge.com"
+
 def lambda_handler(event, context):
 
     def query_execution(column):
@@ -116,8 +120,6 @@ def lambda_handler(event, context):
  
     # Define email content for SES
     
-    sender = "ivr-containment-rate-alerts@sdge.com"
-    recipients = ["smothuku@sdgecontractor.com", "snayak1@sdgecontractor.com", "sracharl@sdgecontractor.com", "sthodima@sdgecontractor.com", "AKumar45@sdgecontractor.com", "sbounds@sdgecontractor.com"] # , "sthodima@sdgecontractor.com", "akumar45@sdgecontractor.com"
     subject = f"{env.upper()} : Containment rate Alerts"
     body_html = f"""
     <html>

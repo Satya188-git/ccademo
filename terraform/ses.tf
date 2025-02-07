@@ -24,6 +24,9 @@ resource "aws_route53_record" "dkim" {
   type    = "CNAME"
   ttl     = "600"
   records = ["${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}.dkim.amazonses.com"]
+  lifecycle {
+    ignore_changes = all
+  }
 }
  
 # Domain Verification Record
@@ -33,4 +36,7 @@ resource "aws_route53_record" "domain_verification" {
   type    = "TXT"
   ttl     = "600"
   records = [aws_ses_domain_identity.main.verification_token]
+  lifecycle {
+    ignore_changes = all
+  }
 }
