@@ -213,6 +213,9 @@ steps:
                     aws quicksight update-data-set --aws-account-id "$(awsAccount)" --data-set-id "481bbd62-7e7e-4062-9240-c8ba256e726f" --cli-input-json fileb://current-dataset_cb_data.json
                     
                     break
+                elif [ "$jobStatus" == "FAILED_ROLLBACK_COMPLETED" ]; then
+                    echo "Job failed and rollback completed, proceeding to next steps."
+                    break
                 else
                     echo "Job status is not successful: $jobStatus"
                     sleep 10
