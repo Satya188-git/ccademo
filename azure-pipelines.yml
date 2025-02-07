@@ -10,7 +10,7 @@ trigger:
 - main
 - dev
 - develop
-# - feature/*
+- feature/*
 - bundle/*
 - release/*
 
@@ -55,7 +55,7 @@ parameters:
     default:
     # - env: dev
     - env: qa
-    - env: prd
+    # - env: prd
     
 # Pattern specific parameter
 # Edit parameter values as needed, do not change parameter names
