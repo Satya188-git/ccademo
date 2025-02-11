@@ -11,9 +11,6 @@ resource "aws_ses_domain_dkim" "main" {
 # Configuration Set Association
 resource "aws_ses_configuration_set" "default" {
   name = "default"
-  lifecycle {
-    ignore_changes = all
-  }
 }
  
 # DKIM DNS Records
@@ -24,9 +21,6 @@ resource "aws_route53_record" "dkim" {
   type    = "CNAME"
   ttl     = "600"
   records = ["${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}.dkim.amazonses.com"]
-  lifecycle {
-    ignore_changes = all
-  }
 }
  
 # Domain Verification Record
@@ -36,7 +30,4 @@ resource "aws_route53_record" "domain_verification" {
   type    = "TXT"
   ttl     = "600"
   records = [aws_ses_domain_identity.main.verification_token]
-  lifecycle {
-    ignore_changes = all
-  }
 }

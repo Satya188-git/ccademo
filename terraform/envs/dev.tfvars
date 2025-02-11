@@ -61,6 +61,6 @@ pandas_layer_arn          = "arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKP
 code_artifact_bucket_name = "sdge-dcctr-dev-wus2-s3-artifacts"
 
 ado_role_name = "sdge-dcctr-dev-iam-role-ado"
-domain_name= "sdge.com"
+domain_name= "app.sdge.com"
 zone_id = "Z033821811F9PN8CE1DQE"
 recipients = "AKumar45@sdgecontractor.com"
