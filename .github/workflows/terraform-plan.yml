@@ -41,7 +41,7 @@ jobs:
 
       # Upload the plan as an artifact (optional)
       - name: Upload Terraform Plan
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: terraform-plan
           path: tfplan
