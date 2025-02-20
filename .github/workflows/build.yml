@@ -1,0 +1,105 @@
+name: CI/CD Pipeline Migration
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and Publish Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set AWS Credentials
+        run: |
+          echo "Setting up AWS credentials"
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          export AWS_DEFAULT_REGION="us-west-2"
+
+      - name: Assume AWS Role
+        run: |
+          ROLE_ARN="arn:aws:iam::442426866507:role/fondo/sdge-dcctr-dev-iam-role-ado"
+          CREDENTIALS=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "GitHubActions" --output json)
+          export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
+
+      - name: Start Quicksight Export Jobs
+        run: |
+          aws quicksight start-asset-bundle-export-job --aws-account-id "442426866507" --asset-bundle-export-job-id "sdge-export-job-IVR" --resource-arns "arn:aws:quicksight:us-west-2:442426866507:dashboard/40ebf7be-50e2-49ed-8136-78aa0117aa65" --include-all-dependencies --export-format 'QUICKSIGHT_JSON'
+          echo "Quicksight export job started"
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: quicksight-export-artifacts
+          path: assetbundle-sdge-export-job-*.qs
+
+  pre_tf:
+    name: Pre-Terraform Steps
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: quicksight-export-artifacts
+
+      - name: Assume AWS Role and Import to Quicksight
+        run: |
+          ROLE_ARN="arn:aws:iam::$(AWS_ACCOUNT_ID):role/fondo/sdge-dcctr-${{ env.ENVIRONMENT }}-iam-role-ado"
+          CREDENTIALS=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "GitHubActions" --output json)
+          export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
+          aws quicksight start-asset-bundle-import-job --aws-account-id "$(AWS_ACCOUNT_ID)" --asset-bundle-import-job-id "sdge-import-job-IVR" --asset-bundle-import-source-bytes fileb://assetbundle-sdge-export-job-IVR.qs --failure-action ROLLBACK
+
+  deploy:
+    name: Deploy to Environment
+    runs-on: ubuntu-latest
+    needs: pre_tf
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m venv .env
+          source .env/bin/activate
+          pip install --upgrade pip boto3
+
+      - name: Assume AWS Role and Deploy Lambda
+        run: |
+          ROLE_ARN="arn:aws:iam::$(AWS_ACCOUNT_ID):role/fondo/sdge-dcctr-${{ env.ENVIRONMENT }}-iam-role-ado"
+          CREDENTIALS=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "GitHubActions" --output json)
+          export AWS_ACCESS_KEY_ID=$(echo $CREDENTIALS | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo $CREDENTIALS | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo $CREDENTIALS | jq -r '.Credentials.SessionToken')
+          aws lambda update-function-code --function-name "sdge-dcctr-${{ env.ENVIRONMENT }}-wus2-lambda-ccc-analytics-containment-alerts" --s3-bucket "sdge-dcctr-${{ env.ENVIRONMENT }}-wus2-s3-artifacts" --s3-key "lambda/packages/containment_alerts.zip" --region "us-west-2"
+
+      - name: Run Python Scripts
+        run: |
+          python ivr_call_transactions.py "${{ env.ENVIRONMENT }}"
+          python ivr_call_events.py "${{ env.ENVIRONMENT }}"
+          python fcr_data_view.py "${{ env.ENVIRONMENT }}"
+          python callback_data_view.py "${{ env.ENVIRONMENT }}"
+
+      - name: Cleanup Virtual Environment
+        run: |
+          rm -rf .env
